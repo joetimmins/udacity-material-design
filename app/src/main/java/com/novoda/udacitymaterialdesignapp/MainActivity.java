@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    boolean isHelloWorldShowing = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             );
         }
 
-        Button helloWorld = (Button) findViewById(R.id.hello_world_button);
+        final Button helloWorld = (Button) findViewById(R.id.hello_world_button);
         if (helloWorld != null) {
             helloWorld.setOnClickListener(
                     new View.OnClickListener() {
@@ -43,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 int finalRadius = (int) Math.hypot(view.getWidth() / 2, view.getHeight() / 2);
+                                Button pressed = (Button) view;
+                                String text = isHelloWorldShowing ? "something else" : "hello world!";
+                                isHelloWorldShowing = !isHelloWorldShowing;
+                                pressed.setText(text);
                                 ViewAnimationUtils.createCircularReveal(view, view.getWidth() / 2, view.getHeight() / 2, 0, finalRadius).start();
                             }
                         }
