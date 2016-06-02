@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 int finalRadius = (int) Math.hypot(view.getWidth() / 2, view.getHeight() / 2);
                                 Button pressed = (Button) view;
-                                String text = isHelloWorldShowing ? "something else" : "hello world!";
+                                String text = isHelloWorldShowing ? "hello again!" : "hello world!";
                                 isHelloWorldShowing = !isHelloWorldShowing;
                                 pressed.setText(text);
                                 ViewAnimationUtils.createCircularReveal(view, view.getWidth() / 2, view.getHeight() / 2, 0, finalRadius).start();
