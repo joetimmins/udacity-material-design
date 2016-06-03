@@ -1,4 +1,4 @@
-package com.novoda.udacitymaterialdesignapp;
+package com.novoda.materialised;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean isHelloWorldShowing = true;
+    ViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        viewModel = new ViewModel();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -46,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 int finalRadius = (int) Math.hypot(view.getWidth() / 2, view.getHeight() / 2);
                                 Button pressed = (Button) view;
-                                String text = isHelloWorldShowing ? "hello again!" : "hello world!";
-                                isHelloWorldShowing = !isHelloWorldShowing;
+                                String text = viewModel.isToggled() ? "hello world!" : "hello again!";
                                 pressed.setText(text);
                                 ViewAnimationUtils.createCircularReveal(view, view.getWidth() / 2, view.getHeight() / 2, 0, finalRadius).start();
                             }

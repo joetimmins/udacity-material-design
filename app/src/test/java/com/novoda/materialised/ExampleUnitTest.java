@@ -1,4 +1,4 @@
-package com.novoda.udacitymaterialdesignapp;
+package com.novoda.materialised;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.novoda.udacitymaterialdesignapp;
+package com.novoda.materialised;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
