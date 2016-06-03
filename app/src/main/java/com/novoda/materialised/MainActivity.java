@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    ViewModel viewModel;
+    MessagePresenter messagePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        viewModel = new ViewModel();
+        messagePresenter = new MessagePresenter(new ToggleMessages("hello world!", "hello again!"));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 int finalRadius = (int) Math.hypot(view.getWidth() / 2, view.getHeight() / 2);
                                 Button pressed = (Button) view;
-                                String text = viewModel.isToggled() ? "hello world!" : "hello again!";
+                                String text = messagePresenter.currentMessage();
                                 pressed.setText(text);
                                 ViewAnimationUtils.createCircularReveal(view, view.getWidth() / 2, view.getHeight() / 2, 0, finalRadius).start();
                             }
