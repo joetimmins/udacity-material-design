@@ -12,9 +12,10 @@ import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.novoda.materialised.example.MessagePresenter;
+import com.novoda.materialised.example.ToggleMessages;
 
-    MessagePresenter messagePresenter;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        messagePresenter = new MessagePresenter(new ToggleMessages("hello world!", "hello again!"));
+        final MessagePresenter messagePresenter = new MessagePresenter(new ToggleMessages("hello world!", "hello again!"));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -47,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 int finalRadius = (int) Math.hypot(view.getWidth() / 2, view.getHeight() / 2);
-                                Button pressed = (Button) view;
-                                String text = messagePresenter.currentMessage();
-                                pressed.setText(text);
+                                ((Button) view).setText(messagePresenter.currentMessage());
                                 ViewAnimationUtils.createCircularReveal(view, view.getWidth() / 2, view.getHeight() / 2, 0, finalRadius).start();
                             }
                         }

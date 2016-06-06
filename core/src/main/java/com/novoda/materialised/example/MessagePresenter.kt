@@ -1,4 +1,4 @@
-package com.novoda.materialised
+package com.novoda.materialised.example
 
 class MessagePresenter(toggleMessages: ToggleMessages) {
     private val toggleMessages: ToggleMessages = toggleMessages
