@@ -37,3 +37,7 @@ proguard/
 
 # Google play publishing plugin
 mobile/src/main/play/
+
+# Vim
+*.swp
+*.swo
