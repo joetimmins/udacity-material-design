@@ -30,6 +30,12 @@
       android:layout_height="wrap_content"
       android:text="@string/lorem_ipsum" />
 
+    <TextView
+      android:id="@+id/firebase_text_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="This needs to be a Hacker News story title" />
+
   </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
