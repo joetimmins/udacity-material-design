@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,14 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.novoda.materialised.example.MessagePresenter;
 import com.novoda.materialised.example.ToggleMessages;
-import com.novoda.materialised.hackernews.Story;
+import com.novoda.materialised.hackernews.StoryViewModel;
+import com.novoda.materialised.hackernews.database.HackerNewsItemDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,29 +62,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        FirebaseDatabase hnDatabase = FirebaseSingleton.INSTANCE.hackerNewsDatabase(this);
-        DatabaseReference item = hnDatabase.getReference("v0").child("item").child("8863");
-        item.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                TextView textView = (TextView) findViewById(R.id.firebase_text_view);
-                if (textView != null) {
-                    Story value = dataSnapshot.getValue(Story.class);
-                    if (value != null) {
-                        textView.setText(value.getTitle());
-                    } else {
-                        Log.d("TAG", "data snapshot had no value");
-                    }
-                } else {
-                    Log.d("TAG", "text view was null");
-                }
-            }
+//        FirebaseDatabase hnDatabase = FirebaseSingleton.INSTANCE.hackerNewsDatabase(this);
+//        DatabaseReference item = hnDatabase.getReference("v0").child("item").child("8863");
+//        item.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                TextView textView = (TextView) findViewById(R.id.firebase_text_view);
+//                if (textView != null) {
+//                    Story value = dataSnapshot.getValue(Story.class);
+//                    if (value != null) {
+//                        textView.setText(value.getTitle());
+//                    } else {
+//                        Log.d("TAG", "data snapshot had no value");
+//                    }
+//                } else {
+//                    Log.d("TAG", "text view was null");
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        HackerNewsItemDatabase hnItems = FirebaseSingleton.INSTANCE.hackerNewsDatabase(this);
+        StoryViewModel storyViewModel = hnItems.readItem(8863);
 
-            }
-        });
+        TextView textView = (TextView) findViewById(R.id.firebase_text_view);
+        if (textView != null) {
+            textView.setText(storyViewModel.getTitle());
+        }
+
     }
 
     @Override

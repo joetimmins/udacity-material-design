@@ -28,3 +28,11 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.0.1'
     compile project(path: ':core')
 }
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.android.support:design:23.4.0'
+        force 'com.android.support:support-v4:23.4.0'
+        force 'com.android.support:appcompat-v7:23.4.0'
+    }
+}
