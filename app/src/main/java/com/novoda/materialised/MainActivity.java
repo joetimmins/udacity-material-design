@@ -62,29 +62,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        FirebaseDatabase hnDatabase = FirebaseSingleton.INSTANCE.hackerNewsDatabase(this);
-//        DatabaseReference item = hnDatabase.getReference("v0").child("item").child("8863");
-//        item.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                TextView textView = (TextView) findViewById(R.id.firebase_text_view);
-//                if (textView != null) {
-//                    Story value = dataSnapshot.getValue(Story.class);
-//                    if (value != null) {
-//                        textView.setText(value.getTitle());
-//                    } else {
-//                        Log.d("TAG", "data snapshot had no value");
-//                    }
-//                } else {
-//                    Log.d("TAG", "text view was null");
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
 
         HackerNewsItemDatabase hnItems = FirebaseSingleton.INSTANCE.hackerNewsDatabase(this);
         StoryViewModel storyViewModel = hnItems.readItem(8863);
