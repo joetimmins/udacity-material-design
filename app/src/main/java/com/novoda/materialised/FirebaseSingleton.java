@@ -1,7 +1,6 @@
 package com.novoda.materialised;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.FirebaseApp;
@@ -14,6 +13,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.novoda.materialised.hackernews.Story;
 import com.novoda.materialised.hackernews.StoryViewModel;
 import com.novoda.materialised.hackernews.database.HackerNewsItemDatabase;
+
+import org.jetbrains.annotations.NotNull;
 
 public enum FirebaseSingleton {
 
@@ -31,22 +32,18 @@ public enum FirebaseSingleton {
         }
 
         return new HackerNewsItemDatabase() {
-            @NonNull
             @Override
-            public StoryViewModel readItem(int id) {
+            public void readItem(int id, @NotNull final ValueCallback<StoryViewModel> valueCallback) {
                 DatabaseReference item = FirebaseDatabase.getInstance(firebaseApp).getReference("v0").child("item").child(Integer.toString(id));
-
-                final StoryViewModel[] viewModel = new StoryViewModel[1];
 
                 item.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Story value = dataSnapshot.getValue(Story.class);
                         if (value != null) {
-                            viewModel[0] = convertStoryToViewModel(value);
+                            valueCallback.onValueRetrieved(convertStoryToViewModel(value));
                         } else {
                             Log.d("TAG", "data snapshot had no value");
-                            viewModel[0] = new StoryViewModel();
                         }
                     }
 
@@ -55,8 +52,6 @@ public enum FirebaseSingleton {
 
                     }
                 });
-
-                return viewModel[0];
             }
 
             private StoryViewModel convertStoryToViewModel(Story story) {

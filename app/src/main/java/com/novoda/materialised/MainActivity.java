@@ -18,7 +18,7 @@ import com.novoda.materialised.example.ToggleMessages;
 import com.novoda.materialised.hackernews.StoryViewModel;
 import com.novoda.materialised.hackernews.database.HackerNewsItemDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +64,15 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         HackerNewsItemDatabase hnItems = FirebaseSingleton.INSTANCE.hackerNewsDatabase(this);
-        StoryViewModel storyViewModel = hnItems.readItem(8863);
-
-        TextView textView = (TextView) findViewById(R.id.firebase_text_view);
-        if (textView != null) {
-            textView.setText(storyViewModel.getTitle());
-        }
-
+        hnItems.readItem(8863, new HackerNewsItemDatabase.ValueCallback<StoryViewModel>() {
+            @Override
+            public void onValueRetrieved(StoryViewModel value) {
+                TextView textView = (TextView) findViewById(R.id.firebase_text_view);
+                if (textView != null) {
+                    textView.setText(value.getTitle());
+                }
+            }
+        });
     }
 
     @Override
