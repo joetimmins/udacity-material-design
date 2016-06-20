@@ -9,22 +9,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.example.MessagePresenter;
 import com.novoda.materialised.example.ToggleMessages;
 import com.novoda.materialised.hackernews.StoryViewModel;
-import com.novoda.materialised.hackernews.database.HackerNewsItemDatabase;
+import com.novoda.materialised.hackernews.database.TopStories;
+import com.novoda.materialised.hackernews.database.ValueCallback;
+
+import java.util.List;
 
 public final class MainActivity extends AppCompatActivity {
+
+    private MainActivityBinding mainActivityLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MainActivityBinding mainActivityLayout = DataBindingUtil.setContentView(this, R.layout.main_activity);
+        mainActivityLayout = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
         setSupportActionBar(mainActivityLayout.toolbar);
 
@@ -59,14 +63,17 @@ public final class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        HackerNewsItemDatabase hnItems = FirebaseSingleton.INSTANCE.hackerNewsDatabase(this);
-        hnItems.readItem(8863, new HackerNewsItemDatabase.ValueCallback<StoryViewModel>() {
+        final FirebaseSingleton firebaseSingleton = FirebaseSingleton.INSTANCE;
+        TopStories topStories = firebaseSingleton.hackerNewsTopStories();
+        topStories.readAll(new ValueCallback<List<Integer>>() {
             @Override
-            public void onValueRetrieved(StoryViewModel value) {
-                TextView textView = (TextView) findViewById(R.id.firebase_text_view);
-                if (textView != null) {
-                    textView.setText(value.getTitle());
-                }
+            public void onValueRetrieved(List<Integer> value) {
+                firebaseSingleton.hackerNewsItems(MainActivity.this).readItem(value.get(0), new ValueCallback<StoryViewModel>() {
+                    @Override
+                    public void onValueRetrieved(StoryViewModel value) {
+                        mainActivityLayout.firebaseTextView.setText(value.getTitle());
+                    }
+                });
             }
         });
     }

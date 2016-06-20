@@ -15,4 +15,6 @@ class MessagePresenter(toggleMessages: ToggleMessages) {
 
         return isCurrentlyToggled
     }
+
+    val something: (first: Int, second: Int, third: Int) -> String = {a, b, c -> Integer.toString(a) + ", " + Integer.toString(b) + ", " + Integer.toString(c)}
 }

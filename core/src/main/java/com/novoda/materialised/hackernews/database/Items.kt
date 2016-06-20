@@ -2,10 +2,6 @@ package com.novoda.materialised.hackernews.database
 
 import com.novoda.materialised.hackernews.StoryViewModel
 
-interface HackerNewsItemDatabase {
+interface Items {
     fun readItem(id: Int, valueCallback: ValueCallback<StoryViewModel>)
-
-    interface ValueCallback<T> {
-        fun onValueRetrieved(value: T)
-    }
 }
