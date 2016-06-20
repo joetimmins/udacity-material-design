@@ -1,4 +1,4 @@
-package com.novoda.materialised;
+package com.novoda.materialised.firebase;
 
 import android.content.Context;
 

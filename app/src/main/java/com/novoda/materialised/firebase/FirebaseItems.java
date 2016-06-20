@@ -1,4 +1,4 @@
-package com.novoda.materialised;
+package com.novoda.materialised.firebase;
 
 import android.util.Log;
 
@@ -15,7 +15,7 @@ import com.novoda.materialised.hackernews.database.ValueCallback;
 
 import org.jetbrains.annotations.NotNull;
 
-class FirebaseItems implements Items {
+public final class FirebaseItems implements Items {
     private FirebaseApp firebaseApp;
 
     public FirebaseItems(FirebaseApp firebaseApp) {
