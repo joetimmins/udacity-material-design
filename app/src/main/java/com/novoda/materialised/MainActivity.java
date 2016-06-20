@@ -55,7 +55,8 @@ public final class MainActivity extends AppCompatActivity {
                                 ViewAnimationUtils.createCircularReveal(view, view.getWidth() / 2, view.getHeight() / 2, 0, finalRadius).start();
                             }
                         }
-                    });
+                    }
+            );
         }
     }
 
