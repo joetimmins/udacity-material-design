@@ -7,7 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.novoda.materialised.hackernews.Story;
+import com.novoda.materialised.hackernews.items.Story;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.ValueCallback;

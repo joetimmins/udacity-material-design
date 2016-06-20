@@ -1,6 +1,5 @@
 package com.novoda.materialised.hackernews.items
 
-import com.novoda.materialised.hackernews.items.StoryViewModel
 import com.novoda.materialised.hackernews.ValueCallback
 
 interface ItemsDatabase {
