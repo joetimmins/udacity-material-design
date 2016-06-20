@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews
+package com.novoda.materialised.hackernews.items
 
 import java.util.*
 

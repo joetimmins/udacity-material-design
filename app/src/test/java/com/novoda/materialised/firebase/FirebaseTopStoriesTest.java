@@ -1,7 +1,7 @@
 package com.novoda.materialised.firebase;
 
 import com.google.firebase.database.FirebaseDatabase;
-import com.novoda.materialised.hackernews.database.ValueCallback;
+import com.novoda.materialised.hackernews.ValueCallback;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +31,7 @@ public class FirebaseTopStoriesTest {
         ListValueCallback callback = new ListValueCallback();
 
         // Act
-        new FirebaseTopStories(FakeFirebase.getTopStoriesFirebaseDatabase(expectedStoryIds)).readAll(callback);
+        new FirebaseTopStoriesDatabase(FakeFirebase.getTopStoriesFirebaseDatabase(expectedStoryIds)).readAll(callback);
 
         // Assert
         assertThat(callback.topStoryIds).isEqualTo(expectedStoryIds);

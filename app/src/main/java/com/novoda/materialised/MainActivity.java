@@ -15,12 +15,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.example.MessagePresenter;
 import com.novoda.materialised.example.ToggleMessages;
-import com.novoda.materialised.firebase.FirebaseItems;
+import com.novoda.materialised.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.firebase.FirebaseSingleton;
-import com.novoda.materialised.firebase.FirebaseTopStories;
-import com.novoda.materialised.hackernews.StoryViewModel;
-import com.novoda.materialised.hackernews.database.TopStories;
-import com.novoda.materialised.hackernews.database.ValueCallback;
+import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
+import com.novoda.materialised.hackernews.items.StoryViewModel;
+import com.novoda.materialised.hackernews.ValueCallback;
 
 import java.util.List;
 
@@ -55,9 +54,9 @@ public final class MainActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             int finalRadius = (int) Math.hypot(view.getWidth() / 2, view.getHeight() / 2);
-                            ((Button) view).setText(messagePresenter.currentMessage());
                             ViewAnimationUtils.createCircularReveal(view, view.getWidth() / 2, view.getHeight() / 2, 0, finalRadius).start();
                         }
+                        ((Button) view).setText(messagePresenter.currentMessage());
                     }
                 }
         );
@@ -68,11 +67,10 @@ public final class MainActivity extends AppCompatActivity {
         super.onResume();
 
         final FirebaseDatabase firebaseApp = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
-        TopStories topStories = new FirebaseTopStories(firebaseApp);
-        topStories.readAll(new ValueCallback<List<Long>>() {
+        new FirebaseTopStoriesDatabase(firebaseApp).readAll(new ValueCallback<List<Long>>() {
             @Override
             public void onValueRetrieved(List<Long> value) {
-                new FirebaseItems(firebaseApp).readItem(value.get(0).intValue(), new ValueCallback<StoryViewModel>() {
+                new FirebaseItemsDatabase(firebaseApp).readItem(value.get(0).intValue(), new ValueCallback<StoryViewModel>() {
                     @Override
                     public void onValueRetrieved(StoryViewModel value) {
                         mainActivityLayout.firebaseTextView.setText(value.getTitle());
