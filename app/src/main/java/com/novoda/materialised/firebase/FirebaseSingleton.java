@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.FirebaseDatabase;
 
 public enum FirebaseSingleton {
 
@@ -11,9 +12,9 @@ public enum FirebaseSingleton {
 
     private FirebaseApp firebaseApp;
 
-    public FirebaseApp getFirebaseApp(Context context) {
+    public FirebaseDatabase getFirebaseDatabase(Context context) {
         initialiseFirebaseAppIfNecessary(context);
-        return firebaseApp;
+        return FirebaseDatabase.getInstance(firebaseApp);
     }
 
     private void initialiseFirebaseAppIfNecessary(Context context) {

@@ -2,7 +2,6 @@ package com.novoda.materialised.firebase;
 
 import android.util.Log;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,15 +15,15 @@ import com.novoda.materialised.hackernews.database.ValueCallback;
 import org.jetbrains.annotations.NotNull;
 
 public final class FirebaseItems implements Items {
-    private FirebaseApp firebaseApp;
+    private FirebaseDatabase firebaseDatabase;
 
-    public FirebaseItems(FirebaseApp firebaseApp) {
-        this.firebaseApp = firebaseApp;
+    public FirebaseItems(FirebaseDatabase firebaseDatabase) {
+        this.firebaseDatabase = firebaseDatabase;
     }
 
     @Override
     public void readItem(int id, @NotNull final ValueCallback<StoryViewModel> valueCallback) {
-        DatabaseReference item = FirebaseDatabase.getInstance(firebaseApp).getReference("v0").child("item").child(Integer.toString(id));
+        DatabaseReference item = firebaseDatabase.getReference("v0").child("item").child(Integer.toString(id));
 
         item.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
