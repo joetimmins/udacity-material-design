@@ -26,7 +26,6 @@ public final class MainActivity extends AppCompatActivity {
 
     private MainActivityBinding mainActivityLayout;
     private TopStoriesPresenter topStoriesPresenter;
-    private StoryView storyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,33 +61,20 @@ public final class MainActivity extends AppCompatActivity {
                 }
         );
 
-        storyView = new StoryView() {
+        StoryView storyView = new StoryView() {
             @Override
             public void updateWith(StoryViewModel storyViewModel) {
                 mainActivityLayout.firebaseTextView.setText(storyViewModel.getTitle());
             }
         };
 
-        final FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
+        FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
         topStoriesPresenter = new TopStoriesPresenter(new FirebaseTopStoriesDatabase(firebaseDatabase), new FirebaseItemsDatabase(firebaseDatabase), storyView);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//
-//        final FirebaseDatabase firebaseApp = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
-//        new FirebaseTopStoriesDatabase(firebaseApp).readAll(new ValueCallback<List<Long>>() {
-//            @Override
-//            public void onValueRetrieved(List<Long> value) {
-//                new FirebaseItemsDatabase(firebaseApp).readItem(value.get(0).intValue(), new ValueCallback<StoryViewModel>() {
-//                    @Override
-//                    public void onValueRetrieved(StoryViewModel value) {
-//                        mainActivityLayout.firebaseTextView.setText(value.getTitle());
-//                    }
-//                });
-//            }
-//        });
         topStoriesPresenter.startPresenting();
     }
 
@@ -113,5 +99,4 @@ public final class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
