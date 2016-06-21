@@ -79,7 +79,7 @@ public final class MainActivity extends AppCompatActivity {
         storiesView = new StoriesView() {
             @Override
             public void updateWith(@NotNull List<StoryViewModel> storyViewModels) {
-                String text = storyViewModels.get(0).getTitle() + "\n\n" + storyViewModels.get(1).getTitle();
+                String text = "\n\n" + storyViewModels.get(0).getTitle() + "\n\n" + storyViewModels.get(1).getTitle();
                 mainActivityLayout.firebaseTextView.setText(text);
             }
         };

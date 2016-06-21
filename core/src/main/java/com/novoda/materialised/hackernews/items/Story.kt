@@ -1,7 +1,5 @@
 package com.novoda.materialised.hackernews.items
 
-import java.util.*
-
 data class Story(
         val by: String = "",
         val descendants: Int = 0,
