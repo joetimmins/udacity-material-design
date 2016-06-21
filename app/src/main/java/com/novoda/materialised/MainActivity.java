@@ -3,25 +3,19 @@ package com.novoda.materialised;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.materialised.databinding.MainActivityBinding;
-import com.novoda.materialised.example.MessagePresenter;
-import com.novoda.materialised.example.ToggleMessages;
 import com.novoda.materialised.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.firebase.FirebaseSingleton;
 import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 import com.novoda.materialised.hackernews.topstories.StoriesView;
-import com.novoda.materialised.hackernews.topstories.StoryView;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
 
 import java.util.List;
@@ -32,7 +26,6 @@ public final class MainActivity extends AppCompatActivity {
 
     private MainActivityBinding mainActivityLayout;
     private TopStoriesPresenter topStoriesPresenter;
-    private StoryView storyView;
     private StoriesView storiesView;
 
     @Override
@@ -43,7 +36,7 @@ public final class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mainActivityLayout.toolbar);
 
-        mainActivityLayout.fab.setOnClickListener(
+        mainActivityLayout.plusFab.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -54,33 +47,11 @@ public final class MainActivity extends AppCompatActivity {
                 }
         );
 
-        final MessagePresenter messagePresenter = new MessagePresenter(new ToggleMessages("hello world!", "hello again!"));
-
-        mainActivityLayout.helloWorldButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            int finalRadius = (int) Math.hypot(view.getWidth() / 2, view.getHeight() / 2);
-                            ViewAnimationUtils.createCircularReveal(view, view.getWidth() / 2, view.getHeight() / 2, 0, finalRadius).start();
-                        }
-                        ((Button) view).setText(messagePresenter.currentMessage());
-                    }
-                }
-        );
-
-        storyView = new StoryView() {
-            @Override
-            public void updateWith(@NonNull StoryViewModel storyViewModel) {
-                mainActivityLayout.firebaseTextView.setText(storyViewModel.getTitle());
-            }
-        };
-
         storiesView = new StoriesView() {
             @Override
             public void updateWith(@NotNull List<StoryViewModel> storyViewModels) {
                 String text = "\n\n" + storyViewModels.get(0).getTitle() + "\n\n" + storyViewModels.get(1).getTitle();
-                mainActivityLayout.firebaseTextView.setText(text);
+                mainActivityLayout.loadingView.setText(text);
             }
         };
 

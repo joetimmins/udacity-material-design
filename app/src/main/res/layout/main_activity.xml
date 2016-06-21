@@ -48,36 +48,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-          android:id="@+id/hello_world_button"
-          style="@style/ButtonStyle"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:padding="@dimen/fab_margin"
-          android:text="Hello World!" />
-
         <TextView
+          android:id="@+id/loading_view"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/lorem_ipsum" />
-
-        <TextView
-          android:id="@+id/firebase_text_view"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="This needs to be a Hacker News story title" />
+          android:text="@string/loading_stories" />
 
       </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
-      android:id="@+id/fab"
+      android:id="@+id/plus_fab"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom|end"
       android:layout_margin="@dimen/fab_margin"
-      android:src="@android:drawable/ic_dialog_email"
+      android:src="@android:drawable/ic_input_add"
       app:rippleColor="@android:color/white" />
 
   </android.support.design.widget.CoordinatorLayout>
