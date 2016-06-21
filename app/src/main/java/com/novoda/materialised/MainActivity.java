@@ -4,9 +4,13 @@ import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -47,11 +51,31 @@ public final class MainActivity extends AppCompatActivity {
                 }
         );
 
+        mainActivityLayout.topStoriesView.setLayoutManager(new LinearLayoutManager(this));
+
         storiesView = new StoriesView() {
             @Override
-            public void updateWith(@NotNull List<StoryViewModel> storyViewModels) {
-                String text = "\n\n" + storyViewModels.get(0).getTitle() + "\n\n" + storyViewModels.get(1).getTitle();
-                mainActivityLayout.loadingView.setText(text);
+            public void updateWith(@NotNull final List<StoryViewModel> storyViewModels) {
+                mainActivityLayout.loadingView.setVisibility(View.GONE);
+                mainActivityLayout.topStoriesView.setAdapter(new RecyclerView.Adapter() {
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                        TextView storyView = new TextView(parent.getContext());
+                        return new StoryViewHolder(storyView);
+                    }
+
+                    @Override
+                    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                        StoryViewHolder storyViewHolder = (StoryViewHolder) holder;
+                        TextView storyView = storyViewHolder.getStoryView();
+                        storyView.setText(storyViewModels.get(position).getTitle());
+                    }
+
+                    @Override
+                    public int getItemCount() {
+                        return storyViewModels.size();
+                    }
+                });
             }
         };
 
@@ -85,5 +109,19 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class StoryViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView storyView;
+
+        public StoryViewHolder(TextView itemView) {
+            super(itemView);
+            storyView = itemView;
+        }
+
+        public TextView getStoryView() {
+            return storyView;
+        }
     }
 }

@@ -54,6 +54,11 @@
           android:layout_height="wrap_content"
           android:text="@string/loading_stories" />
 
+        <android.support.v7.widget.RecyclerView
+          android:id="@+id/top_stories_view"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
       </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
