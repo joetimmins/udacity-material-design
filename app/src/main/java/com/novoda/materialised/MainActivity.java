@@ -5,11 +5,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,7 +17,6 @@ import com.novoda.materialised.firebase.FirebaseSingleton;
 import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 import com.novoda.materialised.hackernews.topstories.StoriesView;
-import com.novoda.materialised.hackernews.topstories.StoryView;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
 
 import java.util.List;
@@ -93,29 +90,4 @@ public final class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static class StoriesAdapter extends RecyclerView.Adapter {
-        private final List<StoryViewModel> storyViewModels;
-
-        public StoriesAdapter(List<StoryViewModel> storyViewModels) {
-            this.storyViewModels = storyViewModels;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            StoryCardView storyCardView = new StoryCardView(parent.getContext());
-            return new StoryViewHolder(storyCardView);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            StoryViewHolder storyViewHolder = (StoryViewHolder) holder;
-            StoryView storyView = storyViewHolder.getStoryView();
-            storyView.updateWith(storyViewModels.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return storyViewModels.size();
-        }
-    }
 }

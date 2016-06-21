@@ -1,7 +1,7 @@
 package com.novoda.materialised;
 
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,8 +19,18 @@ public class StoryCardView extends LinearLayout implements StoryView {
         init(context);
     }
 
+    public StoryCardView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public StoryCardView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
     private void init(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.story_card, this);
+        inflate(context, R.layout.story_card, this);
         titleView = (TextView) findViewById(R.id.title_view);
     }
 
