@@ -5,7 +5,6 @@ import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,14 +14,28 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class TopStoriesPresenterTest {
 
+    private final StoryViewModel storyViewModel = new StoryViewModel("test author", Arrays.asList(1, 2), 123, "test title", "http://test.url");
+
     @Test
-    public void presenterGivesCorrectViewModelToView() {
-        final StoryViewModel expectedStoryViewModel = new StoryViewModel("test author", Arrays.asList(1, 2), 123, "test title", "http://test.url");
+    public void presenterGivesCorrectViewModelToView_WhenPresentingSingleStory() {
         CapturingStoryView storyView = new CapturingStoryView();
 
-        new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(expectedStoryViewModel)).presentSingleStoryWith(storyView);
+        TopStoriesPresenter presenter = new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(storyViewModel));
+        presenter.presentSingleStoryWith(storyView);
 
-        assertThat(storyView.updatedWith).isEqualTo(expectedStoryViewModel);
+        assertThat(storyView.updatedWith).isEqualTo(storyViewModel);
+    }
+
+    @Test
+    public void presenterGivesCorrectListOfViewModelsToView_WhenPresentingMultipleStories() {
+        StoryViewModel anotherStoryViewModel = new StoryViewModel("another author", Arrays.asList(3, 4), 321, "another title", "http://another.url");
+        List<StoryViewModel> expectedViewModels = Arrays.asList(storyViewModel, anotherStoryViewModel);
+        CapturingStoriesView storiesView = new CapturingStoriesView();
+
+        TopStoriesPresenter presenter = new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(expectedViewModels));
+        presenter.presentMultipleStoriesWith(storiesView);
+
+        assertThat(storiesView.updatedWith).isEqualTo(expectedViewModels);
     }
 
     private static class CapturingStoryView implements StoryView {
@@ -43,20 +56,35 @@ public class TopStoriesPresenterTest {
     }
 
     private static class ConfigurableItemsDatabase implements ItemsDatabase {
-        private final StoryViewModel expectedStoryViewModel;
+        private StoryViewModel storyViewModel;
+
+        private List<StoryViewModel> storyViewModels;
 
         public ConfigurableItemsDatabase(StoryViewModel expectedStoryViewModel) {
-            this.expectedStoryViewModel = expectedStoryViewModel;
+            this.storyViewModel = expectedStoryViewModel;
+        }
+
+        public ConfigurableItemsDatabase(List<StoryViewModel> expectedViewModels) {
+            this.storyViewModels = expectedViewModels;
         }
 
         @Override
         public void readItem(int id, @NotNull ValueCallback<StoryViewModel> valueCallback) {
-            valueCallback.onValueRetrieved(expectedStoryViewModel);
+            valueCallback.onValueRetrieved(storyViewModel);
         }
 
         @Override
         public void readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<List<StoryViewModel>> valueCallback) {
-            valueCallback.onValueRetrieved(Collections.singletonList(expectedStoryViewModel));
+            valueCallback.onValueRetrieved(storyViewModels);
+        }
+    }
+
+    private static class CapturingStoriesView implements StoriesView {
+        List<StoryViewModel> updatedWith;
+
+        @Override
+        public void updateWith(@NotNull List<StoryViewModel> storyViewModels) {
+            updatedWith = storyViewModels;
         }
     }
 }
