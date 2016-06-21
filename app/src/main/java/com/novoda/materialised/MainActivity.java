@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -20,6 +19,7 @@ import com.novoda.materialised.firebase.FirebaseSingleton;
 import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 import com.novoda.materialised.hackernews.topstories.StoriesView;
+import com.novoda.materialised.hackernews.topstories.StoryView;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
 
 import java.util.List;
@@ -57,25 +57,7 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void updateWith(@NotNull final List<StoryViewModel> storyViewModels) {
                 mainActivityLayout.loadingView.setVisibility(View.GONE);
-                mainActivityLayout.topStoriesView.setAdapter(new RecyclerView.Adapter() {
-                    @Override
-                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                        TextView storyView = new TextView(parent.getContext());
-                        return new StoryViewHolder(storyView);
-                    }
-
-                    @Override
-                    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                        StoryViewHolder storyViewHolder = (StoryViewHolder) holder;
-                        TextView storyView = storyViewHolder.getStoryView();
-                        storyView.setText(storyViewModels.get(position).getTitle());
-                    }
-
-                    @Override
-                    public int getItemCount() {
-                        return storyViewModels.size();
-                    }
-                });
+                mainActivityLayout.topStoriesView.setAdapter(new StoriesAdapter(storyViewModels));
             }
         };
 
@@ -111,17 +93,29 @@ public final class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class StoryViewHolder extends RecyclerView.ViewHolder {
+    private static class StoriesAdapter extends RecyclerView.Adapter {
+        private final List<StoryViewModel> storyViewModels;
 
-        private TextView storyView;
-
-        public StoryViewHolder(TextView itemView) {
-            super(itemView);
-            storyView = itemView;
+        public StoriesAdapter(List<StoryViewModel> storyViewModels) {
+            this.storyViewModels = storyViewModels;
         }
 
-        public TextView getStoryView() {
-            return storyView;
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            StoryCardView storyCardView = new StoryCardView(parent.getContext());
+            return new StoryViewHolder(storyCardView);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            StoryViewHolder storyViewHolder = (StoryViewHolder) holder;
+            StoryView storyView = storyViewHolder.getStoryView();
+            storyView.updateWith(storyViewModels.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return storyViewModels.size();
         }
     }
 }
