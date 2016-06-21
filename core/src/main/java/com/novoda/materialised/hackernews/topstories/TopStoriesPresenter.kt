@@ -9,7 +9,7 @@ class TopStoriesPresenter(val topStoriesDatabase: TopStoriesDatabase, val itemsD
         topStoriesDatabase.readAll(
                 object : ValueCallback<List<Long>> {
                     override fun onValueRetrieved(value: List<Long>) {
-                        itemsDatabase.readItem(value.get(0).toInt(), object : ValueCallback<StoryViewModel> {
+                        itemsDatabase.readItem(value[0].toInt(), object : ValueCallback<StoryViewModel> {
                             override fun onValueRetrieved(value: StoryViewModel) {
                                 storyView.updateWith(value)
                             }
