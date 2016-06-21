@@ -35,7 +35,8 @@ public class TopStoriesPresenterTest {
         TopStoriesPresenter presenter = new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(expectedViewModels));
         presenter.presentMultipleStoriesWith(storiesView);
 
-        assertThat(storiesView.updatedWith).isEqualTo(expectedViewModels);
+        assertThat(storiesView.updatedStoryCount).isEqualTo(DummyTopStoriesDatabase.TOP_STORIES.size());
+        assertThat(storiesView.updatedStoryModels).isEqualTo(expectedViewModels);
     }
 
     private static class CapturingStoryView implements StoryView {
@@ -49,9 +50,11 @@ public class TopStoriesPresenterTest {
     }
 
     private static class DummyTopStoriesDatabase implements TopStoriesDatabase {
+        public static final List<Long> TOP_STORIES = Arrays.asList(56L, 78L);
+
         @Override
         public void readAll(@NotNull ValueCallback<List<Long>> callback) {
-            callback.onValueRetrieved(Arrays.asList(56L, 78L));
+            callback.onValueRetrieved(TOP_STORIES);
         }
     }
 
@@ -80,11 +83,17 @@ public class TopStoriesPresenterTest {
     }
 
     private static class CapturingStoriesView implements StoriesView {
-        List<StoryViewModel> updatedWith;
+        List<StoryViewModel> updatedStoryModels;
+        int updatedStoryCount;
 
         @Override
         public void updateWith(@NotNull List<StoryViewModel> storyViewModels) {
-            updatedWith = storyViewModels;
+            updatedStoryModels = storyViewModels;
+        }
+
+        @Override
+        public void updateWith(int numberOfStories) {
+            updatedStoryCount = numberOfStories;
         }
     }
 }
