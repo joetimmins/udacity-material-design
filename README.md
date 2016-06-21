@@ -10,4 +10,4 @@ Some other cool techniques on show here include:
 - An intention to achieve 100% test coverage of the `core` module
 - A first draft of a pattern I like to call Android-as-a-factory
 
-Stuff that I haven't included yet but am planning to include Rx integration and proper lazy-loading of story details.
+Stuff I haven't done yet but am planning to includes Rx integration and proper lazy-loading of story details.
