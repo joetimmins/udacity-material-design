@@ -3,6 +3,7 @@ package com.novoda.materialised;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,13 +20,20 @@ import com.novoda.materialised.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.firebase.FirebaseSingleton;
 import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
+import com.novoda.materialised.hackernews.topstories.StoriesView;
 import com.novoda.materialised.hackernews.topstories.StoryView;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
+
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 public final class MainActivity extends AppCompatActivity {
 
     private MainActivityBinding mainActivityLayout;
     private TopStoriesPresenter topStoriesPresenter;
+    private StoryView storyView;
+    private StoriesView storiesView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,21 +69,29 @@ public final class MainActivity extends AppCompatActivity {
                 }
         );
 
-        StoryView storyView = new StoryView() {
+        storyView = new StoryView() {
             @Override
-            public void updateWith(StoryViewModel storyViewModel) {
+            public void updateWith(@NonNull StoryViewModel storyViewModel) {
                 mainActivityLayout.firebaseTextView.setText(storyViewModel.getTitle());
             }
         };
 
+        storiesView = new StoriesView() {
+            @Override
+            public void updateWith(@NotNull List<StoryViewModel> storyViewModels) {
+                String text = storyViewModels.get(0).getTitle() + "\n\n" + storyViewModels.get(1).getTitle();
+                mainActivityLayout.firebaseTextView.setText(text);
+            }
+        };
+
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
-        topStoriesPresenter = new TopStoriesPresenter(new FirebaseTopStoriesDatabase(firebaseDatabase), new FirebaseItemsDatabase(firebaseDatabase), storyView);
+        topStoriesPresenter = new TopStoriesPresenter(new FirebaseTopStoriesDatabase(firebaseDatabase), new FirebaseItemsDatabase(firebaseDatabase));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        topStoriesPresenter.startPresenting();
+        topStoriesPresenter.presentMultipleStoriesWith(storiesView);
     }
 
     @Override

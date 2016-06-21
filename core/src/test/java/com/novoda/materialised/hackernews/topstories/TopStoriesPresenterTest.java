@@ -5,6 +5,7 @@ import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +16,11 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class TopStoriesPresenterTest {
 
     @Test
-    public void testPresenter() {
+    public void presenterGivesCorrectViewModelToView() {
         final StoryViewModel expectedStoryViewModel = new StoryViewModel("test author", Arrays.asList(1, 2), 123, "test title", "http://test.url");
         CapturingStoryView storyView = new CapturingStoryView();
 
-        new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(expectedStoryViewModel), storyView).startPresenting();
+        new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(expectedStoryViewModel)).presentSingleStoryWith(storyView);
 
         assertThat(storyView.updatedWith).isEqualTo(expectedStoryViewModel);
     }
@@ -51,6 +52,11 @@ public class TopStoriesPresenterTest {
         @Override
         public void readItem(int id, @NotNull ValueCallback<StoryViewModel> valueCallback) {
             valueCallback.onValueRetrieved(expectedStoryViewModel);
+        }
+
+        @Override
+        public void readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<List<StoryViewModel>> valueCallback) {
+            valueCallback.onValueRetrieved(Collections.singletonList(expectedStoryViewModel));
         }
     }
 }
