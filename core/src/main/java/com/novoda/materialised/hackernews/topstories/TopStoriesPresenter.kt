@@ -21,6 +21,7 @@ class TopStoriesPresenter(val topStoriesDatabase: TopStoriesDatabase, val itemsD
     fun presentMultipleStoriesWith(storiesView: StoriesView) {
         topStoriesDatabase.readAll(
                 valueCallbackFor<List<Long>> {
+                    storiesView.updateWith(it.size)
                     itemsDatabase.readItems(
                             it.map { it.toInt() },
                             valueCallbackFor<List<StoryViewModel>> {
