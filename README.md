@@ -1,4 +1,4 @@
-# udacity-material-design
+# Materialised: Hacker News, with Material Design
 An app based on the stuff on Udacity's Material Design course.
 
 In order to showcase some of the cool techniques detailed in the course, I've created a small app that lets you browse Hacker News.
