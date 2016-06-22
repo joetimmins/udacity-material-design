@@ -7,32 +7,35 @@ import com.novoda.materialised.hackernews.valueCallbackFor
 
 class TopStoriesPresenter(val topStoriesDatabase: TopStoriesDatabase, val itemsDatabase: ItemsDatabase) {
     fun presentSingleStoryWith(storyView: StoryView) {
-        topStoriesDatabase.readAll(
-                valueCallbackFor<List<Long>> {
-                    itemsDatabase.readItem(
-                            it[0].toInt(),
-                            valueCallbackFor<StoryViewModel> {
-                                storyView.updateWith(it)
-                            }
-                    )
-                }
-        )
+        topStoriesDatabase.readAll(callbackWithFirstStoryInList(storyView))
+    }
+
+    private fun callbackWithFirstStoryInList(storyView: StoryView): ValueCallback<List<Long>> {
+        return valueCallbackFor {
+            itemsDatabase.readItem(it[0].toInt(), callbackWithSingleStoryViewModel(storyView))
+        }
+    }
+
+    private fun callbackWithSingleStoryViewModel(storyView: StoryView): ValueCallback<StoryViewModel> {
+        return valueCallbackFor {
+            storyView.updateWith(it)
+        }
     }
 
     fun presentMultipleStoriesWith(storiesView: StoriesView) {
-        topStoriesDatabase.readAll(valueCallbackForReadingStoryIds(storiesView))
+        topStoriesDatabase.readAll(callbackWithAllStoriesInList(storiesView))
     }
 
-    private fun valueCallbackForReadingStoryIds(storiesView: StoriesView): ValueCallback<List<Long>> {
+    private fun callbackWithAllStoriesInList(storiesView: StoriesView): ValueCallback<List<Long>> {
         return valueCallbackFor {
             storiesView.updateWith(it.size)
-            itemsDatabase.readItems(convertLongsToInts(it), valueCallbackForReadingEveryItem(storiesView))
+            itemsDatabase.readItems(convertLongsToInts(it), callbackWithListOfStories(storiesView))
         }
     }
 
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map { it.toInt() }
 
-    private fun valueCallbackForReadingEveryItem(storiesView: StoriesView): ValueCallback<List<StoryViewModel>> {
+    private fun callbackWithListOfStories(storiesView: StoriesView): ValueCallback<List<StoryViewModel>> {
         return valueCallbackFor {
             storiesView.updateWith(it)
         }
