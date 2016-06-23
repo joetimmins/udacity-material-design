@@ -4,8 +4,8 @@ import com.novoda.materialised.hackernews.ValueCallback;
 import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +15,12 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class TopStoriesPresenterTest {
 
-    private static final long firstStoryId = 56L;
-    private static final long secondStoryId = 78L;
+    private final long firstStoryId = 56L;
+    private final long secondStoryId = 78L;
+    private final List<Long> topStoryIds = Arrays.asList(firstStoryId, secondStoryId);
 
-    private static final StoryViewModel storyViewModel = new StoryViewModel("test author", Arrays.asList(1, 2), (int) firstStoryId, 123, "test title", "http://test.url");
-    private static final StoryViewModel anotherStoryViewModel = new StoryViewModel("another author", Arrays.asList(3, 4), (int) secondStoryId, 321, "another title", "http://another.url");
+    private final StoryViewModel storyViewModel = buildStoryViewModel();
+    private final StoryViewModel anotherStoryViewModel = buildAnotherStoryViewModel();
 
     @Test
     public void presenterGivesCorrectListOfIdsToView_AsViewModels_WhenPresentingMultipleStories() {
@@ -27,9 +28,12 @@ public class TopStoriesPresenterTest {
         StoryViewModel secondIdOnlyViewModel = buildIdOnlyViewModel(secondStoryId);
 
         List<StoryViewModel> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
-        CapturingStoriesView storiesView = new CapturingStoriesView();
+        SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        TopStoriesPresenter presenter = new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(new ArrayList<StoryViewModel>()));
+        TopStoriesPresenter presenter = new TopStoriesPresenter(
+                new StubbedTopStoriesDatabase(topStoryIds),
+                new StubbedItemsDatabase(Collections.<StoryViewModel>emptyList())
+        );
         presenter.presentMultipleStoriesWith(storiesView);
 
         assertThat(storiesView.updatedStoryViewModels).isEqualTo(expectedViewModels);
@@ -37,13 +41,24 @@ public class TopStoriesPresenterTest {
 
     @Test
     public void presenterGivesCorrectUpdatedViewModelsToView_OneAtATime_WhenPresentingMultipleStories() {
-        CapturingStoriesView storiesView = new CapturingStoriesView();
+        SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        TopStoriesPresenter presenter = new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(Arrays.asList(storyViewModel, anotherStoryViewModel)));
+        TopStoriesPresenter presenter = new TopStoriesPresenter(
+                new StubbedTopStoriesDatabase(topStoryIds),
+                new StubbedItemsDatabase(Arrays.asList(storyViewModel, anotherStoryViewModel))
+        );
         presenter.presentMultipleStoriesWith(storiesView);
 
         assertThat(storiesView.firstUpdatedStoryViewModel).isEqualTo(storyViewModel);
         assertThat(storiesView.secondUpdatedStoryViewModel).isEqualTo(anotherStoryViewModel);
+    }
+
+    private StoryViewModel buildStoryViewModel() {
+        return new StoryViewModel("test author", Arrays.asList(1, 2), (int) firstStoryId, 123, "test title", "http://test.url");
+    }
+
+    private StoryViewModel buildAnotherStoryViewModel() {
+        return new StoryViewModel("another author", Arrays.asList(3, 4), (int) secondStoryId, 321, "another title", "http://another.url");
     }
 
     private StoryViewModel buildIdOnlyViewModel(long storyId) {
@@ -51,19 +66,23 @@ public class TopStoriesPresenterTest {
         return new StoryViewModel(empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl());
     }
 
-    private static class DummyTopStoriesDatabase implements TopStoriesDatabase {
-        public final List<Long> topStories = Arrays.asList(firstStoryId, secondStoryId);
+    private static class StubbedTopStoriesDatabase implements TopStoriesDatabase {
+        public final List<Long> ids;
+
+        private StubbedTopStoriesDatabase(List<Long> ids) {
+            this.ids = ids;
+        }
 
         @Override
         public void readAll(@NotNull ValueCallback<List<Long>> callback) {
-            callback.onValueRetrieved(topStories);
+            callback.onValueRetrieved(ids);
         }
     }
 
-    private static class ConfigurableItemsDatabase implements ItemsDatabase {
+    private static class StubbedItemsDatabase implements ItemsDatabase {
         private List<StoryViewModel> storyViewModels;
 
-        public ConfigurableItemsDatabase(List<StoryViewModel> expectedViewModels) {
+        public StubbedItemsDatabase(List<StoryViewModel> expectedViewModels) {
             this.storyViewModels = expectedViewModels;
         }
 
@@ -80,7 +99,7 @@ public class TopStoriesPresenterTest {
         }
     }
 
-    private static class CapturingStoriesView implements StoriesView {
+    private static class SpyingStoriesView implements StoriesView {
         List<StoryViewModel> updatedStoryViewModels;
         StoryViewModel firstUpdatedStoryViewModel;
         StoryViewModel secondUpdatedStoryViewModel;
