@@ -12,7 +12,6 @@ import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.items.Story;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,8 +49,6 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
 
     @Override
     public void readItems(@NotNull final List<Integer> ids, @NotNull final ValueCallback<StoryViewModel> valueCallback) {
-        final List<StoryViewModel> result = new ArrayList<>();
-
         DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
 
         for (final Integer id : ids) {
@@ -61,12 +58,9 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Story value = dataSnapshot.getValue(Story.class);
                     if (value != null) {
-                        result.add(convertStoryToViewModel(value));
+                        valueCallback.onValueRetrieved(convertStoryToViewModel(value));
                     } else {
                         Log.d("TAG", "data snapshot had no value");
-                    }
-                    if (ids.indexOf(id) == (ids.size() - 1)) {
-                        valueCallback.onValueRetrieved(result);
                     }
                 }
 

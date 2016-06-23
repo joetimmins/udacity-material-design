@@ -52,9 +52,8 @@ public final class MainActivity extends AppCompatActivity {
 
         storiesView = new StoriesView() {
             @Override
-            public void updateWith(final int numberOfStories) {
-                mainActivityLayout.loadingView.setVisibility(View.GONE);
-                mainActivityLayout.topStoriesView.setAdapter(new EmptyStoriesAdapter(numberOfStories));
+            public void updateWith(@NotNull StoryViewModel storyViewModel) {
+                // figure this out later
             }
 
             @Override
