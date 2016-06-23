@@ -7,11 +7,10 @@ import android.widget.TextView;
 
 import com.novoda.materialised.R;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
-import com.novoda.materialised.hackernews.topstories.StoryView;
 
 import org.jetbrains.annotations.NotNull;
 
-final class StoryCardView extends LinearLayout implements StoryView {
+final class StoryCardView extends LinearLayout implements SingleTypeAdapter.UpdatableView<StoryViewModel> {
 
     private TextView titleView;
 
