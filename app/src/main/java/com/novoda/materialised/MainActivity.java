@@ -18,6 +18,7 @@ import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 import com.novoda.materialised.hackernews.topstories.StoriesView;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
+import com.novoda.materialised.stories.StoriesAdapter;
 
 import java.util.List;
 

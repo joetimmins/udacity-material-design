@@ -6,7 +6,6 @@ import com.novoda.materialised.hackernews.items.StoryViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,16 +20,6 @@ public class TopStoriesPresenterTest {
 
     private static final StoryViewModel storyViewModel = new StoryViewModel("test author", Arrays.asList(1, 2), (int) firstStoryId, 123, "test title", "http://test.url");
     private static final StoryViewModel anotherStoryViewModel = new StoryViewModel("another author", Arrays.asList(3, 4), (int) secondStoryId, 321, "another title", "http://another.url");
-
-    @Test
-    public void presenterGivesCorrectViewModelToView_WhenPresentingSingleStory() {
-        CapturingStoryView storyView = new CapturingStoryView();
-
-        TopStoriesPresenter presenter = new TopStoriesPresenter(new DummyTopStoriesDatabase(), new ConfigurableItemsDatabase(Collections.singletonList(storyViewModel)));
-        presenter.presentSingleStoryWith(storyView);
-
-        assertThat(storyView.updatedWith).isEqualTo(storyViewModel);
-    }
 
     @Test
     public void presenterGivesCorrectListOfIdsToView_AsViewModels_WhenPresentingMultipleStories() {
@@ -60,16 +49,6 @@ public class TopStoriesPresenterTest {
     private StoryViewModel buildIdOnlyViewModel(long storyId) {
         StoryViewModel empty = new StoryViewModel();
         return new StoryViewModel(empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl());
-    }
-
-    private static class CapturingStoryView implements StoryView {
-
-        public StoryViewModel updatedWith;
-
-        @Override
-        public void updateWith(@NotNull StoryViewModel storyViewModel) {
-            updatedWith = storyViewModel;
-        }
     }
 
     private static class DummyTopStoriesDatabase implements TopStoriesDatabase {
