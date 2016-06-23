@@ -17,7 +17,6 @@ import com.novoda.materialised.firebase.FirebaseSingleton;
 import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 import com.novoda.materialised.hackernews.topstories.StoriesView;
-import com.novoda.materialised.hackernews.topstories.StoryView;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
 import com.novoda.materialised.stories.SingleTypeAdapter;
 
@@ -61,12 +60,7 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void updateWith(@NotNull final List<StoryViewModel> storyViewModels) {
                 mainActivityLayout.loadingView.setVisibility(View.GONE);
-                SingleTypeAdapter<StoryViewModel, StoryView> adapter = new SingleTypeAdapter<>(storyViewModels, StoryView.class, new SingleTypeAdapter.ViewDataBinder<StoryViewModel, StoryView>() {
-                    @Override
-                    public void bind(StoryViewModel data, StoryView viewInstance) {
-                        viewInstance.updateWith(data);
-                    }
-                }, R.layout.inflatable_story_card);
+                SingleTypeAdapter<StoryViewModel> adapter = new SingleTypeAdapter<>(storyViewModels, R.layout.inflatable_story_card);
                 mainActivityLayout.topStoriesView.swapAdapter(adapter, false);
             }
         };

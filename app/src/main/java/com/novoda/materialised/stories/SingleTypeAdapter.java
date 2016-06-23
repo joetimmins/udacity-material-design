@@ -8,18 +8,13 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public final class SingleTypeAdapter<T, U> extends RecyclerView.Adapter {
-    private final List<T> storyViewModels;
-    private final Class<U> viewClass;
-    private final ViewDataBinder<T, U> viewDataBinder;
-
+public final class SingleTypeAdapter<T> extends RecyclerView.Adapter {
     @LayoutRes
     private final int layoutRes;
+    private final List<T> viewModels;
 
-    public SingleTypeAdapter(List<T> storyViewModels, Class<U> viewClass, ViewDataBinder<T, U> viewDataBinder, int layoutRes) {
-        this.storyViewModels = storyViewModels;
-        this.viewClass = viewClass;
-        this.viewDataBinder = viewDataBinder;
+    public SingleTypeAdapter(List<T> viewModels, int layoutRes) {
+        this.viewModels = viewModels;
         this.layoutRes = layoutRes;
     }
 
@@ -32,24 +27,13 @@ public final class SingleTypeAdapter<T, U> extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//        viewDataBinder.bind(storyViewModels.get(position), viewClass.cast(holder.itemView));
-        new DefaultViewDataBinder<T>().bind(storyViewModels.get(position), holder);
+        UpdatableView<T> view = (UpdatableView<T>) holder.itemView;
+        view.updateWith(viewModels.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return storyViewModels.size();
-    }
-
-    public interface ViewDataBinder<T, U> {
-        void bind(T data, U viewInstance);
-    }
-
-    public static class DefaultViewDataBinder<T> {
-        public void bind(T data, RecyclerView.ViewHolder holder) {
-            UpdatableView<T> view = (UpdatableView<T>) holder.itemView;
-            view.updateWith(data);
-        }
+        return viewModels.size();
     }
 
     public interface UpdatableView<T> {
