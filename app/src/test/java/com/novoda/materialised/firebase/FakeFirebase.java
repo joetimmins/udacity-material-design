@@ -13,7 +13,7 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class FakeFirebase {
+class FakeFirebase {
 
     public static FirebaseDatabase getTopStoriesFirebaseDatabase(final List<Long> expectedTopStories) {
         FirebaseDatabase mockFirebaseDatabase = mock(FirebaseDatabase.class);

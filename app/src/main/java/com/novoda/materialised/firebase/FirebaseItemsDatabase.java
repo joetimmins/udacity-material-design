@@ -17,6 +17,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.novoda.materialised.hackernews.items.StoryToViewModelConverterKt.convertStoryToViewModel;
+
 public final class FirebaseItemsDatabase implements ItemsDatabase {
     private FirebaseDatabase firebaseDatabase;
 
@@ -47,7 +49,7 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
     }
 
     @Override
-    public void readItems(@NotNull final List<Integer> ids, @NotNull final ValueCallback<List<StoryViewModel>> valueCallback) {
+    public void readItems(@NotNull final List<Integer> ids, @NotNull final ValueCallback<StoryViewModel> valueCallback) {
         final List<StoryViewModel> result = new ArrayList<>();
 
         DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
@@ -74,9 +76,5 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
                 }
             });
         }
-    }
-
-    private StoryViewModel convertStoryToViewModel(Story story) {
-        return new StoryViewModel(story.getBy(), story.getKids(), story.getScore(), story.getTitle(), story.getUrl());
     }
 }
