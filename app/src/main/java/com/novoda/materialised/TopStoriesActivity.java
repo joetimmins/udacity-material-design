@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class MainActivity extends AppCompatActivity {
+public final class TopStoriesActivity extends AppCompatActivity {
 
     private MainActivityBinding mainActivityLayout;
     private TopStoriesPresenter topStoriesPresenter;
@@ -43,7 +43,7 @@ public final class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            Toast.makeText(MainActivity.this, "This button does nothing", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TopStoriesActivity.this, "This button does nothing", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
