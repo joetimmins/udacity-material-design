@@ -32,9 +32,10 @@ public class TopStoriesPresenterTest {
 
         TopStoriesPresenter presenter = new TopStoriesPresenter(
                 new StubbedTopStoriesDatabase(topStoryIds),
-                new StubbedItemsDatabase(Collections.<StoryViewModel>emptyList())
+                new StubbedItemsDatabase(Collections.<StoryViewModel>emptyList()),
+                storiesView
         );
-        presenter.presentMultipleStoriesWith(storiesView);
+        presenter.present();
 
         assertThat(storiesView.updatedStoryViewModels).isEqualTo(expectedViewModels);
     }
@@ -45,9 +46,10 @@ public class TopStoriesPresenterTest {
 
         TopStoriesPresenter presenter = new TopStoriesPresenter(
                 new StubbedTopStoriesDatabase(topStoryIds),
-                new StubbedItemsDatabase(Arrays.asList(storyViewModel, anotherStoryViewModel))
+                new StubbedItemsDatabase(Arrays.asList(storyViewModel, anotherStoryViewModel)),
+                storiesView
         );
-        presenter.presentMultipleStoriesWith(storiesView);
+        presenter.present();
 
         assertThat(storiesView.firstUpdatedStoryViewModel).isEqualTo(storyViewModel);
         assertThat(storiesView.secondUpdatedStoryViewModel).isEqualTo(anotherStoryViewModel);

@@ -28,7 +28,6 @@ public final class TopStoriesActivity extends AppCompatActivity {
 
     private MainActivityBinding mainActivityLayout;
     private TopStoriesPresenter topStoriesPresenter;
-    private StoriesView storiesView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
 
         mainActivityLayout.topStoriesView.setLayoutManager(new LinearLayoutManager(this));
 
-        storiesView = new StoriesView() {
+        StoriesView storiesView = new StoriesView() {
 
             private SingleViewModelTypeAdapter<StoryViewModel> adapter;
 
@@ -69,13 +68,17 @@ public final class TopStoriesActivity extends AppCompatActivity {
         };
 
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
-        topStoriesPresenter = new TopStoriesPresenter(new FirebaseTopStoriesDatabase(firebaseDatabase), new FirebaseItemsDatabase(firebaseDatabase));
+        topStoriesPresenter = new TopStoriesPresenter(
+                new FirebaseTopStoriesDatabase(firebaseDatabase),
+                new FirebaseItemsDatabase(firebaseDatabase),
+                storiesView
+        );
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        topStoriesPresenter.presentMultipleStoriesWith(storiesView);
+        topStoriesPresenter.present();
     }
 
     @Override

@@ -5,9 +5,9 @@ import com.novoda.materialised.hackernews.items.ItemsDatabase
 import com.novoda.materialised.hackernews.items.StoryViewModel
 import com.novoda.materialised.hackernews.valueCallbackFor
 
-class TopStoriesPresenter(val topStoriesDatabase: TopStoriesDatabase, val itemsDatabase: ItemsDatabase) {
+class TopStoriesPresenter(val topStoriesDatabase: TopStoriesDatabase, val itemsDatabase: ItemsDatabase, val storiesView: StoriesView) {
 
-    fun presentMultipleStoriesWith(storiesView: StoriesView) {
+    fun present() {
         topStoriesDatabase.readAll(callbackWithAllStoriesInList(storiesView))
     }
 
