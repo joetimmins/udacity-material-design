@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 public final class FirebaseTopStoriesDatabase implements TopStoriesDatabase {
     private final FirebaseDatabase firebaseDatabase;
 
-    public FirebaseTopStoriesDatabase(FirebaseDatabase firebaseApp) {
-        this.firebaseDatabase = firebaseApp;
+    public FirebaseTopStoriesDatabase(FirebaseDatabase firebaseDatabase) {
+        this.firebaseDatabase = firebaseDatabase;
     }
 
     @Override
