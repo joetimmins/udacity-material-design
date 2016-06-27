@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,7 @@ import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 import com.novoda.materialised.hackernews.topstories.StoriesView;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
-import com.novoda.materialised.stories.SingleTypeAdapter;
+import com.novoda.materialised.stories.SingleViewModelTypeAdapter;
 
 import java.util.List;
 
@@ -52,15 +53,19 @@ public final class MainActivity extends AppCompatActivity {
         mainActivityLayout.topStoriesView.setLayoutManager(new LinearLayoutManager(this));
 
         storiesView = new StoriesView() {
+
+            private SingleViewModelTypeAdapter<StoryViewModel> adapter;
+
             @Override
             public void updateWith(@NotNull StoryViewModel storyViewModel) {
-                // figure this out later
+                Log.d("something", "view closure updateWith called");
+                adapter.updateWith(storyViewModel);
             }
 
             @Override
             public void updateWith(@NotNull final List<StoryViewModel> storyViewModels) {
                 mainActivityLayout.loadingView.setVisibility(View.GONE);
-                SingleTypeAdapter<StoryViewModel> adapter = new SingleTypeAdapter<>(storyViewModels, R.layout.inflatable_story_card);
+                adapter = new SingleViewModelTypeAdapter<>(storyViewModels, R.layout.inflatable_story_card);
                 mainActivityLayout.topStoriesView.swapAdapter(adapter, false);
             }
         };
