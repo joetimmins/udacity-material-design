@@ -16,7 +16,6 @@ import com.novoda.materialised.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.firebase.FirebaseSingleton;
 import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
-import com.novoda.materialised.hackernews.topstories.StoriesView;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
 import com.novoda.materialised.stories.SingleViewModelTypeAdapter;
 
@@ -50,22 +49,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
 
         mainActivityLayout.topStoriesView.setLayoutManager(new LinearLayoutManager(this));
 
-        StoriesView storiesView = new StoriesView() {
-
-            private SingleViewModelTypeAdapter<StoryViewModel> adapter;
-
-            @Override
-            public void updateWith(@NotNull StoryViewModel storyViewModel) {
-                adapter.updateWith(storyViewModel);
-            }
-
-            @Override
-            public void updateWith(@NotNull final List<StoryViewModel> storyViewModels) {
-                mainActivityLayout.loadingView.setVisibility(View.GONE);
-                adapter = new SingleViewModelTypeAdapter<>(storyViewModels, R.layout.inflatable_story_card);
-                mainActivityLayout.topStoriesView.swapAdapter(adapter, false);
-            }
-        };
+        TopStoriesView storiesView = new TopStoriesView();
 
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
         topStoriesPresenter = new TopStoriesPresenter(
@@ -103,4 +87,20 @@ public final class TopStoriesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private class TopStoriesView implements com.novoda.materialised.hackernews.topstories.TopStoriesView {
+
+        private SingleViewModelTypeAdapter<StoryViewModel> adapter;
+
+        @Override
+        public void updateWith(@NotNull StoryViewModel storyViewModel) {
+            adapter.updateWith(storyViewModel);
+        }
+
+        @Override
+        public void updateWith(@NotNull final List<StoryViewModel> storyViewModels) {
+            mainActivityLayout.loadingView.setVisibility(View.GONE);
+            adapter = new SingleViewModelTypeAdapter<>(storyViewModels, R.layout.inflatable_story_card);
+            mainActivityLayout.topStoriesView.swapAdapter(adapter, false);
+        }
+    }
 }

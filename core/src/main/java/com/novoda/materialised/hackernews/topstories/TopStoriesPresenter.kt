@@ -5,16 +5,16 @@ import com.novoda.materialised.hackernews.items.ItemsDatabase
 import com.novoda.materialised.hackernews.items.StoryViewModel
 import com.novoda.materialised.hackernews.valueCallbackFor
 
-class TopStoriesPresenter(val topStoriesDatabase: TopStoriesDatabase, val itemsDatabase: ItemsDatabase, val storiesView: StoriesView) {
+class TopStoriesPresenter(val topStoriesDatabase: TopStoriesDatabase, val itemsDatabase: ItemsDatabase, val topStoriesView: TopStoriesView) {
 
     fun present() {
-        topStoriesDatabase.readAll(callbackWithAllStoriesInList(storiesView))
+        topStoriesDatabase.readAll(callbackWithAllStoriesInList(topStoriesView))
     }
 
-    private fun callbackWithAllStoriesInList(storiesView: StoriesView): ValueCallback<List<Long>> {
+    private fun callbackWithAllStoriesInList(topStoriesView: TopStoriesView): ValueCallback<List<Long>> {
         return valueCallbackFor {
-            storiesView.updateWith(createIdOnlyViewModels(it))
-            itemsDatabase.readItems(convertLongsToInts(it), callbackToStoriesViewWithSingleStoryViewModel(storiesView))
+            topStoriesView.updateWith(createIdOnlyViewModels(it))
+            itemsDatabase.readItems(convertLongsToInts(it), callbackToStoriesViewWithSingleStoryViewModel(topStoriesView))
         }
     }
 
@@ -29,9 +29,9 @@ class TopStoriesPresenter(val topStoriesDatabase: TopStoriesDatabase, val itemsD
 
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map { it.toInt() }
 
-    private fun callbackToStoriesViewWithSingleStoryViewModel(storiesView: StoriesView): ValueCallback<StoryViewModel> {
+    private fun callbackToStoriesViewWithSingleStoryViewModel(topStoriesView: TopStoriesView): ValueCallback<StoryViewModel> {
         return valueCallbackFor {
-            storiesView.updateWith(it)
+            topStoriesView.updateWith(it)
         }
     }
 }

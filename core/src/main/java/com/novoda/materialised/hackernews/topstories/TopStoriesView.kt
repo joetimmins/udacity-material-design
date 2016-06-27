@@ -2,7 +2,7 @@ package com.novoda.materialised.hackernews.topstories
 
 import com.novoda.materialised.hackernews.items.StoryViewModel
 
-interface StoriesView {
+interface TopStoriesView {
     fun updateWith(storyViewModels: List<StoryViewModel>)
     fun updateWith(storyViewModel: StoryViewModel)
 }

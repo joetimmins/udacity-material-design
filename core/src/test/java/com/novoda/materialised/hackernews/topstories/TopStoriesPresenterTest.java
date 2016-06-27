@@ -28,7 +28,7 @@ public class TopStoriesPresenterTest {
         StoryViewModel secondIdOnlyViewModel = buildIdOnlyViewModel(secondStoryId);
 
         List<StoryViewModel> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
-        SpyingStoriesView storiesView = new SpyingStoriesView();
+        SpyingTopStoriesView storiesView = new SpyingTopStoriesView();
 
         TopStoriesPresenter presenter = new TopStoriesPresenter(
                 new StubbedTopStoriesDatabase(topStoryIds),
@@ -42,7 +42,7 @@ public class TopStoriesPresenterTest {
 
     @Test
     public void presenterGivesCorrectUpdatedViewModelsToView_OneAtATime_WhenPresentingMultipleStories() {
-        SpyingStoriesView storiesView = new SpyingStoriesView();
+        SpyingTopStoriesView storiesView = new SpyingTopStoriesView();
 
         TopStoriesPresenter presenter = new TopStoriesPresenter(
                 new StubbedTopStoriesDatabase(topStoryIds),
@@ -101,7 +101,7 @@ public class TopStoriesPresenterTest {
         }
     }
 
-    private static class SpyingStoriesView implements StoriesView {
+    private static class SpyingTopStoriesView implements TopStoriesView {
         List<StoryViewModel> updatedStoryViewModels;
         StoryViewModel firstUpdatedStoryViewModel;
         StoryViewModel secondUpdatedStoryViewModel;
