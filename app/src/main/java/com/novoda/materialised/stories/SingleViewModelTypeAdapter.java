@@ -2,13 +2,11 @@ package com.novoda.materialised.stories;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.novoda.materialised.hackernews.ViewModel;
-import com.novoda.materialised.hackernews.items.StoryViewModel;
 
 import java.util.List;
 
@@ -32,7 +30,7 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        UpdatableView<T> view = (UpdatableView) holder.itemView;
+        UpdatableView<T> view = (UpdatableView<T>) holder.itemView;
         view.updateWith(viewModels.get(position));
     }
 
@@ -47,13 +45,11 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
     }
 
     public void updateWith(T newItem) {
-        Log.d("something", "update with new item, title: " + ((StoryViewModel) newItem).getTitle());
         for (T viewModel : viewModels) {
             if (viewModel.getId() == newItem.getId()) {
                 int indexToUpdate = viewModels.indexOf(viewModel);
-                Log.d("something", "updating item at index: " + indexToUpdate);
                 viewModels.set(indexToUpdate, newItem);
-                notifyDataSetChanged();
+                notifyItemChanged(indexToUpdate);
                 break;
             }
         }

@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,7 +57,6 @@ public final class MainActivity extends AppCompatActivity {
 
             @Override
             public void updateWith(@NotNull StoryViewModel storyViewModel) {
-                Log.d("something", "view closure updateWith called");
                 adapter.updateWith(storyViewModel);
             }
 
