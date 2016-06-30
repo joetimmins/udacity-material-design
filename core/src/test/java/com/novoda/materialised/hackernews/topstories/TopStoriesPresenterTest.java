@@ -30,12 +30,7 @@ public class TopStoriesPresenterTest {
         List<StoryViewModel> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
         SpyingTopStoriesView storiesView = new SpyingTopStoriesView();
 
-        TopStoriesPresenter presenter = new TopStoriesPresenter(
-                new StubbedTopStoriesDatabase(topStoryIds),
-                new StubbedItemsDatabase(Collections.<StoryViewModel>emptyList()),
-                storiesView
-        );
-        presenter.present();
+        presentWith(storiesView, Collections.<StoryViewModel>emptyList());
 
         assertThat(storiesView.updatedStoryViewModels).isEqualTo(expectedViewModels);
     }
@@ -44,15 +39,19 @@ public class TopStoriesPresenterTest {
     public void presenterGivesCorrectUpdatedViewModelsToView_OneAtATime_WhenPresentingMultipleStories() {
         SpyingTopStoriesView storiesView = new SpyingTopStoriesView();
 
-        TopStoriesPresenter presenter = new TopStoriesPresenter(
-                new StubbedTopStoriesDatabase(topStoryIds),
-                new StubbedItemsDatabase(Arrays.asList(storyViewModel, anotherStoryViewModel)),
-                storiesView
-        );
-        presenter.present();
+        presentWith(storiesView, Arrays.asList(storyViewModel, anotherStoryViewModel));
 
         assertThat(storiesView.firstUpdatedStoryViewModel).isEqualTo(storyViewModel);
         assertThat(storiesView.secondUpdatedStoryViewModel).isEqualTo(anotherStoryViewModel);
+    }
+
+    private void presentWith(SpyingTopStoriesView storiesView, List<StoryViewModel> emptyViewModelList) {
+        TopStoriesPresenter presenter = new TopStoriesPresenter(
+                new StubbedTopStoriesDatabase(topStoryIds),
+                new StubbedItemsDatabase(emptyViewModelList),
+                storiesView
+        );
+        presenter.present();
     }
 
     private StoryViewModel buildStoryViewModel() {
