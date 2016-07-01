@@ -51,7 +51,12 @@ public class TopStoriesPresenterTest {
                 new StubbedTopStoriesDatabase(topStoryIds),
                 new StubbedItemsDatabase(emptyViewModelList),
                 storiesView,
-                clickListener
+                new ClickListener<StoryViewModel>() {
+                    @Override
+                    public void onClick(@NotNull StoryViewModel viewModel) {
+
+                    }
+                }
         );
         presenter.present();
     }
@@ -113,7 +118,7 @@ public class TopStoriesPresenterTest {
         }
 
         @Override
-        public void updateWith(@NotNull StoryViewModel storyViewModel, @NotNull ClickListener<? super StoryViewModel> clickListener) {
+        public void updateWith(@NotNull StoryViewModel storyViewModel, @NotNull ClickListener<StoryViewModel> clickListener) {
             if (firstUpdatedStoryViewModel == null) {
                 firstUpdatedStoryViewModel = storyViewModel;
             } else if (secondUpdatedStoryViewModel == null) {
