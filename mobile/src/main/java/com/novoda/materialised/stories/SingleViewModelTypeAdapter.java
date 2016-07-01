@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.novoda.materialised.hackernews.ClickListener;
 import com.novoda.materialised.hackernews.NoOpClickListener;
 import com.novoda.materialised.hackernews.ViewModel;
+import com.novoda.materialised.hackernews.ViewModelWithClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,21 +78,4 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
         void updateWith(U data, ClickListener<U> clickListener);
     }
 
-    public static class ViewModelWithClickListener<V extends ViewModel> {
-        private final V viewModel;
-        private final ClickListener<V> clickListener;
-
-        public ViewModelWithClickListener(V viewModel, ClickListener<V> clickListener) {
-            this.viewModel = viewModel;
-            this.clickListener = clickListener;
-        }
-
-        public V getViewModel() {
-            return viewModel;
-        }
-
-        public ClickListener<V> getClickListener() {
-            return clickListener;
-        }
-    }
 }

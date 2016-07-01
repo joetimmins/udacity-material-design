@@ -2,7 +2,6 @@ package com.novoda.materialised.stories;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +38,6 @@ final class StoryCardView
 
     @Override
     public void updateWith(final StoryViewModel storyViewModel, final ClickListener<StoryViewModel> clickListener) {
-        Log.d("something", "setting text to " + storyViewModel.getTitle());
         titleView.setText(storyViewModel.getTitle());
         titleView.setOnClickListener(new OnClickListener() {
             @Override

@@ -1,6 +1,5 @@
 package com.novoda.materialised.hackernews.items
 
-import com.novoda.materialised.hackernews.ClickListener
 import com.novoda.materialised.hackernews.ViewModel
 import java.util.*
 
