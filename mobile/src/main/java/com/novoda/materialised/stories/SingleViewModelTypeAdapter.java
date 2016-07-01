@@ -8,12 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.novoda.materialised.hackernews.ClickListener;
+import com.novoda.materialised.hackernews.NoOpClickListener;
 import com.novoda.materialised.hackernews.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
 
 public final class SingleViewModelTypeAdapter<T extends ViewModel> extends RecyclerView.Adapter {
     @LayoutRes
@@ -32,7 +31,7 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
     private List<ClickListener<T>> buildNullSafeClickListeners(int size) {
         List<ClickListener<T>> clickListeners = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            clickListeners.add(i, new NoOpClickListener());
+            clickListeners.add(i, new NoOpClickListener<T>());
         }
         return clickListeners;
     }
@@ -76,10 +75,4 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
         void updateWith(U data, ClickListener<U> clickListener);
     }
 
-    private class NoOpClickListener implements ClickListener<T> {
-        @Override
-        public void onClick(@NotNull T viewModel) {
-            // No-op
-        }
-    }
 }

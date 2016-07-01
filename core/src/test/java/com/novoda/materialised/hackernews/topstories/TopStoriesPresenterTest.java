@@ -1,6 +1,7 @@
 package com.novoda.materialised.hackernews.topstories;
 
 import com.novoda.materialised.hackernews.ClickListener;
+import com.novoda.materialised.hackernews.NoOpClickListener;
 import com.novoda.materialised.hackernews.ValueCallback;
 import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
@@ -51,12 +52,7 @@ public class TopStoriesPresenterTest {
                 new StubbedTopStoriesDatabase(topStoryIds),
                 new StubbedItemsDatabase(emptyViewModelList),
                 storiesView,
-                new ClickListener<StoryViewModel>() {
-                    @Override
-                    public void onClick(@NotNull StoryViewModel viewModel) {
-
-                    }
-                }
+                new NoOpClickListener<StoryViewModel>()
         );
         presenter.present();
     }
