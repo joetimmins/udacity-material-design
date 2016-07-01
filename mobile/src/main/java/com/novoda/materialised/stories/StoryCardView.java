@@ -3,13 +3,17 @@ package com.novoda.materialised.stories;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.materialised.R;
+import com.novoda.materialised.hackernews.ClickListener;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 
-final class StoryCardView extends LinearLayout implements SingleViewModelTypeAdapter.UpdatableView<StoryViewModel> {
+final class StoryCardView
+        extends LinearLayout
+        implements SingleViewModelTypeAdapter.UpdatableView<StoryViewModel> {
 
     private TextView titleView;
 
@@ -34,8 +38,15 @@ final class StoryCardView extends LinearLayout implements SingleViewModelTypeAda
     }
 
     @Override
-    public void updateWith(StoryViewModel storyViewModel) {
+    public void updateWith(final StoryViewModel storyViewModel, final ClickListener<StoryViewModel> clickListener) {
         Log.d("something", "setting text to " + storyViewModel.getTitle());
         titleView.setText(storyViewModel.getTitle());
+        titleView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickListener.onClick(storyViewModel);
+            }
+        });
     }
+
 }

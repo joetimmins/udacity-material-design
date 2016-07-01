@@ -1,6 +1,8 @@
 package com.novoda.materialised;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +17,11 @@ import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.firebase.FirebaseSingleton;
 import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
+import com.novoda.materialised.hackernews.ClickListener;
+import com.novoda.materialised.hackernews.items.StoryViewModel;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
+
+import org.jetbrains.annotations.NotNull;
 
 public final class TopStoriesActivity extends AppCompatActivity {
 
@@ -42,13 +48,22 @@ public final class TopStoriesActivity extends AppCompatActivity {
 
         mainActivityLayout.topStoriesView.setLayoutManager(new LinearLayoutManager(this));
 
-        TopStoriesViewPresenter storiesView = new TopStoriesViewPresenter(mainActivityLayout.loadingView, mainActivityLayout.topStoriesView);
+        TopStoriesViewPresenter storiesViewPresenter = new TopStoriesViewPresenter(
+                mainActivityLayout.loadingView,
+                mainActivityLayout.topStoriesView
+        );
 
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
         topStoriesPresenter = new TopStoriesPresenter(
                 new FirebaseTopStoriesDatabase(firebaseDatabase),
                 new FirebaseItemsDatabase(firebaseDatabase),
-                storiesView
+                storiesViewPresenter,
+                new ClickListener<StoryViewModel>() {
+                    @Override
+                    public void onClick(@NotNull StoryViewModel viewModel) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(viewModel.getUrl())));
+                    }
+                }
         );
     }
 

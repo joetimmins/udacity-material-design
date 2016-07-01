@@ -1,5 +1,6 @@
 package com.novoda.materialised.hackernews.topstories;
 
+import com.novoda.materialised.hackernews.ClickListener;
 import com.novoda.materialised.hackernews.ValueCallback;
 import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
@@ -49,7 +50,8 @@ public class TopStoriesPresenterTest {
         TopStoriesPresenter presenter = new TopStoriesPresenter(
                 new StubbedTopStoriesDatabase(topStoryIds),
                 new StubbedItemsDatabase(emptyViewModelList),
-                storiesView
+                storiesView,
+                clickListener
         );
         presenter.present();
     }
@@ -106,12 +108,12 @@ public class TopStoriesPresenterTest {
         StoryViewModel secondUpdatedStoryViewModel;
 
         @Override
-        public void updateWith(@NotNull List<StoryViewModel> storyViewModels) {
-            updatedStoryViewModels = storyViewModels;
+        public void updateWith(@NotNull List<StoryViewModel> initialViewModelList) {
+            updatedStoryViewModels = initialViewModelList;
         }
 
         @Override
-        public void updateWith(@NotNull StoryViewModel storyViewModel) {
+        public void updateWith(@NotNull StoryViewModel storyViewModel, @NotNull ClickListener<? super StoryViewModel> clickListener) {
             if (firstUpdatedStoryViewModel == null) {
                 firstUpdatedStoryViewModel = storyViewModel;
             } else if (secondUpdatedStoryViewModel == null) {
