@@ -2,8 +2,6 @@ package com.novoda.materialised.firebase;
 
 import com.novoda.materialised.hackernews.ValueCallback;
 import com.novoda.materialised.hackernews.items.Story;
-import com.novoda.materialised.hackernews.items.StoryToViewModelConverterKt;
-import com.novoda.materialised.hackernews.items.StoryViewModel;
 
 import java.util.Arrays;
 
@@ -24,16 +22,16 @@ public class FirebaseItemsDatabaseTest {
         FirebaseItemsDatabase firebaseItemsDatabase = new FirebaseItemsDatabase(FakeFirebase.getItemsDatabase(Arrays.asList(firstStory, secondStory)));
         firebaseItemsDatabase.readItems(Arrays.asList(firstStoryId, secondStoryId), valueCallback);
 
-        assertThat(valueCallback.first).isEqualTo(StoryToViewModelConverterKt.convertStoryToViewModel(firstStory));
-        assertThat(valueCallback.second).isEqualTo(StoryToViewModelConverterKt.convertStoryToViewModel(secondStory));
+        assertThat(valueCallback.first).isEqualTo(firstStory);
+        assertThat(valueCallback.second).isEqualTo(secondStory);
     }
 
-    private class CapturingValueCallback implements ValueCallback<StoryViewModel> {
-        public StoryViewModel first;
-        public StoryViewModel second;
+    private class CapturingValueCallback implements ValueCallback<Story> {
+        public Story first;
+        public Story second;
 
         @Override
-        public void onValueRetrieved(StoryViewModel value) {
+        public void onValueRetrieved(Story value) {
             if (first == null) {
                 first = value;
             } else if (second == null) {

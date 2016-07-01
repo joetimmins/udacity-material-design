@@ -10,13 +10,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.novoda.materialised.hackernews.ValueCallback;
 import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.items.Story;
-import com.novoda.materialised.hackernews.items.StoryViewModel;
 
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-
-import static com.novoda.materialised.hackernews.items.StoryToViewModelConverterKt.convertStoryToViewModel;
 
 public final class FirebaseItemsDatabase implements ItemsDatabase {
     private FirebaseDatabase firebaseDatabase;
@@ -26,7 +23,7 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
     }
 
     @Override
-    public void readItem(int id, @NotNull final ValueCallback<StoryViewModel> valueCallback) {
+    public void readItem(int id, @NotNull final ValueCallback<Story> valueCallback) {
         DatabaseReference item = firebaseDatabase.getReference("v0").child("item").child(Integer.toString(id));
 
         item.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -34,7 +31,7 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Story value = dataSnapshot.getValue(Story.class);
                 if (value != null) {
-                    valueCallback.onValueRetrieved(convertStoryToViewModel(value));
+                    valueCallback.onValueRetrieved(value);
                 } else {
                     Log.d("TAG", "data snapshot had no value");
                 }
@@ -48,7 +45,7 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
     }
 
     @Override
-    public void readItems(@NotNull final List<Integer> ids, @NotNull final ValueCallback<StoryViewModel> valueCallback) {
+    public void readItems(@NotNull final List<Integer> ids, @NotNull final ValueCallback<Story> valueCallback) {
         DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
 
         for (final Integer id : ids) {
@@ -58,7 +55,7 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Story value = dataSnapshot.getValue(Story.class);
                     if (value != null) {
-                        valueCallback.onValueRetrieved(convertStoryToViewModel(value));
+                        valueCallback.onValueRetrieved(value);
                     } else {
                         Log.d("TAG", "data snapshot had no value");
                     }

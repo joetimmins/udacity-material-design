@@ -3,7 +3,9 @@ package com.novoda.materialised.hackernews.topstories
 import com.novoda.materialised.hackernews.ClickListener
 import com.novoda.materialised.hackernews.ValueCallback
 import com.novoda.materialised.hackernews.items.ItemsDatabase
+import com.novoda.materialised.hackernews.items.Story
 import com.novoda.materialised.hackernews.items.StoryViewModel
+import com.novoda.materialised.hackernews.items.convertStoryToViewModel
 import com.novoda.materialised.hackernews.valueCallbackFor
 
 class TopStoriesPresenter(
@@ -37,9 +39,9 @@ class TopStoriesPresenter(
 
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map { it.toInt() }
 
-    private fun callbackToStoriesViewWithSingleStoryViewModel(topStoriesView: TopStoriesView): ValueCallback<StoryViewModel> {
+    private fun callbackToStoriesViewWithSingleStoryViewModel(topStoriesView: TopStoriesView): ValueCallback<Story> {
         return valueCallbackFor {
-            topStoriesView.updateWith(it, clickListener)
+            topStoriesView.updateWith(convertStoryToViewModel(it), clickListener)
         }
     }
 }
