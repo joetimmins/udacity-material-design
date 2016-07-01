@@ -7,12 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.novoda.materialised.hackernews.ClickListener;
-import com.novoda.materialised.hackernews.NoOpClickListener;
 import com.novoda.materialised.hackernews.ViewModel;
 import com.novoda.materialised.hackernews.ViewModelWithClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.novoda.materialised.hackernews.ViewModelUtilsKt.addClickListener;
+import static com.novoda.materialised.hackernews.ViewModelUtilsKt.addNoOpClickListeners;
 
 public final class SingleViewModelTypeAdapter<T extends ViewModel> extends RecyclerView.Adapter {
     @LayoutRes
@@ -35,10 +36,8 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         UpdatableView<T> view = (UpdatableView<T>) holder.itemView;
-        view.updateWith(
-                viewModelWithClickListeners.get(position).getViewModel(),
-                viewModelWithClickListeners.get(position).getClickListener()
-        );
+        ViewModelWithClickListener<T> data = viewModelWithClickListeners.get(position);
+        view.updateWith(data.getViewModel(), data.getClickListener());
     }
 
     @Override
@@ -62,20 +61,7 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
         }
     }
 
-    private List<ViewModelWithClickListener<T>> addNoOpClickListeners(List<T> viewModels) {
-        List<ViewModelWithClickListener<T>> result = new ArrayList<>();
-        for (T viewModel : viewModels) {
-            result.add(addClickListener(viewModel, new NoOpClickListener<T>()));
-        }
-        return result;
-    }
-
-    private ViewModelWithClickListener<T> addClickListener(T viewModel, ClickListener<T> clickListener) {
-        return new ViewModelWithClickListener<>(viewModel, clickListener);
-    }
-
     public interface UpdatableView<U extends ViewModel> {
         void updateWith(U data, ClickListener<U> clickListener);
     }
-
 }
