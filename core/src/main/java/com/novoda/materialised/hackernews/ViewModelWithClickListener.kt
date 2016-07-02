@@ -1,6 +1,6 @@
 package com.novoda.materialised.hackernews
 
-data class ViewModelWithClickListener<V : ViewModel>(
-        val viewModel: V,
-        val clickListener: ClickListener<V>
+data class ViewModelWithClickListener<T : ViewModel>(
+        val viewModel: T,
+        val clickListener: ClickListener<T>
 ) {}

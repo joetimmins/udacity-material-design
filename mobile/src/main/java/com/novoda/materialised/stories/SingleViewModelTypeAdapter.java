@@ -12,8 +12,7 @@ import com.novoda.materialised.hackernews.ViewModelWithClickListener;
 
 import java.util.List;
 
-import static com.novoda.materialised.hackernews.ViewModelUtilsKt.addClickListener;
-import static com.novoda.materialised.hackernews.ViewModelUtilsKt.addNoOpClickListeners;
+import static com.novoda.materialised.hackernews.ClickListenerBuilderKt.addNoOpClickListeners;
 
 public final class SingleViewModelTypeAdapter<T extends ViewModel> extends RecyclerView.Adapter {
     @LayoutRes
@@ -54,7 +53,7 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
         for (ViewModelWithClickListener<T> viewModel : viewModelWithClickListeners) {
             if (viewModel.getViewModel().getId() == newItem.getId()) {
                 int positionToUpdate = viewModelWithClickListeners.indexOf(viewModel);
-                viewModelWithClickListeners.set(positionToUpdate, addClickListener(newItem, clickListener));
+                viewModelWithClickListeners.set(positionToUpdate, new ViewModelWithClickListener<>(newItem, clickListener));
                 notifyItemChanged(positionToUpdate);
                 break;
             }
