@@ -35,5 +35,4 @@ final class TopStoriesViewPresenter implements TopStoriesView {
         adapter = new SingleViewModelTypeAdapter<>(initialViewModelList, R.layout.inflatable_story_card);
         topStoriesView.swapAdapter(adapter, false);
     }
-
 }

@@ -17,10 +17,10 @@ import static com.novoda.materialised.hackernews.ClickListenerBuilderKt.addNoOpC
 public final class SingleViewModelTypeAdapter<T extends ViewModel> extends RecyclerView.Adapter {
     @LayoutRes
     private final int layoutRes;
-    private final List<ViewModelWithClickListener<T>> viewModelWithClickListeners;
+    private final List<ViewModelWithClickListener<T>> viewModelsWithClickListeners;
 
     public SingleViewModelTypeAdapter(List<T> viewModels, int layoutRes) {
-        this.viewModelWithClickListeners = addNoOpClickListeners(viewModels);
+        this.viewModelsWithClickListeners = addNoOpClickListeners(viewModels);
         this.layoutRes = layoutRes;
         setHasStableIds(true);
     }
@@ -35,25 +35,25 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         UpdatableView<T> view = (UpdatableView<T>) holder.itemView;
-        ViewModelWithClickListener<T> data = viewModelWithClickListeners.get(position);
+        ViewModelWithClickListener<T> data = viewModelsWithClickListeners.get(position);
         view.updateWith(data.getViewModel(), data.getClickListener());
     }
 
     @Override
     public int getItemCount() {
-        return viewModelWithClickListeners.size();
+        return viewModelsWithClickListeners.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return viewModelWithClickListeners.get(position).getViewModel().getId();
+        return viewModelsWithClickListeners.get(position).getViewModel().getId();
     }
 
     public void updateWith(T newItem, ClickListener<T> clickListener) {
-        for (ViewModelWithClickListener<T> viewModel : viewModelWithClickListeners) {
+        for (ViewModelWithClickListener<T> viewModel : viewModelsWithClickListeners) {
             if (viewModel.getViewModel().getId() == newItem.getId()) {
-                int positionToUpdate = viewModelWithClickListeners.indexOf(viewModel);
-                viewModelWithClickListeners.set(positionToUpdate, new ViewModelWithClickListener<>(newItem, clickListener));
+                int positionToUpdate = viewModelsWithClickListeners.indexOf(viewModel);
+                viewModelsWithClickListeners.set(positionToUpdate, new ViewModelWithClickListener<>(newItem, clickListener));
                 notifyItemChanged(positionToUpdate);
                 break;
             }
