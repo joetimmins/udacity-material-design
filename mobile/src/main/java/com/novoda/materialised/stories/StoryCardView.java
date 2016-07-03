@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.materialised.R;
-import com.novoda.materialised.hackernews.ClickListener;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
 
 final class StoryCardView
@@ -37,12 +36,12 @@ final class StoryCardView
     }
 
     @Override
-    public void updateWith(final StoryViewModel storyViewModel, final ClickListener<StoryViewModel> clickListener) {
+    public void updateWith(final StoryViewModel storyViewModel) {
         titleView.setText(storyViewModel.getTitle());
         titleView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickListener.onClick(storyViewModel);
+                storyViewModel.getClickListener().onClick(storyViewModel);
             }
         });
     }

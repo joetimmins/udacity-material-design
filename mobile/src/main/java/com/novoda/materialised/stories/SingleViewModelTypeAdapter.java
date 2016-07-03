@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.novoda.materialised.hackernews.ClickListener;
 import com.novoda.materialised.hackernews.ViewModel;
 
 import java.util.List;
@@ -14,10 +13,10 @@ import java.util.List;
 public final class SingleViewModelTypeAdapter<T extends ViewModel<T>> extends RecyclerView.Adapter {
     @LayoutRes
     private final int layoutRes;
-    private final List<T> viewModelsWithClickListeners;
+    private final List<T> viewModels;
 
     public SingleViewModelTypeAdapter(List<T> viewModels, int layoutRes) {
-        this.viewModelsWithClickListeners = viewModels;
+        this.viewModels = viewModels;
         this.layoutRes = layoutRes;
         setHasStableIds(true);
     }
@@ -32,32 +31,32 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel<T>> extends Re
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         UpdatableView<T> view = (UpdatableView<T>) holder.itemView;
-        T data = viewModelsWithClickListeners.get(position);
-        view.updateWith(data, data.getClickListener());
+        T data = viewModels.get(position);
+        view.updateWith(data);
     }
 
     @Override
     public int getItemCount() {
-        return viewModelsWithClickListeners.size();
+        return viewModels.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return viewModelsWithClickListeners.get(position).getId();
+        return viewModels.get(position).getId();
     }
 
     public void updateWith(T newItem) {
-        for (T viewModel : viewModelsWithClickListeners) {
+        for (T viewModel : viewModels) {
             if (viewModel.getId() == newItem.getId()) {
-                int positionToUpdate = viewModelsWithClickListeners.indexOf(viewModel);
-                viewModelsWithClickListeners.set(positionToUpdate, newItem);
+                int positionToUpdate = viewModels.indexOf(viewModel);
+                viewModels.set(positionToUpdate, newItem);
                 notifyItemChanged(positionToUpdate);
                 break;
             }
         }
     }
 
-    public interface UpdatableView<U extends ViewModel> {
-        void updateWith(U data, ClickListener<U> clickListener);
+    public interface UpdatableView<U extends ViewModel<U>> {
+        void updateWith(U data);
     }
 }
