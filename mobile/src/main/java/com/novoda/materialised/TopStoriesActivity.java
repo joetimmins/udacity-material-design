@@ -58,12 +58,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
                 new FirebaseTopStoriesDatabase(firebaseDatabase),
                 new FirebaseItemsDatabase(firebaseDatabase),
                 storiesViewPresenter,
-                new ClickListener<StoryViewModel>() {
-                    @Override
-                    public void onClick(@NotNull StoryViewModel viewModel) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(viewModel.getUrl())));
-                    }
-                }
+                new StoryViewModelClickListener()
         );
     }
 
@@ -95,4 +90,10 @@ public final class TopStoriesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private class StoryViewModelClickListener implements ClickListener<StoryViewModel> {
+        @Override
+        public void onClick(@NotNull StoryViewModel data) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(data.getUrl())));
+        }
+    }
 }
