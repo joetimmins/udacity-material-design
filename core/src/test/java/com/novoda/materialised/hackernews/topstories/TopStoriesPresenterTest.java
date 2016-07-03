@@ -73,7 +73,7 @@ public class TopStoriesPresenterTest {
 
     private StoryViewModel buildIdOnlyViewModel(long storyId) {
         StoryViewModel empty = new StoryViewModel();
-        return new StoryViewModel(empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl());
+        return new StoryViewModel(empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl(), empty.getClickListener());
     }
 
     private static class StubbedTopStoriesDatabase implements TopStoriesDatabase {

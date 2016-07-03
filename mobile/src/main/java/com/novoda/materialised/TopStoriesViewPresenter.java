@@ -26,7 +26,7 @@ final class TopStoriesViewPresenter implements TopStoriesView {
 
     @Override
     public void updateWith(@NotNull StoryViewModel storyViewModel, @NotNull ClickListener<StoryViewModel> clickListener) {
-        adapter.updateWith(storyViewModel, clickListener);
+        adapter.updateWith(storyViewModel);
     }
 
     @Override

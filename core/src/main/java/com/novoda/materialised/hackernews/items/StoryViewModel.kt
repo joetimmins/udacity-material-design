@@ -1,5 +1,7 @@
 package com.novoda.materialised.hackernews.items
 
+import com.novoda.materialised.hackernews.ClickListener
+import com.novoda.materialised.hackernews.NoOpClickListener
 import com.novoda.materialised.hackernews.ViewModel
 import java.util.*
 
@@ -9,5 +11,6 @@ data class StoryViewModel(
         override val id: Int = 0,
         val score: Int = 0,
         val title: String = "",
-        val url: String = ""
-) : ViewModel {}
+        val url: String = "",
+        override val clickListener: ClickListener<StoryViewModel> = NoOpClickListener()
+) : ViewModel<StoryViewModel> {}
