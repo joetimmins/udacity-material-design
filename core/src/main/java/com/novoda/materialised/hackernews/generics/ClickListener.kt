@@ -1,10 +1,10 @@
 package com.novoda.materialised.hackernews.generics
 
-interface ClickListener<T> {
+interface ClickListener<in T> {
     fun onClick(data: T)
 }
 
-class NoOpClickListener<T> : ClickListener<T> {
+class NoOpClickListener<in T> : ClickListener<T> {
     override fun onClick(data: T) {
         // No-op
     }
