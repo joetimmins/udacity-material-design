@@ -44,11 +44,10 @@ class TopStoriesPresenter(
 
     private fun convert(story: Story): DecoupledStoryViewModel {
         val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
-        val something = object : ClickListener<StoryViewData> {
+        return DecoupledStoryViewModel(storyViewData, object : ClickListener<StoryViewData> {
             override fun onClick(data: StoryViewData) {
                 navigator.navigateTo(data.url)
             }
-        }
-        return DecoupledStoryViewModel(storyViewData, something)
+        })
     }
 }
