@@ -1,31 +1,31 @@
-package com.novoda.materialised.hackernews;
+package com.novoda.materialised.hackernews.stories;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.novoda.materialised.R;
 import com.novoda.materialised.hackernews.generics.AsyncListView;
 import com.novoda.materialised.hackernews.generics.ViewModel;
-import com.novoda.materialised.hackernews.stories.SingleTypeAdapter;
 
 import java.util.List;
 
-final class AsyncListViewPresenter<T extends ViewModel> implements AsyncListView<T> {
+public final class AsyncListViewPresenter<T extends ViewModel, U extends View & UpdatableView<T>> implements AsyncListView<T> {
 
     private final View loadingView;
     private final RecyclerView topStoriesView;
+    private final UpdatableViewInflater<U> viewInflater;
 
-    private SingleTypeAdapter<T> adapter;
+    private SingleTypeAdapter<T, U> adapter;
 
-    AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView) {
+    public AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView, UpdatableViewInflater<U> viewInflater) {
         this.loadingView = loadingView;
         this.topStoriesView = topStoriesView;
+        this.viewInflater = viewInflater;
     }
 
     @Override
     public void updateWith(List<T> initialViewModelList) {
         loadingView.setVisibility(View.GONE);
-        adapter = new SingleTypeAdapter<>(initialViewModelList, R.layout.inflatable_story_card);
+        adapter = new SingleTypeAdapter<>(initialViewModelList, viewInflater);
         topStoriesView.swapAdapter(adapter, false);
     }
 
@@ -33,4 +33,5 @@ final class AsyncListViewPresenter<T extends ViewModel> implements AsyncListView
     public void updateWith(T viewModel) {
         adapter.updateWith(viewModel);
     }
+
 }

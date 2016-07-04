@@ -1,8 +1,6 @@
 package com.novoda.materialised.hackernews.stories;
 
-import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -10,20 +8,19 @@ import com.novoda.materialised.hackernews.generics.ViewModel;
 
 import java.util.List;
 
-public final class SingleTypeAdapter<T extends ViewModel> extends RecyclerView.Adapter {
-    @LayoutRes
-    private final int layoutRes;
+public final class SingleTypeAdapter<T extends ViewModel, U extends View & UpdatableView<T>> extends RecyclerView.Adapter {
     private final List<T> viewModels;
+    private final UpdatableViewInflater<U> viewInflater;
 
-    public SingleTypeAdapter(List<T> viewModels, int layoutRes) {
+    public SingleTypeAdapter(List<T> viewModels, UpdatableViewInflater<U> viewInflater) {
         this.viewModels = viewModels;
-        this.layoutRes = layoutRes;
+        this.viewInflater = viewInflater;
         setHasStableIds(true);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false);
+        View view = viewInflater.inflateUpdatableView(parent);
         return new RecyclerView.ViewHolder(view) {
         };
     }
@@ -57,9 +54,5 @@ public final class SingleTypeAdapter<T extends ViewModel> extends RecyclerView.A
 
     private boolean shouldUpdate(int i, T newItem) {
         return viewModels.get(i).getViewData().getId() == newItem.getViewData().getId();
-    }
-
-    public interface UpdatableView<U extends ViewModel> {
-        void updateWith(U viewModel);
     }
 }

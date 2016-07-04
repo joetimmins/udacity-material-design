@@ -9,9 +9,9 @@ import android.widget.TextView;
 import com.novoda.materialised.R;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
-final class StoryCardView
+public final class StoryCardView
         extends LinearLayout
-        implements SingleTypeAdapter.UpdatableView<StoryViewModel> {
+        implements UpdatableView<StoryViewModel> {
 
     private TextView titleView;
 
