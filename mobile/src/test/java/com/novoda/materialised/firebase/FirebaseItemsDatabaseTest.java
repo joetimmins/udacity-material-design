@@ -1,7 +1,7 @@
 package com.novoda.materialised.firebase;
 
-import com.novoda.materialised.hackernews.ValueCallback;
-import com.novoda.materialised.hackernews.items.Story;
+import com.novoda.materialised.hackernews.generics.ValueCallback;
+import com.novoda.materialised.hackernews.topstories.database.Story;
 
 import java.util.Arrays;
 

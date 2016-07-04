@@ -1,25 +1,22 @@
 package com.novoda.materialised.hackernews.topstories
 
-import com.novoda.materialised.hackernews.generics.AsyncListView
-import com.novoda.materialised.hackernews.generics.ValueCallback
-import com.novoda.materialised.hackernews.generics.valueCallbackFor
+import com.novoda.materialised.hackernews.generics.*
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase
 import com.novoda.materialised.hackernews.topstories.database.Story
 import com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase
-import com.novoda.materialised.hackernews.topstories.view.StoryViewModelClickListener
 
 class TopStoriesPresenter(
         val topStoriesDatabase: TopStoriesDatabase,
         val itemsDatabase: ItemsDatabase,
-        val topStoriesView: AsyncListView<StoryViewModel>,
+        val topStoriesView: DecoupledAsyncListView<DecoupledStoryViewModel>,
         val navigator: Navigator
 ) {
     fun present() {
         topStoriesDatabase.readAll(callbackWithAllStoriesInList(topStoriesView))
     }
 
-    private fun callbackWithAllStoriesInList(topStoriesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {
+    private fun callbackWithAllStoriesInList(topStoriesView: DecoupledAsyncListView<DecoupledStoryViewModel>): ValueCallback<List<Long>> {
         return valueCallbackFor {
             if (it.size > 0) {
                 topStoriesView.updateWith(createIdOnlyViewModels(it))
@@ -28,19 +25,30 @@ class TopStoriesPresenter(
         }
     }
 
-    private fun createIdOnlyViewModels(listOfLongs: List<Long>): List<StoryViewModel> {
+    private fun createIdOnlyViewModels(listOfLongs: List<Long>): List<DecoupledStoryViewModel> {
         return listOfLongs.map { createIdOnlyViewModel(it) }
     }
 
-    private fun createIdOnlyViewModel(storyId: Long): StoryViewModel {
-        return StoryViewModel().copy(id = storyId.toInt())
+    private fun createIdOnlyViewModel(storyId: Long): DecoupledStoryViewModel {
+        val dataWithIdOnly = StoryViewData().copy(id = storyId.toInt())
+        return DecoupledStoryViewModel(dataWithIdOnly, NoOpClickListener())
     }
 
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map { it.toInt() }
 
-    private fun callbackToStoriesViewWithSingleStoryViewModel(topStoriesView: AsyncListView<StoryViewModel>): ValueCallback<Story> {
+    private fun callbackToStoriesViewWithSingleStoryViewModel(topStoriesView: DecoupledAsyncListView<DecoupledStoryViewModel>): ValueCallback<Story> {
         return valueCallbackFor {
-            topStoriesView.updateWith(convertStoryToViewModel(it, StoryViewModelClickListener(navigator)))
+            topStoriesView.updateWith(convert(it))
         }
+    }
+
+    private fun convert(story: Story): DecoupledStoryViewModel {
+        val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
+        val something = object : ClickListener<StoryViewData> {
+            override fun onClick(data: StoryViewData) {
+                navigator.navigateTo(data.url)
+            }
+        }
+        return DecoupledStoryViewModel(storyViewData, something)
     }
 }

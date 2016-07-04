@@ -1,7 +1,7 @@
 package com.novoda.materialised.firebase;
 
 import com.google.firebase.database.FirebaseDatabase;
-import com.novoda.materialised.hackernews.ValueCallback;
+import com.novoda.materialised.hackernews.generics.ValueCallback;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +21,6 @@ public class FirebaseTopStoriesTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-
     }
 
     @Test

@@ -7,11 +7,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.materialised.R;
-import com.novoda.materialised.hackernews.items.StoryViewModel;
+import com.novoda.materialised.hackernews.topstories.DecoupledStoryViewModel;
 
 final class StoryCardView
         extends LinearLayout
-        implements SingleViewModelTypeAdapter.UpdatableView<StoryViewModel> {
+        implements SingleViewModelTypeAdapter.UpdatableView<DecoupledStoryViewModel> {
 
     private TextView titleView;
 
@@ -30,20 +30,19 @@ final class StoryCardView
         init(context);
     }
 
-    private void init(Context context) {
-        inflate(context, R.layout.story_card, this);
-        titleView = (TextView) findViewById(R.id.title_view);
-    }
-
     @Override
-    public void updateWith(final StoryViewModel storyViewModel) {
-        titleView.setText(storyViewModel.getTitle());
+    public void updateWith(final DecoupledStoryViewModel viewModel) {
+        titleView.setText(viewModel.getViewData().getTitle());
         titleView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                storyViewModel.getClickListener().onClick(storyViewModel);
+                viewModel.getViewBehaviour().onClick(viewModel.getViewData());
             }
         });
     }
 
+    private void init(Context context) {
+        inflate(context, R.layout.story_card, this);
+        titleView = (TextView) findViewById(R.id.title_view);
+    }
 }

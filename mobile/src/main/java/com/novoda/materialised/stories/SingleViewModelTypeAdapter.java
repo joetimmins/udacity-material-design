@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.novoda.materialised.hackernews.ViewModel;
+import com.novoda.materialised.hackernews.generics.DecoupledViewModel;
 
 import java.util.List;
 
-public final class SingleViewModelTypeAdapter<T extends ViewModel<T>> extends RecyclerView.Adapter {
+public final class SingleViewModelTypeAdapter<T extends DecoupledViewModel> extends RecyclerView.Adapter {
     @LayoutRes
     private final int layoutRes;
     private final List<T> viewModels;
@@ -42,12 +42,12 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel<T>> extends Re
 
     @Override
     public long getItemId(int position) {
-        return viewModels.get(position).getId();
+        return viewModels.get(position).getViewData().getId();
     }
 
     public void updateWith(T newItem) {
         for (int i = 0; i < viewModels.size(); i++) {
-            if (viewModels.get(i).getId() == newItem.getId()) {
+            if (viewModels.get(i).getViewData().getId() == newItem.getViewData().getId()) {
                 viewModels.set(i, newItem);
                 notifyItemChanged(i);
                 break;
@@ -55,7 +55,7 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel<T>> extends Re
         }
     }
 
-    public interface UpdatableView<U extends ViewModel<U>> {
-        void updateWith(U data);
+    public interface UpdatableView<U extends DecoupledViewModel> {
+        void updateWith(U viewModel);
     }
 }

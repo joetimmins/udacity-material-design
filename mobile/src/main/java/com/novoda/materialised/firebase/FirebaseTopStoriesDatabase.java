@@ -4,8 +4,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.novoda.materialised.hackernews.generics.ValueCallback;
 import com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase;
-import com.novoda.materialised.hackernews.ValueCallback;
 
 import java.util.List;
 
