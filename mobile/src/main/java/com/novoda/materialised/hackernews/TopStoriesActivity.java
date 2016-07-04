@@ -1,4 +1,4 @@
-package com.novoda.materialised;
+package com.novoda.materialised.hackernews;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -13,12 +13,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
-import com.novoda.materialised.firebase.FirebaseItemsDatabase;
-import com.novoda.materialised.firebase.FirebaseSingleton;
-import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
+import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
+import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
+import com.novoda.materialised.hackernews.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
+import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +49,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
 
         mainActivityLayout.topStoriesView.setLayoutManager(new LinearLayoutManager(this));
 
-        TopStoriesViewPresenter storiesViewPresenter = new TopStoriesViewPresenter(
+        AsyncListViewPresenter<StoryViewModel> storiesViewPresenter = new AsyncListViewPresenter<>(
                 mainActivityLayout.loadingView,
                 mainActivityLayout.topStoriesView
         );

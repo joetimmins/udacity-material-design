@@ -1,4 +1,4 @@
-package com.novoda.materialised.stories;
+package com.novoda.materialised.hackernews.stories;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -11,7 +11,7 @@ import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 final class StoryCardView
         extends LinearLayout
-        implements SingleViewModelTypeAdapter.UpdatableView<StoryViewModel> {
+        implements SingleTypeAdapter.UpdatableView<StoryViewModel> {
 
     private TextView titleView;
 

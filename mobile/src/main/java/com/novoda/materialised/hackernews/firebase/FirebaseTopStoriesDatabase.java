@@ -1,4 +1,4 @@
-package com.novoda.materialised.firebase;
+package com.novoda.materialised.hackernews.firebase;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

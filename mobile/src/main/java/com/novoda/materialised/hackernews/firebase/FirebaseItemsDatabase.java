@@ -1,4 +1,4 @@
-package com.novoda.materialised.firebase;
+package com.novoda.materialised.hackernews.firebase;
 
 import android.util.Log;
 

@@ -1,4 +1,4 @@
-package com.novoda.materialised.stories;
+package com.novoda.materialised.hackernews.stories;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +10,12 @@ import com.novoda.materialised.hackernews.generics.ViewModel;
 
 import java.util.List;
 
-public final class SingleViewModelTypeAdapter<T extends ViewModel> extends RecyclerView.Adapter {
+public final class SingleTypeAdapter<T extends ViewModel> extends RecyclerView.Adapter {
     @LayoutRes
     private final int layoutRes;
     private final List<T> viewModels;
 
-    public SingleViewModelTypeAdapter(List<T> viewModels, int layoutRes) {
+    public SingleTypeAdapter(List<T> viewModels, int layoutRes) {
         this.viewModels = viewModels;
         this.layoutRes = layoutRes;
         setHasStableIds(true);
@@ -47,12 +47,16 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel> extends Recyc
 
     public void updateWith(T newItem) {
         for (int i = 0; i < viewModels.size(); i++) {
-            if (viewModels.get(i).getViewData().getId() == newItem.getViewData().getId()) {
+            if (shouldUpdate(i, newItem)) {
                 viewModels.set(i, newItem);
                 notifyItemChanged(i);
                 break;
             }
         }
+    }
+
+    private boolean shouldUpdate(int i, T newItem) {
+        return viewModels.get(i).getViewData().getId() == newItem.getViewData().getId();
     }
 
     public interface UpdatableView<U extends ViewModel> {

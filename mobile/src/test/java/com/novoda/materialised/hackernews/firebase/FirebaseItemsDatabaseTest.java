@@ -1,4 +1,4 @@
-package com.novoda.materialised.firebase;
+package com.novoda.materialised.hackernews.firebase;
 
 import com.novoda.materialised.hackernews.generics.ValueCallback;
 import com.novoda.materialised.hackernews.topstories.database.Story;
