@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.novoda.materialised.hackernews.generics.DecoupledViewModel;
+import com.novoda.materialised.hackernews.generics.ViewModel;
 
 import java.util.List;
 
-public final class SingleViewModelTypeAdapter<T extends DecoupledViewModel> extends RecyclerView.Adapter {
+public final class SingleViewModelTypeAdapter<T extends ViewModel> extends RecyclerView.Adapter {
     @LayoutRes
     private final int layoutRes;
     private final List<T> viewModels;
@@ -55,7 +55,7 @@ public final class SingleViewModelTypeAdapter<T extends DecoupledViewModel> exte
         }
     }
 
-    public interface UpdatableView<U extends DecoupledViewModel> {
+    public interface UpdatableView<U extends ViewModel> {
         void updateWith(U viewModel);
     }
 }

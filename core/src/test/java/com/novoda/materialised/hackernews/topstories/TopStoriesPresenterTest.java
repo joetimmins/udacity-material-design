@@ -1,12 +1,14 @@
 package com.novoda.materialised.hackernews.topstories;
 
 import com.novoda.materialised.hackernews.generics.ClickListener;
-import com.novoda.materialised.hackernews.generics.DecoupledAsyncListView;
+import com.novoda.materialised.hackernews.generics.AsyncListView;
 import com.novoda.materialised.hackernews.generics.NoOpClickListener;
 import com.novoda.materialised.hackernews.generics.ValueCallback;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.database.Story;
+import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
+import com.novoda.materialised.hackernews.topstories.view.StoryViewData;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,10 +31,10 @@ public class TopStoriesPresenterTest {
 
     @Test
     public void presenterGivesCorrectListOfIdsToView_AsViewModels_WhenPresentingMultipleStories() {
-        DecoupledStoryViewModel firstIdOnlyViewModel = buildIdOnlyViewModel(firstStoryId);
-        DecoupledStoryViewModel secondIdOnlyViewModel = buildIdOnlyViewModel(secondStoryId);
+        StoryViewModel firstIdOnlyViewModel = buildIdOnlyViewModel(firstStoryId);
+        StoryViewModel secondIdOnlyViewModel = buildIdOnlyViewModel(secondStoryId);
 
-        List<DecoupledStoryViewModel> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
+        List<StoryViewModel> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
         SpyingAsyncListView storiesView = new SpyingAsyncListView();
 
         presentWith(storiesView, Collections.<Story>emptyList());
@@ -46,16 +48,16 @@ public class TopStoriesPresenterTest {
 
         presentWith(storiesView, Arrays.asList(aStory, anotherStory));
 
-        DecoupledStoryViewModel storyViewModel = convert(aStory, new NoOpClickListener<StoryViewData>());
-        DecoupledStoryViewModel anotherStoryViewModel = convert(anotherStory, new NoOpClickListener<StoryViewData>());
+        StoryViewModel storyViewModel = convert(aStory, new NoOpClickListener<StoryViewData>());
+        StoryViewModel anotherStoryViewModel = convert(anotherStory, new NoOpClickListener<StoryViewData>());
 
         assertThat(storiesView.firstUpdatedStoryViewModel.getViewData()).isEqualTo(storyViewModel.getViewData());
         assertThat(storiesView.secondUpdatedStoryViewModel.getViewData()).isEqualTo(anotherStoryViewModel.getViewData());
     }
 
-    private DecoupledStoryViewModel convert(Story story, ClickListener<StoryViewData> clickListener) {
+    private StoryViewModel convert(Story story, ClickListener<StoryViewData> clickListener) {
         StoryViewData storyViewData = new StoryViewData(story.getBy(), story.getKids(), story.getId(), story.getScore(), story.getTitle(), story.getUrl());
-        return new DecoupledStoryViewModel(storyViewData, clickListener);
+        return new StoryViewModel(storyViewData, clickListener);
     }
 
     private void presentWith(SpyingAsyncListView storiesView, List<Story> stories) {
@@ -76,10 +78,10 @@ public class TopStoriesPresenterTest {
         return new Story("another author", 456, (int) secondStoryId, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url");
     }
 
-    private DecoupledStoryViewModel buildIdOnlyViewModel(long storyId) {
+    private StoryViewModel buildIdOnlyViewModel(long storyId) {
         StoryViewData empty = new StoryViewData();
         StoryViewData idOnly = new StoryViewData(empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl());
-        return new DecoupledStoryViewModel(idOnly, new NoOpClickListener<StoryViewData>());
+        return new StoryViewModel(idOnly, new NoOpClickListener<StoryViewData>());
     }
 
     private static class StubbedTopStoriesDatabase implements com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase {
@@ -115,18 +117,18 @@ public class TopStoriesPresenterTest {
         }
     }
 
-    private static class SpyingAsyncListView implements DecoupledAsyncListView<DecoupledStoryViewModel> {
-        List<DecoupledStoryViewModel> updatedStoryViewModels;
-        DecoupledStoryViewModel firstUpdatedStoryViewModel;
-        DecoupledStoryViewModel secondUpdatedStoryViewModel;
+    private static class SpyingAsyncListView implements AsyncListView<StoryViewModel> {
+        List<com.novoda.materialised.hackernews.topstories.view.StoryViewModel> updatedStoryViewModels;
+        com.novoda.materialised.hackernews.topstories.view.StoryViewModel firstUpdatedStoryViewModel;
+        com.novoda.materialised.hackernews.topstories.view.StoryViewModel secondUpdatedStoryViewModel;
 
         @Override
-        public void updateWith(List<DecoupledStoryViewModel> initialViewModelList) {
+        public void updateWith(List<com.novoda.materialised.hackernews.topstories.view.StoryViewModel> initialViewModelList) {
             updatedStoryViewModels = initialViewModelList;
         }
 
         @Override
-        public void updateWith(DecoupledStoryViewModel viewModel) {
+        public void updateWith(com.novoda.materialised.hackernews.topstories.view.StoryViewModel viewModel) {
             if (firstUpdatedStoryViewModel == null) {
                 firstUpdatedStoryViewModel = viewModel;
             } else if (secondUpdatedStoryViewModel == null) {
