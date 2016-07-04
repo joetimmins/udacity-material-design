@@ -19,7 +19,7 @@ public final class FirebaseTopStoriesDatabase implements TopStoriesDatabase {
     }
 
     @Override
-    public void readAll(@NotNull final ValueCallback<List<Long>> callback) {
+    public void readAll(@NotNull final ValueCallback<? super List<Long>> callback) {
         firebaseDatabase.getReference("v0").child("topstories").addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override

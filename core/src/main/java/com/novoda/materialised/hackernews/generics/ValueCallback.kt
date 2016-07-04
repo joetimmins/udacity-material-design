@@ -1,6 +1,6 @@
 package com.novoda.materialised.hackernews.generics
 
-interface ValueCallback<T> {
+interface ValueCallback<in T> {
     fun onValueRetrieved(value: T)
 }
 

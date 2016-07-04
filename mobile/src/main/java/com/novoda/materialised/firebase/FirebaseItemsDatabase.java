@@ -23,7 +23,7 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
     }
 
     @Override
-    public void readItem(int id, @NotNull final ValueCallback<Story> valueCallback) {
+    public void readItem(int id, @NotNull final ValueCallback<? super Story> valueCallback) {
         DatabaseReference item = firebaseDatabase.getReference("v0").child("item").child(Integer.toString(id));
 
         item.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -45,7 +45,7 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
     }
 
     @Override
-    public void readItems(@NotNull final List<Integer> ids, @NotNull final ValueCallback<Story> valueCallback) {
+    public void readItems(@NotNull List<Integer> ids, @NotNull final ValueCallback<? super Story> valueCallback) {
         DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
 
         for (final Integer id : ids) {

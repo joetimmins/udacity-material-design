@@ -1,14 +1,15 @@
 package com.novoda.materialised.hackernews.topstories;
 
-import com.novoda.materialised.hackernews.generics.ClickListener;
 import com.novoda.materialised.hackernews.generics.AsyncListView;
+import com.novoda.materialised.hackernews.generics.ClickListener;
 import com.novoda.materialised.hackernews.generics.NoOpClickListener;
 import com.novoda.materialised.hackernews.generics.ValueCallback;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.database.Story;
-import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
+import com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewData;
+import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -84,7 +85,7 @@ public class TopStoriesPresenterTest {
         return new StoryViewModel(idOnly, new NoOpClickListener<StoryViewData>());
     }
 
-    private static class StubbedTopStoriesDatabase implements com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase {
+    private static class StubbedTopStoriesDatabase implements TopStoriesDatabase {
         public final List<Long> ids;
 
         private StubbedTopStoriesDatabase(List<Long> ids) {
@@ -92,7 +93,7 @@ public class TopStoriesPresenterTest {
         }
 
         @Override
-        public void readAll(@NotNull ValueCallback<List<Long>> callback) {
+        public void readAll(@NotNull ValueCallback<? super List<Long>> callback) {
             callback.onValueRetrieved(ids);
         }
     }
@@ -105,12 +106,12 @@ public class TopStoriesPresenterTest {
         }
 
         @Override
-        public void readItem(int id, @NotNull ValueCallback<Story> valueCallback) {
+        public void readItem(int id, @NotNull ValueCallback<? super Story> valueCallback) {
             valueCallback.onValueRetrieved(stories.get(0));
         }
 
         @Override
-        public void readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<Story> valueCallback) {
+        public void readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<? super Story> valueCallback) {
             for (Story story : stories) {
                 valueCallback.onValueRetrieved(story);
             }
