@@ -46,11 +46,10 @@ public final class SingleViewModelTypeAdapter<T extends ViewModel<T>> extends Re
     }
 
     public void updateWith(T newItem) {
-        for (T viewModel : viewModels) {
-            if (viewModel.getId() == newItem.getId()) {
-                int positionToUpdate = viewModels.indexOf(viewModel);
-                viewModels.set(positionToUpdate, newItem);
-                notifyItemChanged(positionToUpdate);
+        for (int i = 0; i < viewModels.size(); i++) {
+            if (viewModels.get(i).getId() == newItem.getId()) {
+                viewModels.set(i, newItem);
+                notifyItemChanged(i);
                 break;
             }
         }
