@@ -5,6 +5,7 @@ import com.novoda.materialised.hackernews.ValueCallback;
 import com.novoda.materialised.hackernews.items.ItemsDatabase;
 import com.novoda.materialised.hackernews.items.Story;
 import com.novoda.materialised.hackernews.items.StoryViewModel;
+import com.novoda.materialised.hackernews.navigator.Navigator;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,8 +49,8 @@ public class TopStoriesPresenterTest {
         StoryViewModel storyViewModel = convertStoryToViewModel(aStory, new NoOpClickListener<StoryViewModel>());
         StoryViewModel anotherStoryViewModel = convertStoryToViewModel(anotherStory, new NoOpClickListener<StoryViewModel>());
 
-        assertThat(storiesView.firstUpdatedStoryViewModel).isEqualTo(storyViewModel);
-        assertThat(storiesView.secondUpdatedStoryViewModel).isEqualTo(anotherStoryViewModel);
+        assertThat(storiesView.firstUpdatedStoryViewModel.getId()).isEqualTo(storyViewModel.getId());
+        assertThat(storiesView.secondUpdatedStoryViewModel.getId()).isEqualTo(anotherStoryViewModel.getId());
     }
 
     private void presentWith(SpyingAsyncListView storiesView, List<Story> stories) {
@@ -57,7 +58,7 @@ public class TopStoriesPresenterTest {
                 new StubbedTopStoriesDatabase(topStoryIds),
                 new StubbedItemsDatabase(stories),
                 storiesView,
-                new NoOpClickListener<StoryViewModel>()
+                new SpyingNavigator()
         );
         presenter.present();
     }
@@ -125,6 +126,15 @@ public class TopStoriesPresenterTest {
             } else if (secondUpdatedStoryViewModel == null) {
                 secondUpdatedStoryViewModel = viewModel;
             }
+        }
+    }
+
+    private static class SpyingNavigator implements Navigator {
+        public String uri;
+
+        @Override
+        public void navigateTo(@NotNull String uri) {
+            this.uri = uri;
         }
     }
 }

@@ -17,8 +17,7 @@ import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.firebase.FirebaseSingleton;
 import com.novoda.materialised.firebase.FirebaseTopStoriesDatabase;
-import com.novoda.materialised.hackernews.ClickListener;
-import com.novoda.materialised.hackernews.items.StoryViewModel;
+import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +57,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
                 new FirebaseTopStoriesDatabase(firebaseDatabase),
                 new FirebaseItemsDatabase(firebaseDatabase),
                 storiesViewPresenter,
-                new StoryViewModelClickListener()
+                new IntentNavigator()
         );
     }
 
@@ -90,10 +89,10 @@ public final class TopStoriesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class StoryViewModelClickListener implements ClickListener<StoryViewModel> {
+    private class IntentNavigator implements Navigator {
         @Override
-        public void onClick(@NotNull StoryViewModel data) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(data.getUrl())));
+        public void navigateTo(@NotNull String uri) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
         }
     }
 }

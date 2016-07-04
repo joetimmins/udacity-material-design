@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews.topstories
+package com.novoda.materialised.hackernews.topstories.view
 
 import com.novoda.materialised.hackernews.items.StoryViewModel
 
