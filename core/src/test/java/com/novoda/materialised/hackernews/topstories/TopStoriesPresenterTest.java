@@ -1,6 +1,5 @@
 package com.novoda.materialised.hackernews.topstories;
 
-import com.novoda.materialised.hackernews.ClickListener;
 import com.novoda.materialised.hackernews.NoOpClickListener;
 import com.novoda.materialised.hackernews.ValueCallback;
 import com.novoda.materialised.hackernews.items.ItemsDatabase;
@@ -23,7 +22,7 @@ public class TopStoriesPresenterTest {
     private final long secondStoryId = 78L;
     private final List<Long> topStoryIds = Arrays.asList(firstStoryId, secondStoryId);
 
-    private final Story story = buildStory();
+    private final Story aStory = buildStory();
     private final Story anotherStory = buildAnotherStory();
     private final int TEST_TIME = 3471394;
 
@@ -33,7 +32,7 @@ public class TopStoriesPresenterTest {
         StoryViewModel secondIdOnlyViewModel = buildIdOnlyViewModel(secondStoryId);
 
         List<StoryViewModel> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
-        SpyingTopStoriesView storiesView = new SpyingTopStoriesView();
+        SpyingAsyncListView storiesView = new SpyingAsyncListView();
 
         presentWith(storiesView, Collections.<Story>emptyList());
 
@@ -42,18 +41,18 @@ public class TopStoriesPresenterTest {
 
     @Test
     public void presenterGivesCorrectUpdatedViewModelsToView_OneAtATime_WhenPresentingMultipleStories() {
-        SpyingTopStoriesView storiesView = new SpyingTopStoriesView();
+        SpyingAsyncListView storiesView = new SpyingAsyncListView();
 
-        presentWith(storiesView, Arrays.asList(story, anotherStory));
+        presentWith(storiesView, Arrays.asList(aStory, anotherStory));
 
-        StoryViewModel storyViewModel = convertStoryToViewModel(story);
-        StoryViewModel anotherStoryViewModel = convertStoryToViewModel(anotherStory);
+        StoryViewModel storyViewModel = convertStoryToViewModel(aStory, new NoOpClickListener<StoryViewModel>());
+        StoryViewModel anotherStoryViewModel = convertStoryToViewModel(anotherStory, new NoOpClickListener<StoryViewModel>());
 
         assertThat(storiesView.firstUpdatedStoryViewModel).isEqualTo(storyViewModel);
         assertThat(storiesView.secondUpdatedStoryViewModel).isEqualTo(anotherStoryViewModel);
     }
 
-    private void presentWith(SpyingTopStoriesView storiesView, List<Story> stories) {
+    private void presentWith(SpyingAsyncListView storiesView, List<Story> stories) {
         TopStoriesPresenter presenter = new TopStoriesPresenter(
                 new StubbedTopStoriesDatabase(topStoryIds),
                 new StubbedItemsDatabase(stories),
@@ -109,22 +108,22 @@ public class TopStoriesPresenterTest {
         }
     }
 
-    private static class SpyingTopStoriesView implements TopStoriesView {
+    private static class SpyingAsyncListView implements com.novoda.materialised.hackernews.AsyncListView<StoryViewModel> {
         List<StoryViewModel> updatedStoryViewModels;
         StoryViewModel firstUpdatedStoryViewModel;
         StoryViewModel secondUpdatedStoryViewModel;
 
         @Override
-        public void updateWith(@NotNull List<StoryViewModel> initialViewModelList) {
-            updatedStoryViewModels = initialViewModelList;
+        public void updateWith(List<StoryViewModel> viewModels) {
+            updatedStoryViewModels = viewModels;
         }
 
         @Override
-        public void updateWith(@NotNull StoryViewModel storyViewModel, @NotNull ClickListener<StoryViewModel> clickListener) {
+        public void updateWith(StoryViewModel viewModel) {
             if (firstUpdatedStoryViewModel == null) {
-                firstUpdatedStoryViewModel = storyViewModel;
+                firstUpdatedStoryViewModel = viewModel;
             } else if (secondUpdatedStoryViewModel == null) {
-                secondUpdatedStoryViewModel = storyViewModel;
+                secondUpdatedStoryViewModel = viewModel;
             }
         }
     }
