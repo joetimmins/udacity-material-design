@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews
+package com.novoda.materialised.hackernews.generics
 
 interface ClickListener<T> {
     fun onClick(data: T)

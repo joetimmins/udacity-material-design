@@ -1,11 +1,11 @@
 package com.novoda.materialised.hackernews.topstories;
 
-import com.novoda.materialised.hackernews.NoOpClickListener;
-import com.novoda.materialised.hackernews.ValueCallback;
-import com.novoda.materialised.hackernews.items.ItemsDatabase;
-import com.novoda.materialised.hackernews.items.Story;
-import com.novoda.materialised.hackernews.items.StoryViewModel;
+import com.novoda.materialised.hackernews.generics.AsyncListView;
+import com.novoda.materialised.hackernews.generics.NoOpClickListener;
+import com.novoda.materialised.hackernews.generics.ValueCallback;
 import com.novoda.materialised.hackernews.navigator.Navigator;
+import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
+import com.novoda.materialised.hackernews.topstories.database.Story;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,7 +14,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-import static com.novoda.materialised.hackernews.items.StoryToViewModelConverterKt.convertStoryToViewModel;
+import static com.novoda.materialised.hackernews.topstories.StoryToViewModelConverterKt.convertStoryToViewModel;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class TopStoriesPresenterTest {
@@ -76,7 +76,7 @@ public class TopStoriesPresenterTest {
         return new StoryViewModel(empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl(), empty.getClickListener());
     }
 
-    private static class StubbedTopStoriesDatabase implements TopStoriesDatabase {
+    private static class StubbedTopStoriesDatabase implements com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase {
         public final List<Long> ids;
 
         private StubbedTopStoriesDatabase(List<Long> ids) {
@@ -109,7 +109,7 @@ public class TopStoriesPresenterTest {
         }
     }
 
-    private static class SpyingAsyncListView implements com.novoda.materialised.hackernews.AsyncListView<StoryViewModel> {
+    private static class SpyingAsyncListView implements AsyncListView<StoryViewModel> {
         List<StoryViewModel> updatedStoryViewModels;
         StoryViewModel firstUpdatedStoryViewModel;
         StoryViewModel secondUpdatedStoryViewModel;

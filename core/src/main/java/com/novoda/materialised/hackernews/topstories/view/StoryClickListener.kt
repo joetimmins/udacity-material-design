@@ -2,10 +2,10 @@ package com.novoda.materialised.hackernews.topstories.view
 
 import com.novoda.materialised.hackernews.generics.ClickListener
 import com.novoda.materialised.hackernews.navigator.Navigator
-import com.novoda.materialised.hackernews.topstories.StoryViewModel
+import com.novoda.materialised.hackernews.topstories.StoryViewData
 
-class StoryViewModelClickListener(private val navigator: Navigator) : ClickListener<StoryViewModel> {
-    override fun onClick(data: StoryViewModel) {
+class StoryClickListener(private val navigator: Navigator) : ClickListener<StoryViewData> {
+    override fun onClick(data: StoryViewData) {
         navigator.navigateTo(data.url)
     }
 }

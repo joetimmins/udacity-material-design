@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews;
+package com.novoda.materialised.hackernews.generics;
 
 import java.util.List;
 

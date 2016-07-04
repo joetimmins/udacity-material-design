@@ -1,8 +1,8 @@
-package com.novoda.materialised.hackernews.items
+package com.novoda.materialised.hackernews.topstories
 
-import com.novoda.materialised.hackernews.ClickListener
-import com.novoda.materialised.hackernews.NoOpClickListener
-import com.novoda.materialised.hackernews.ViewModel
+import com.novoda.materialised.hackernews.generics.ClickListener
+import com.novoda.materialised.hackernews.generics.NoOpClickListener
+import com.novoda.materialised.hackernews.generics.ViewModel
 import java.util.*
 
 data class StoryViewModel(
