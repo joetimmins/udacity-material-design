@@ -1,7 +1,6 @@
 package com.novoda.materialised.hackernews.topstories.view
 
 import com.novoda.materialised.hackernews.asynclistview.ViewData
-import java.util.*
 
 data class StoryViewData(
         val by: String = "",

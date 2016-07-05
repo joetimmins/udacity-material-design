@@ -2,12 +2,8 @@ package com.novoda.materialised.hackernews.topstories
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener
-import com.novoda.materialised.hackernews.topstories.database.ValueCallback
-import com.novoda.materialised.hackernews.topstories.database.valueCallbackFor
 import com.novoda.materialised.hackernews.navigator.Navigator
-import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase
-import com.novoda.materialised.hackernews.topstories.database.Story
-import com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase
+import com.novoda.materialised.hackernews.topstories.database.*
 import com.novoda.materialised.hackernews.topstories.view.StoryClickListener
 import com.novoda.materialised.hackernews.topstories.view.StoryViewData
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel
@@ -19,7 +15,7 @@ class TopStoriesPresenter(
         val navigator: Navigator
 ) {
     fun present() {
-        topStoriesDatabase.readAll(callbackWithAllStoriesInList(topStoriesView))
+        topStoriesDatabase.readTopStoriesIds(callbackWithAllStoriesInList(topStoriesView))
     }
 
     private fun callbackWithAllStoriesInList(topStoriesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {

@@ -30,7 +30,7 @@ public class FirebaseTopStoriesTest {
         ListValueCallback callback = new ListValueCallback();
 
         // Act
-        new FirebaseTopStoriesDatabase(FakeFirebase.getTopStoriesFirebaseDatabase(expectedStoryIds)).readAll(callback);
+        new FirebaseTopStoriesDatabase(FakeFirebase.getTopStoriesFirebaseDatabase(expectedStoryIds)).readTopStoriesIds(callback);
 
         // Assert
         assertThat(callback.topStoryIds).isEqualTo(expectedStoryIds);

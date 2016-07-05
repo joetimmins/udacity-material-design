@@ -93,7 +93,7 @@ public class TopStoriesPresenterTest {
         }
 
         @Override
-        public void readAll(@NotNull ValueCallback<? super List<Long>> callback) {
+        public void readTopStoriesIds(@NotNull ValueCallback<? super List<Long>> callback) {
             callback.onValueRetrieved(ids);
         }
     }
@@ -103,11 +103,6 @@ public class TopStoriesPresenterTest {
 
         public StubbedItemsDatabase(List<Story> stories) {
             this.stories = stories;
-        }
-
-        @Override
-        public void readItem(int id, @NotNull ValueCallback<? super Story> valueCallback) {
-            valueCallback.onValueRetrieved(stories.get(0));
         }
 
         @Override

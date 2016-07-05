@@ -23,28 +23,6 @@ public final class FirebaseItemsDatabase implements ItemsDatabase {
     }
 
     @Override
-    public void readItem(int id, @NotNull final ValueCallback<? super Story> valueCallback) {
-        DatabaseReference item = firebaseDatabase.getReference("v0").child("item").child(Integer.toString(id));
-
-        item.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Story value = dataSnapshot.getValue(Story.class);
-                if (value != null) {
-                    valueCallback.onValueRetrieved(value);
-                } else {
-                    Log.d("TAG", "data snapshot had no value");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    @Override
     public void readItems(@NotNull List<Integer> ids, @NotNull final ValueCallback<? super Story> valueCallback) {
         DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
 

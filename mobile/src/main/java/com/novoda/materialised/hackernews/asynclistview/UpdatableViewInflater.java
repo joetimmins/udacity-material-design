@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class UpdatableViewInflater<T extends View & UpdatableView> {
+public final class UpdatableViewInflater<T extends View & UpdatableView> {
     private final Class<T> viewClass;
 
     public UpdatableViewInflater(Class<T> viewClass) {
