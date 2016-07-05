@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public final class UpdatableViewInflater<T extends View & UpdatableView> {
+public final class UpdatableViewInflater<T extends View & ModelledView> {
     private final Class<T> viewClass;
 
     public UpdatableViewInflater(Class<T> viewClass) {
@@ -22,16 +22,16 @@ public final class UpdatableViewInflater<T extends View & UpdatableView> {
             result = constructor.newInstance(parent.getContext());
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException("Couldn't inflate UpdatableView instance!");
+            throw new RuntimeException("Couldn't inflate ModelledView instance!");
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            throw new RuntimeException("Couldn't inflate UpdatableView instance!");
+            throw new RuntimeException("Couldn't inflate ModelledView instance!");
         } catch (InvocationTargetException e) {
             e.printStackTrace();
-            throw new RuntimeException("Couldn't inflate UpdatableView instance!");
+            throw new RuntimeException("Couldn't inflate ModelledView instance!");
         } catch (InstantiationException e) {
             e.printStackTrace();
-            throw new RuntimeException("Couldn't inflate UpdatableView instance!");
+            throw new RuntimeException("Couldn't inflate ModelledView instance!");
         }
         return result;
     }

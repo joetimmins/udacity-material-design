@@ -1,18 +1,19 @@
 package com.novoda.materialised.hackernews.topstories;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.materialised.R;
-import com.novoda.materialised.hackernews.asynclistview.UpdatableView;
+import com.novoda.materialised.hackernews.asynclistview.ModelledView;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 public final class StoryCardView
         extends LinearLayout
-        implements UpdatableView<StoryViewModel> {
+        implements ModelledView<StoryViewModel> {
 
     private TextView titleView;
 
@@ -32,7 +33,7 @@ public final class StoryCardView
     }
 
     @Override
-    public void updateWith(final StoryViewModel viewModel) {
+    public void updateWith(@NonNull final StoryViewModel viewModel) {
         titleView.setText(viewModel.getViewData().getTitle());
         titleView.setOnClickListener(new OnClickListener() {
             @Override

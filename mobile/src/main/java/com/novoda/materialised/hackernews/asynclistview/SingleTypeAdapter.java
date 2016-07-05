@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public final class SingleTypeAdapter<T extends ViewModel, U extends View & UpdatableView<T>> extends RecyclerView.Adapter {
+public final class SingleTypeAdapter<T extends ViewModel, U extends View & ModelledView<T>> extends RecyclerView.Adapter {
     private final List<T> viewModels;
     private final UpdatableViewInflater<U> viewInflater;
 
@@ -25,7 +25,7 @@ public final class SingleTypeAdapter<T extends ViewModel, U extends View & Updat
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        UpdatableView<T> view = (UpdatableView<T>) holder.itemView;
+        ModelledView<T> view = (ModelledView<T>) holder.itemView;
         T data = viewModels.get(position);
         view.updateWith(data);
     }
