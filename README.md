@@ -15,6 +15,6 @@ Some other attempted techniques on show here include:
 - Data pulled in from the Hacker News API using Firebase, detailed here https://github.com/HackerNews/API
 - An intention to achieve 100% test coverage of the `core` module
 - A first draft of a pattern I like to call Android-as-a-factory
-- An asynchronously-loading RecyclerView, which gets data set on it as it comes back, rather than all at once
+- An asynchronously-loading RecyclerView, which updates its views as their data is returned from Firebase
 
 The big thing I haven't done yet but am planning to is Rx integration. PR coming soon!
