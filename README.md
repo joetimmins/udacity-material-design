@@ -10,10 +10,11 @@ Material effects that are planned include:
 - Fancy view animations for nice transitions!
 
 Some other attempted techniques on show here include:
-- Hexagonal architecture, with the code split between `app` and `core` modules
+- Hexagonal architecture, with the code split between `mobile` and `core` modules
 - Exclusive use of Kotlin for the `core` module of the app
 - Data pulled in from the Hacker News API using Firebase, detailed here https://github.com/HackerNews/API
 - An intention to achieve 100% test coverage of the `core` module
 - A first draft of a pattern I like to call Android-as-a-factory
+- An asynchronously-loading RecyclerView, which gets data set on it as it comes back, rather than all at once
 
-Stuff I haven't done yet but am planning to includes Rx integration and proper lazy-loading of story details.
+The big thing I haven't done yet but am planning to is Rx integration. PR coming soon!
