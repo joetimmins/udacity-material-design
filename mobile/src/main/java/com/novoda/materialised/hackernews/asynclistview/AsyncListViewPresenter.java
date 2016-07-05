@@ -1,10 +1,7 @@
-package com.novoda.materialised.hackernews.stories;
+package com.novoda.materialised.hackernews.asynclistview;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-import com.novoda.materialised.hackernews.generics.AsyncListView;
-import com.novoda.materialised.hackernews.generics.ViewModel;
 
 import java.util.List;
 

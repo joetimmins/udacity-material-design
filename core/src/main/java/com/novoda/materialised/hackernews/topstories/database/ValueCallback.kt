@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews.generics
+package com.novoda.materialised.hackernews.topstories.database
 
 interface ValueCallback<in T> {
     fun onValueRetrieved(value: T)

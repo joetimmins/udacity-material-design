@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews.stories;
+package com.novoda.materialised.hackernews.topstories;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.materialised.R;
+import com.novoda.materialised.hackernews.asynclistview.UpdatableView;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 public final class StoryCardView
@@ -43,6 +44,8 @@ public final class StoryCardView
 
     private void init(Context context) {
         inflate(context, R.layout.story_card, this);
+        LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        setLayoutParams(layoutParams);
         titleView = (TextView) findViewById(R.id.title_view);
     }
 }

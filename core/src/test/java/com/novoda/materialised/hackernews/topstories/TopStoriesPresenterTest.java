@@ -1,9 +1,9 @@
 package com.novoda.materialised.hackernews.topstories;
 
-import com.novoda.materialised.hackernews.generics.AsyncListView;
-import com.novoda.materialised.hackernews.generics.ClickListener;
-import com.novoda.materialised.hackernews.generics.NoOpClickListener;
-import com.novoda.materialised.hackernews.generics.ValueCallback;
+import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
+import com.novoda.materialised.hackernews.asynclistview.ClickListener;
+import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener;
+import com.novoda.materialised.hackernews.topstories.database.ValueCallback;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.database.Story;

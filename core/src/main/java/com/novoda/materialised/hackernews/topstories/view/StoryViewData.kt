@@ -1,6 +1,6 @@
 package com.novoda.materialised.hackernews.topstories.view
 
-import com.novoda.materialised.hackernews.generics.ViewData
+import com.novoda.materialised.hackernews.asynclistview.ViewData
 import java.util.*
 
 data class StoryViewData(
@@ -10,4 +10,4 @@ data class StoryViewData(
         val score: Int = 0,
         val title: String = "",
         val url: String = ""
-) : com.novoda.materialised.hackernews.generics.ViewData {}
+) : ViewData {}

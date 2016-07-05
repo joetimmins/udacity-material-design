@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews;
+package com.novoda.materialised.hackernews.topstories;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -15,14 +15,12 @@ import android.widget.Toast;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
+import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
+import com.novoda.materialised.hackernews.asynclistview.UpdatableViewInflater;
 import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
 import com.novoda.materialised.hackernews.firebase.FirebaseTopStoriesDatabase;
 import com.novoda.materialised.hackernews.navigator.Navigator;
-import com.novoda.materialised.hackernews.stories.AsyncListViewPresenter;
-import com.novoda.materialised.hackernews.stories.StoryCardView;
-import com.novoda.materialised.hackernews.stories.UpdatableViewInflater;
-import com.novoda.materialised.hackernews.topstories.TopStoriesPresenter;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +53,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
         AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter = new AsyncListViewPresenter<>(
                 mainActivityLayout.loadingView,
                 mainActivityLayout.topStoriesView,
-                new UpdatableViewInflater<StoryCardView>(R.layout.inflatable_story_card)
+                new UpdatableViewInflater<>(StoryCardView.class)
         );
 
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);

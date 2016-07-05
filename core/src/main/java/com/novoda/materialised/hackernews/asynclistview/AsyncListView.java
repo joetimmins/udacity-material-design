@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews.generics;
+package com.novoda.materialised.hackernews.asynclistview;
 
 import java.util.List;
 
