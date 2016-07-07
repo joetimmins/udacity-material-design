@@ -14,7 +14,7 @@ public final class ModelledViewInflater<T extends View & ModelledView> {
         this.viewClass = viewClass;
     }
 
-    public T inflateUpdatableView(ViewGroup parent) {
+    public T inflateUsing(ViewGroup parent) {
         Constructor<T> constructor;
         T result;
         try {

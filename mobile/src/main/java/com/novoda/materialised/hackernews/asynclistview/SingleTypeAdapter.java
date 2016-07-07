@@ -18,7 +18,7 @@ public final class SingleTypeAdapter<T extends ViewModel, U extends View & Model
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = viewInflater.inflateUpdatableView(parent);
+        View view = viewInflater.inflateUsing(parent);
         return new RecyclerView.ViewHolder(view) {
         };
     }
@@ -50,7 +50,7 @@ public final class SingleTypeAdapter<T extends ViewModel, U extends View & Model
         }
     }
 
-    private boolean shouldUpdate(int i, T newItem) {
-        return viewModels.get(i).getViewData().getId() == newItem.getViewData().getId();
+    private boolean shouldUpdate(int position, T newItem) {
+        return viewModels.get(position).getViewData().getId() == newItem.getViewData().getId();
     }
 }
