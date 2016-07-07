@@ -9,11 +9,11 @@ public final class AsyncListViewPresenter<T extends ViewModel, U extends View & 
 
     private final View loadingView;
     private final RecyclerView topStoriesView;
-    private final UpdatableViewInflater<U> viewInflater;
+    private final ModelledViewInflater<U> viewInflater;
 
     private SingleTypeAdapter<T, U> adapter;
 
-    public AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView, UpdatableViewInflater<U> viewInflater) {
+    public AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView, ModelledViewInflater<U> viewInflater) {
         this.loadingView = loadingView;
         this.topStoriesView = topStoriesView;
         this.viewInflater = viewInflater;

@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
-import com.novoda.materialised.hackernews.asynclistview.UpdatableViewInflater;
+import com.novoda.materialised.hackernews.asynclistview.ModelledViewInflater;
 import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
 import com.novoda.materialised.hackernews.firebase.FirebaseTopStoriesDatabase;
@@ -53,7 +53,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
         AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter = new AsyncListViewPresenter<>(
                 mainActivityLayout.loadingView,
                 mainActivityLayout.topStoriesView,
-                new UpdatableViewInflater<>(StoryCardView.class)
+                new ModelledViewInflater<>(StoryCardView.class)
         );
 
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);

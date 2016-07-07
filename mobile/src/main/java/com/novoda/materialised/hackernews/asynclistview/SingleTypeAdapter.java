@@ -8,9 +8,9 @@ import java.util.List;
 
 public final class SingleTypeAdapter<T extends ViewModel, U extends View & ModelledView<T>> extends RecyclerView.Adapter {
     private final List<T> viewModels;
-    private final UpdatableViewInflater<U> viewInflater;
+    private final ModelledViewInflater<U> viewInflater;
 
-    public SingleTypeAdapter(List<T> viewModels, UpdatableViewInflater<U> viewInflater) {
+    public SingleTypeAdapter(List<T> viewModels, ModelledViewInflater<U> viewInflater) {
         this.viewModels = viewModels;
         this.viewInflater = viewInflater;
         setHasStableIds(true);
