@@ -21,7 +21,7 @@ data class StoryViewData(
         }
     }
 
-    fun commentCount(): Int {
-        return commentIds.count()
+    fun commentCount(): String {
+        return commentIds.count().toString()
     }
 }

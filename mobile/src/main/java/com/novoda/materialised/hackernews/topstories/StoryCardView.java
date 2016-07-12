@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.StoryCardBinding;
 import com.novoda.materialised.hackernews.asynclistview.ModelledView;
+import com.novoda.materialised.hackernews.topstories.view.StoryViewData;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 public final class StoryCardView
@@ -36,16 +37,18 @@ public final class StoryCardView
 
     @Override
     public void updateWith(@NonNull final StoryViewModel viewModel) {
-        storyCard.titleView.setText(viewModel.getViewData().getTitle());
+        final StoryViewData viewData = viewModel.getViewData();
 
-        storyCard.storyScore.setText(String.valueOf(viewModel.getViewData().getScore()));
-        storyCard.storyComments.setText(String.valueOf(viewModel.getViewData().getCommentIds().size()));
-        storyCard.storySubmittedFrom.setText(viewModel.getViewData().submittedFrom());
+        storyCard.titleView.setText(viewData.getTitle());
+
+        storyCard.storyScore.setText(String.valueOf(viewData.getScore()));
+        storyCard.storyComments.setText(viewData.commentCount());
+        storyCard.storySubmittedFrom.setText(viewData.submittedFrom());
 
         storyCard.fullWidthCardView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.getViewBehaviour().onClick(viewModel.getViewData());
+                viewModel.getViewBehaviour().onClick(viewData);
             }
         });
     }

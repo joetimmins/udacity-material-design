@@ -42,7 +42,7 @@ public class StoryViewDataTest {
     @Test
     public void commentCountIsZeroWhenThereAreNoCommentIds() {
         StoryViewData empty = new StoryViewData();
-        assertThat(empty.commentCount()).isEqualTo(0);
+        assertThat(empty.commentCount()).isEqualTo(String.valueOf(0));
     }
 
     @Test
@@ -52,6 +52,6 @@ public class StoryViewDataTest {
         StoryViewData data = new StoryViewData(
                 empty.getBy(), commentIds, empty.getId(), empty.getScore(), empty.getTitle(), empty.getUrl()
         );
-        assertThat(data.commentCount()).isEqualTo(commentIds.size());
+        assertThat(data.commentCount()).isEqualTo(String.valueOf(commentIds.size()));
     }
 }
