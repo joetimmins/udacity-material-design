@@ -2,10 +2,11 @@ package com.novoda.materialised.hackernews.topstories.view
 
 import com.novoda.materialised.hackernews.asynclistview.ViewData
 import java.net.URI
+import java.util.*
 
 data class StoryViewData(
         val by: String = "",
-        val commentIds: List<Int> = java.util.Arrays.asList(0),
+        val commentIds: List<Int> = Collections.emptyList(),
         override val id: Int = 0,
         val score: Int = 0,
         val title: String = "",
@@ -18,5 +19,9 @@ data class StoryViewData(
             domainName.startsWith(prefix) -> return domainName.substring(prefix.length)
             else -> return domainName
         }
+    }
+
+    fun commentCount(): Int {
+        return commentIds.count()
     }
 }
