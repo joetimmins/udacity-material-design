@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <data>
+
+    <variable
+      name="viewData"
+      type="com.novoda.materialised.hackernews.topstories.view.StoryViewData" />
+
+  </data>
+
   <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/full_width_card_view"
     android:layout_width="match_parent"
@@ -24,6 +32,7 @@
         android:paddingLeft="@dimen/story_card_horizontal_padding"
         android:paddingRight="@dimen/story_card_horizontal_padding"
         android:paddingTop="@dimen/story_card_vertical_padding"
+        android:text="@{viewData.getTitle}"
         android:textColor="@android:color/black" />
 
       <View
@@ -44,6 +53,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+          android:text='@{viewData.getScore + " points by " + viewData.getBy}'
           android:textColor="@android:color/darker_gray" />
 
         <TextView
@@ -51,6 +61,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+          android:text='@{viewData.commentCount + " comments"}'
           android:textColor="@android:color/darker_gray" />
 
         <TextView
@@ -58,6 +69,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+          android:text="@{viewData.submittedFrom}"
           android:textColor="@android:color/darker_gray" />
 
       </LinearLayout>
