@@ -67,7 +67,7 @@ public class TopStoriesPresenterTest {
 
     private StoryViewModel convert(Story story, ClickListener<StoryViewData> clickListener) {
         StoryViewData storyViewData = new StoryViewData(
-                story.getBy(), story.getKids(), story.getId(), story.getScore(), story.getTitle(), story.getUrl(), "news.ycombinator.com"
+                story.getBy(), story.getKids(), story.getId(), story.getScore(), story.getTitle(), story.getUrl()
         );
         return new StoryViewModel(storyViewData, clickListener);
     }
@@ -93,7 +93,7 @@ public class TopStoriesPresenterTest {
     private StoryViewModel buildIdOnlyViewModel(long storyId) {
         StoryViewData empty = new StoryViewData();
         StoryViewData idOnly = new StoryViewData(
-                empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl(), empty.getSubmittedFrom()
+                empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
         return new StoryViewModel(idOnly, new NoOpClickListener<StoryViewData>());
     }
