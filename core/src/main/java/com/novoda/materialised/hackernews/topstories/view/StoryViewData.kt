@@ -8,5 +8,6 @@ data class StoryViewData(
         override val id: Int = 0,
         val score: Int = 0,
         val title: String = "",
-        val url: String = ""
+        val url: String = "",
+        val submittedFrom: String = "news.ycombinator.com"
 ) : ViewData {}
