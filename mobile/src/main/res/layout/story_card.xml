@@ -11,12 +11,58 @@
     card_view:cardBackgroundColor="@android:color/white"
     card_view:cardCornerRadius="0dp">
 
-    <TextView
-      android:id="@+id/title_view"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:padding="@dimen/activity_horizontal_margin"
-      android:textColor="@android:color/black" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/title_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/story_card_vertical_padding"
+        android:paddingLeft="@dimen/story_card_horizontal_padding"
+        android:paddingRight="@dimen/story_card_horizontal_padding"
+        android:paddingTop="@dimen/story_card_vertical_padding"
+        android:textColor="@android:color/black" />
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#eeeeee" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/story_card_vertical_padding"
+        android:paddingLeft="@dimen/story_card_horizontal_padding"
+        android:paddingRight="@dimen/story_card_horizontal_padding"
+        android:paddingTop="@dimen/story_card_vertical_padding">
+
+        <TextView
+          android:id="@+id/story_score"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:background="@android:color/holo_red_light" />
+
+        <TextView
+          android:id="@+id/story_comments"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:background="@android:color/holo_green_light" />
+
+        <TextView
+          android:id="@+id/story_submitted_from"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:background="@android:color/holo_blue_light" />
+
+      </LinearLayout>
+
+    </LinearLayout>
 
   </android.support.v7.widget.CardView>
 
