@@ -1,13 +1,15 @@
 package com.novoda.materialised.hackernews.topstories;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.novoda.materialised.R;
+import com.novoda.materialised.databinding.StoryCardBinding;
 import com.novoda.materialised.hackernews.asynclistview.ModelledView;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
@@ -15,7 +17,7 @@ public final class StoryCardView
         extends LinearLayout
         implements ModelledView<StoryViewModel> {
 
-    private TextView titleView;
+    private StoryCardBinding storyCard;
 
     public StoryCardView(Context context) {
         super(context);
@@ -34,8 +36,8 @@ public final class StoryCardView
 
     @Override
     public void updateWith(@NonNull final StoryViewModel viewModel) {
-        titleView.setText(viewModel.getViewData().getTitle());
-        titleView.setOnClickListener(new OnClickListener() {
+        storyCard.titleView.setText(viewModel.getViewData().getTitle());
+        storyCard.fullWidthCardView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 viewModel.getViewBehaviour().onClick(viewModel.getViewData());
@@ -44,9 +46,8 @@ public final class StoryCardView
     }
 
     private void init(Context context) {
-        inflate(context, R.layout.story_card, this);
+        storyCard = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.story_card, this, true);
         LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         setLayoutParams(layoutParams);
-        titleView = (TextView) findViewById(R.id.title_view);
     }
 }
