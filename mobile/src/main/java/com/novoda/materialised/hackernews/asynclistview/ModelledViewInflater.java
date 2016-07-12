@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 public final class ModelledViewInflater<T extends View & ModelledView> {
     private final Class<T> viewClass;
@@ -20,16 +19,7 @@ public final class ModelledViewInflater<T extends View & ModelledView> {
         try {
             constructor = viewClass.getDeclaredConstructor(Context.class);
             result = constructor.newInstance(parent.getContext());
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Couldn't inflate ModelledView instance!");
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Couldn't inflate ModelledView instance!");
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Couldn't inflate ModelledView instance!");
-        } catch (InstantiationException e) {
+        } catch (Exception e) { // this is horrendous, but multi-catching gives a compile error on API < 19
             e.printStackTrace();
             throw new RuntimeException("Couldn't inflate ModelledView instance!");
         }
