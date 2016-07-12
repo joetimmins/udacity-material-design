@@ -29,4 +29,10 @@ public class StoryViewDataTest {
 
         assertThat(data.submittedFrom()).isEqualTo(expectedDomainName);
     }
+
+    @Test
+    public void submittedFromReturnsEmptyString_WhenUrlIsEmptyString() {
+        StoryViewData empty = new StoryViewData();
+        assertThat(empty.submittedFrom()).isEqualTo("");
+    }
 }

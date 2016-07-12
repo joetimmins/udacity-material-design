@@ -44,21 +44,21 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:background="@android:color/holo_red_light" />
+          android:textColor="@android:color/darker_gray" />
 
         <TextView
           android:id="@+id/story_comments"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:background="@android:color/holo_green_light" />
+          android:textColor="@android:color/darker_gray" />
 
         <TextView
           android:id="@+id/story_submitted_from"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:background="@android:color/holo_blue_light" />
+          android:textColor="@android:color/darker_gray" />
 
       </LinearLayout>
 

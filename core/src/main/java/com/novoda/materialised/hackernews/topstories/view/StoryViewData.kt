@@ -12,7 +12,7 @@ data class StoryViewData(
         val url: String = ""
 ) : ViewData {
     fun submittedFrom(): String {
-        val domainName = URI.create(url).host
+        val domainName = URI.create(url).host ?: ""
         val prefix = "www."
         when {
             domainName.startsWith(prefix) -> return domainName.substring(prefix.length)

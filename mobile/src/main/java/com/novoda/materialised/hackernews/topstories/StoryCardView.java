@@ -37,6 +37,11 @@ public final class StoryCardView
     @Override
     public void updateWith(@NonNull final StoryViewModel viewModel) {
         storyCard.titleView.setText(viewModel.getViewData().getTitle());
+
+        storyCard.storyScore.setText(String.valueOf(viewModel.getViewData().getScore()));
+        storyCard.storyComments.setText(String.valueOf(viewModel.getViewData().getCommentIds().size()));
+        storyCard.storySubmittedFrom.setText(viewModel.getViewData().submittedFrom());
+
         storyCard.fullWidthCardView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
