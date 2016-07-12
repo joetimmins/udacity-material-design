@@ -4,8 +4,8 @@
   <data>
 
     <variable
-      name="viewData"
-      type="com.novoda.materialised.hackernews.topstories.view.StoryViewData" />
+      name="viewModel"
+      type="com.novoda.materialised.hackernews.topstories.view.StoryViewModel" />
 
   </data>
 
@@ -28,11 +28,12 @@
         android:id="@+id/title_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> viewModel.getViewBehaviour.onClick(viewModel.viewData)}"
         android:paddingBottom="@dimen/story_card_vertical_padding"
         android:paddingLeft="@dimen/story_card_horizontal_padding"
         android:paddingRight="@dimen/story_card_horizontal_padding"
         android:paddingTop="@dimen/story_card_vertical_padding"
-        android:text="@{viewData.getTitle}"
+        android:text="@{viewModel.getViewData.getTitle}"
         android:textColor="@android:color/black" />
 
       <View
@@ -53,7 +54,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:text='@{viewData.getScore + " points by " + viewData.getBy}'
+          android:text='@{viewModel.getViewData.getScore + " points by " + viewModel.viewData.getBy}'
           android:textColor="@android:color/darker_gray" />
 
         <TextView
@@ -61,7 +62,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:text='@{viewData.commentCount + " comments"}'
+          android:text='@{viewModel.getViewData.commentCount + " comments"}'
           android:textColor="@android:color/darker_gray" />
 
         <TextView
@@ -69,7 +70,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:text="@{viewData.submittedFrom}"
+          android:text="@{viewModel.getViewData.submittedFrom}"
           android:textColor="@android:color/darker_gray" />
 
       </LinearLayout>

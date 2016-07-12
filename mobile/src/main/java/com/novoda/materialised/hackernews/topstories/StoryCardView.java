@@ -5,13 +5,11 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.StoryCardBinding;
 import com.novoda.materialised.hackernews.asynclistview.ModelledView;
-import com.novoda.materialised.hackernews.topstories.view.StoryViewData;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 public final class StoryCardView
@@ -37,14 +35,7 @@ public final class StoryCardView
 
     @Override
     public void updateWith(@NonNull final StoryViewModel viewModel) {
-        final StoryViewData viewData = viewModel.getViewData();
-        storyCard.setViewData(viewData);
-        storyCard.fullWidthCardView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewModel.getViewBehaviour().onClick(viewData);
-            }
-        });
+        storyCard.setViewModel(viewModel);
     }
 
     private void init(Context context) {
