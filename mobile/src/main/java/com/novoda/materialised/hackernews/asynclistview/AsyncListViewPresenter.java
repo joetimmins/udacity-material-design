@@ -31,4 +31,9 @@ public final class AsyncListViewPresenter<T extends ViewModel, U extends View & 
         adapter.updateWith(viewModel);
     }
 
+    @Override
+    public void showError() {
+
+    }
+
 }

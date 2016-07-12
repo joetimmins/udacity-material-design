@@ -23,6 +23,8 @@ class TopStoriesPresenter(
             if (it.size > 0) {
                 topStoriesView.updateWith(createIdOnlyViewModels(it))
                 itemsDatabase.readItems(convertLongsToInts(it), callbackToStoriesViewWithSingleStoryViewModel(topStoriesView))
+            } else {
+                topStoriesView.showError()
             }
         }
     }

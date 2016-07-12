@@ -3,11 +3,11 @@ package com.novoda.materialised.hackernews.topstories;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ClickListener;
 import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener;
-import com.novoda.materialised.hackernews.topstories.database.ValueCallback;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.database.Story;
 import com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase;
+import com.novoda.materialised.hackernews.topstories.database.ValueCallback;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewData;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
@@ -38,16 +38,25 @@ public class TopStoriesPresenterTest {
         List<StoryViewModel> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
         SpyingAsyncListView storiesView = new SpyingAsyncListView();
 
-        presentWith(storiesView, Collections.<Story>emptyList());
+        presentWith(topStoryIds, Collections.<Story>emptyList(), storiesView);
 
         assertThat(storiesView.updatedStoryViewModels).isEqualTo(expectedViewModels);
+    }
+
+    @Test
+    public void presenterTellsViewToShowErrorScreen_WhenNoStoryIdsAreRetrieved() {
+        SpyingAsyncListView storiesView = new SpyingAsyncListView();
+
+        presentWith(Collections.<Long>emptyList(), Collections.<Story>emptyList(), storiesView);
+
+        assertThat(storiesView.errorShown).isTrue();
     }
 
     @Test
     public void presenterGivesCorrectUpdatedViewModelsToView_OneAtATime_WhenPresentingMultipleStories() {
         SpyingAsyncListView storiesView = new SpyingAsyncListView();
 
-        presentWith(storiesView, Arrays.asList(aStory, anotherStory));
+        presentWith(topStoryIds, Arrays.asList(aStory, anotherStory), storiesView);
 
         StoryViewModel storyViewModel = convert(aStory, new NoOpClickListener<StoryViewData>());
         StoryViewModel anotherStoryViewModel = convert(anotherStory, new NoOpClickListener<StoryViewData>());
@@ -61,7 +70,7 @@ public class TopStoriesPresenterTest {
         return new StoryViewModel(storyViewData, clickListener);
     }
 
-    private void presentWith(SpyingAsyncListView storiesView, List<Story> stories) {
+    private void presentWith(List<Long> topStoryIds, List<Story> stories, SpyingAsyncListView storiesView) {
         TopStoriesPresenter presenter = new TopStoriesPresenter(
                 new StubbedTopStoriesDatabase(topStoryIds),
                 new StubbedItemsDatabase(stories),
@@ -114,22 +123,28 @@ public class TopStoriesPresenterTest {
     }
 
     private static class SpyingAsyncListView implements AsyncListView<StoryViewModel> {
-        List<com.novoda.materialised.hackernews.topstories.view.StoryViewModel> updatedStoryViewModels;
-        com.novoda.materialised.hackernews.topstories.view.StoryViewModel firstUpdatedStoryViewModel;
-        com.novoda.materialised.hackernews.topstories.view.StoryViewModel secondUpdatedStoryViewModel;
+        List<StoryViewModel> updatedStoryViewModels;
+        StoryViewModel firstUpdatedStoryViewModel;
+        StoryViewModel secondUpdatedStoryViewModel;
+        boolean errorShown;
 
         @Override
-        public void updateWith(List<com.novoda.materialised.hackernews.topstories.view.StoryViewModel> initialViewModelList) {
+        public void updateWith(List<StoryViewModel> initialViewModelList) {
             updatedStoryViewModels = initialViewModelList;
         }
 
         @Override
-        public void updateWith(com.novoda.materialised.hackernews.topstories.view.StoryViewModel viewModel) {
+        public void updateWith(StoryViewModel viewModel) {
             if (firstUpdatedStoryViewModel == null) {
                 firstUpdatedStoryViewModel = viewModel;
             } else if (secondUpdatedStoryViewModel == null) {
                 secondUpdatedStoryViewModel = viewModel;
             }
+        }
+
+        @Override
+        public void showError() {
+            errorShown = true;
         }
     }
 
