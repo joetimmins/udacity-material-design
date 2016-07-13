@@ -36,7 +36,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
 
         MainActivityBinding mainActivityLayout = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
-        mainActivityLayout.collapsingToolbar.setTitle(getString(R.string.app_name));
+        setSupportActionBar(mainActivityLayout.toolbar);
 
         mainActivityLayout.plusFab.setOnClickListener(
                 new View.OnClickListener() {
