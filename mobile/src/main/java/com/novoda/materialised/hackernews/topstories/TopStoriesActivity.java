@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
@@ -35,7 +36,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
 
         MainActivityBinding mainActivityLayout = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
-        setSupportActionBar(mainActivityLayout.toolbar);
+        mainActivityLayout.collapsingToolbar.setTitle(getString(R.string.app_name));
 
         mainActivityLayout.plusFab.setOnClickListener(
                 new View.OnClickListener() {
@@ -63,6 +64,10 @@ public final class TopStoriesActivity extends AppCompatActivity {
                 storiesViewPresenter,
                 new IntentNavigator()
         );
+
+        TabLayout tabLayout = mainActivityLayout.storyTypeTabLayout;
+        tabLayout.addTab(tabLayout.newTab().setText("something"));
+        tabLayout.addTab(tabLayout.newTab().setText("another one"));
     }
 
     @Override
