@@ -40,7 +40,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         MainActivityBinding mainActivityLayout = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
         setSupportActionBar(mainActivityLayout.toolbar);
-
+        mainActivityLayout.storiesView.setLayoutManager(new LinearLayoutManager(this));
         mainActivityLayout.plusFab.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -57,8 +57,6 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 mainActivityLayout.storiesView,
                 new ModelledViewInflater<>(StoryCardView.class)
         );
-
-        mainActivityLayout.storiesView.setLayoutManager(new LinearLayoutManager(this));
 
         final FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
         storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "topstories");
