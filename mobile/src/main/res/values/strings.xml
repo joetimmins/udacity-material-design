@@ -2,4 +2,8 @@
   <string name="app_name">Material Hacker News</string>
   <string name="action_settings">Settings</string>
   <string name="loading_stories">Loading stories…</string>
+
+  <string name="top_stories">Top Stories</string>
+  <string name="new_stories">New</string>
+  <string name="best">Best</string>
 </resources>

@@ -60,21 +60,11 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
         mainActivityLayout.storiesView.setLayoutManager(new LinearLayoutManager(this));
 
-        TabLayout tabLayout = mainActivityLayout.storyTypeTabLayout;
-
-        TabLayout.Tab topStoriesTab = tabLayout.newTab().setText("Top Stories");
-        tabLayout.addTab(topStoriesTab);
-
-        TabLayout.Tab newTab = tabLayout.newTab().setText("New");
-        tabLayout.addTab(newTab);
-
-        TabLayout.Tab bestTab = tabLayout.newTab().setText("Best");
-        tabLayout.addTab(bestTab);
-
         final FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
         storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "topstories");
         final ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+        mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 String tabText = tab.getText() != null ? tab.getText().toString() : "broken";
