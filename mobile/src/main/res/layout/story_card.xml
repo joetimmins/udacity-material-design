@@ -10,7 +10,6 @@
   </data>
 
   <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/full_width_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
@@ -25,7 +24,6 @@
       android:orientation="vertical">
 
       <TextView
-        android:id="@+id/title_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="@{() -> viewModel.getViewBehaviour.onClick(viewModel.viewData)}"
@@ -49,29 +47,48 @@
         android:paddingRight="@dimen/story_card_horizontal_padding"
         android:paddingTop="@dimen/story_card_vertical_padding">
 
-        <TextView
-          android:id="@+id/story_score"
+        <LinearLayout
           android:layout_width="0dp"
           android:layout_height="wrap_content"
+          android:layout_gravity="start"
           android:layout_weight="1"
-          android:text='@{viewModel.getViewData.getScore + " points by " + viewModel.viewData.getBy}'
-          android:textColor="@android:color/darker_gray" />
+          android:orientation="vertical">
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{viewModel.getViewData.getScore + " points"}'
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{"by " + viewModel.viewData.getBy}'
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
+
+        </LinearLayout>
 
         <TextView
-          android:id="@+id/story_comments"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+          android:gravity="center"
           android:text='@{viewModel.getViewData.commentCount + " comments"}'
-          android:textColor="@android:color/darker_gray" />
+          android:textColor="@android:color/darker_gray"
+          android:textSize="12sp" />
 
         <TextView
-          android:id="@+id/story_submitted_from"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+          android:ellipsize="end"
+          android:gravity="end"
+          android:maxLines="1"
           android:text="@{viewModel.getViewData.submittedFrom}"
-          android:textColor="@android:color/darker_gray" />
+          android:textColor="@android:color/darker_gray"
+          android:textSize="12sp" />
 
       </LinearLayout>
 
