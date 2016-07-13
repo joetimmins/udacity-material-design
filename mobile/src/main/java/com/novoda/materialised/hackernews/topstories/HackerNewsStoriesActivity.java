@@ -1,11 +1,8 @@
 package com.novoda.materialised.hackernews.topstories;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
@@ -21,14 +18,10 @@ import com.novoda.materialised.hackernews.asynclistview.ModelledViewInflater;
 import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
 import com.novoda.materialised.hackernews.firebase.FirebaseStoryIdDatabase;
-import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
-import com.novoda.materialised.hackernews.topstories.database.StoryIdDatabase;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
-import org.jetbrains.annotations.NotNull;
-
-public final class HackerNewsStoriesActivity extends AppCompatActivity {
+public final class HackerNewsStoriesActivity extends AppCompatActivity implements MultipleTabView {
 
     private StoriesPresenter storiesPresenter;
 
@@ -51,61 +44,24 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 }
         );
 
-        final AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter = new AsyncListViewPresenter<>(
+        AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter = new AsyncListViewPresenter<>(
                 mainActivityLayout.loadingView,
                 mainActivityLayout.storiesView,
                 new ModelledViewInflater<>(StoryCardView.class)
         );
 
-        final FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
-        final ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
+        FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
+        ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
 
-        mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                String tabText = tab.getText() != null ? tab.getText().toString() : "broken";
-                if (tabText.equalsIgnoreCase("Top Stories")) {
-                    storiesPresenter = createPresenter(
-                            new FirebaseStoryIdDatabase(firebaseDatabase, "topstories"), itemsDatabase, storiesViewPresenter
-                    );
-                    storiesPresenter.present();
-                }
-                if (tabText.equalsIgnoreCase("New")) {
-                    storiesPresenter = createPresenter(
-                            new FirebaseStoryIdDatabase(firebaseDatabase, "newstories"), itemsDatabase, storiesViewPresenter
-                    );
-                    storiesPresenter.present();
-                }
-                if (tabText.equalsIgnoreCase("Best")) {
-                    storiesPresenter = createPresenter(
-                            new FirebaseStoryIdDatabase(firebaseDatabase, "beststories"), itemsDatabase, storiesViewPresenter
-                    );
-                    storiesPresenter.present();
-                }
-            }
+        mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(
+                new StoriesTabSelectedListener(firebaseDatabase, itemsDatabase, storiesViewPresenter, new IntentNavigator(this), this)
+        );
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        storiesPresenter = createPresenter(new FirebaseStoryIdDatabase(firebaseDatabase, "topstories"), itemsDatabase, storiesViewPresenter);
-    }
-
-    private StoriesPresenter createPresenter(
-            StoryIdDatabase storyIdDatabase, ItemsDatabase itemsDatabase, AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter
-    ) {
-        return new StoriesPresenter(
-                storyIdDatabase,
+        storiesPresenter = new StoriesPresenter(
+                new FirebaseStoryIdDatabase(firebaseDatabase, "topstories"),
                 itemsDatabase,
                 storiesViewPresenter,
-                new IntentNavigator()
+                new IntentNavigator(this)
         );
     }
 
@@ -137,10 +93,9 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class IntentNavigator implements Navigator {
-        @Override
-        public void navigateTo(@NotNull String uri) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
-        }
+    @Override
+    public void usePresenter(StoriesPresenter presenter) {
+        storiesPresenter = presenter;
+        storiesPresenter.present();
     }
 }
