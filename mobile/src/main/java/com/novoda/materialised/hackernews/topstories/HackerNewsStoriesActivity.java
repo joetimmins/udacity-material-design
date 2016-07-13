@@ -28,7 +28,7 @@ import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class TopStoriesActivity extends AppCompatActivity {
+public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
     private StoriesPresenter storiesPresenter;
     private StoryIdDatabase storyIdDatabase;
@@ -46,7 +46,7 @@ public final class TopStoriesActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            Toast.makeText(TopStoriesActivity.this, "This button does nothing", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HackerNewsStoriesActivity.this, "This button does nothing", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
