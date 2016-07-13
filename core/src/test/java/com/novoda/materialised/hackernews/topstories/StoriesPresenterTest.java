@@ -6,7 +6,7 @@ import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.database.Story;
-import com.novoda.materialised.hackernews.topstories.database.TopStoriesDatabase;
+import com.novoda.materialised.hackernews.topstories.database.StoryIdDatabase;
 import com.novoda.materialised.hackernews.topstories.database.ValueCallback;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewData;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class TopStoriesPresenterTest {
+public class StoriesPresenterTest {
 
     private final long firstStoryId = 56L;
     private final long secondStoryId = 78L;
@@ -73,8 +73,8 @@ public class TopStoriesPresenterTest {
     }
 
     private void presentWith(List<Long> topStoryIds, List<Story> stories, SpyingAsyncListView storiesView) {
-        TopStoriesPresenter presenter = new TopStoriesPresenter(
-                new StubbedTopStoriesDatabase(topStoryIds),
+        StoriesPresenter presenter = new StoriesPresenter(
+                new StubbedStoryIdDatabase(topStoryIds),
                 new StubbedItemsDatabase(stories),
                 storiesView,
                 new SpyingNavigator()
@@ -98,10 +98,10 @@ public class TopStoriesPresenterTest {
         return new StoryViewModel(idOnly, new NoOpClickListener<StoryViewData>());
     }
 
-    private static class StubbedTopStoriesDatabase implements TopStoriesDatabase {
+    private static class StubbedStoryIdDatabase implements StoryIdDatabase {
         public final List<Long> ids;
 
-        private StubbedTopStoriesDatabase(List<Long> ids) {
+        private StubbedStoryIdDatabase(List<Long> ids) {
             this.ids = ids;
         }
 

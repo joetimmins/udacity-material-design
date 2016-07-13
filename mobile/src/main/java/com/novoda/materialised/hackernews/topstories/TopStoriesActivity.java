@@ -20,15 +20,18 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
 import com.novoda.materialised.hackernews.asynclistview.ModelledViewInflater;
 import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
-import com.novoda.materialised.hackernews.firebase.FirebaseTopStoriesDatabase;
+import com.novoda.materialised.hackernews.firebase.FirebaseStoryIdDatabase;
 import com.novoda.materialised.hackernews.navigator.Navigator;
+import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
+import com.novoda.materialised.hackernews.topstories.database.StoryIdDatabase;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 public final class TopStoriesActivity extends AppCompatActivity {
 
-    private TopStoriesPresenter topStoriesPresenter;
+    private StoriesPresenter storiesPresenter;
+    private StoryIdDatabase storyIdDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,32 +52,78 @@ public final class TopStoriesActivity extends AppCompatActivity {
                 }
         );
 
-        mainActivityLayout.storiesView.setLayoutManager(new LinearLayoutManager(this));
-
-        AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter = new AsyncListViewPresenter<>(
+        final AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter = new AsyncListViewPresenter<>(
                 mainActivityLayout.loadingView,
                 mainActivityLayout.storiesView,
                 new ModelledViewInflater<>(StoryCardView.class)
         );
 
-        FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
-        topStoriesPresenter = new TopStoriesPresenter(
-                new FirebaseTopStoriesDatabase(firebaseDatabase),
-                new FirebaseItemsDatabase(firebaseDatabase),
+        mainActivityLayout.storiesView.setLayoutManager(new LinearLayoutManager(this));
+
+        TabLayout tabLayout = mainActivityLayout.storyTypeTabLayout;
+
+        TabLayout.Tab topStoriesTab = tabLayout.newTab().setText("Top Stories");
+        tabLayout.addTab(topStoriesTab);
+
+        TabLayout.Tab newTab = tabLayout.newTab().setText("New");
+        tabLayout.addTab(newTab);
+
+        TabLayout.Tab bestTab = tabLayout.newTab().setText("Best");
+        tabLayout.addTab(bestTab);
+
+        final FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
+        storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "topstories");
+        final ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String tabText = tab.getText() != null ? tab.getText().toString() : "broken";
+                if (tabText.equalsIgnoreCase("Top Stories")) {
+                    storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "topstories");
+                    createPresenter(storyIdDatabase, itemsDatabase, storiesViewPresenter);
+                    storiesPresenter.present();
+                }
+                if (tabText.equalsIgnoreCase("New")) {
+                    storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "newstories");
+                    createPresenter(storyIdDatabase, itemsDatabase, storiesViewPresenter);
+                    storiesPresenter.present();
+                }
+                if (tabText.equalsIgnoreCase("Best")) {
+                    storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "beststories");
+                    createPresenter(storyIdDatabase, itemsDatabase, storiesViewPresenter);
+                    storiesPresenter.present();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        createPresenter(storyIdDatabase, itemsDatabase, storiesViewPresenter);
+    }
+
+    private void createPresenter(
+            StoryIdDatabase storyIdDatabase, ItemsDatabase itemsDatabase, AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter
+    ) {
+        storiesPresenter = new StoriesPresenter(
+                storyIdDatabase,
+                itemsDatabase,
                 storiesViewPresenter,
                 new IntentNavigator()
         );
-
-        TabLayout tabLayout = mainActivityLayout.storyTypeTabLayout;
-        tabLayout.addTab(tabLayout.newTab().setText("Top Stories"));
-        tabLayout.addTab(tabLayout.newTab().setText("New"));
-        tabLayout.addTab(tabLayout.newTab().setText("Best"));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        topStoriesPresenter.present();
+        storiesPresenter.present();
     }
 
     @Override

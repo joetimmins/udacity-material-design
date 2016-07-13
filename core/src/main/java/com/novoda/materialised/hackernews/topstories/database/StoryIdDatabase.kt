@@ -1,5 +1,5 @@
 package com.novoda.materialised.hackernews.topstories.database
 
-interface TopStoriesDatabase {
+interface StoryIdDatabase {
     fun readTopStoriesIds(callback: ValueCallback<List<Long>>)
 }
