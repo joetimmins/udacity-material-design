@@ -62,7 +62,7 @@
         android:text="@string/loading_stories" />
 
       <android.support.v7.widget.RecyclerView
-        android:id="@+id/top_stories_view"
+        android:id="@+id/stories_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

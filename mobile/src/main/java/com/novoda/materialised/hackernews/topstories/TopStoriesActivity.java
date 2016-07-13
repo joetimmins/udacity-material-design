@@ -49,11 +49,11 @@ public final class TopStoriesActivity extends AppCompatActivity {
                 }
         );
 
-        mainActivityLayout.topStoriesView.setLayoutManager(new LinearLayoutManager(this));
+        mainActivityLayout.storiesView.setLayoutManager(new LinearLayoutManager(this));
 
         AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter = new AsyncListViewPresenter<>(
                 mainActivityLayout.loadingView,
-                mainActivityLayout.topStoriesView,
+                mainActivityLayout.storiesView,
                 new ModelledViewInflater<>(StoryCardView.class)
         );
 
@@ -66,8 +66,9 @@ public final class TopStoriesActivity extends AppCompatActivity {
         );
 
         TabLayout tabLayout = mainActivityLayout.storyTypeTabLayout;
-        tabLayout.addTab(tabLayout.newTab().setText("something"));
-        tabLayout.addTab(tabLayout.newTab().setText("another one"));
+        tabLayout.addTab(tabLayout.newTab().setText("Top Stories"));
+        tabLayout.addTab(tabLayout.newTab().setText("New"));
+        tabLayout.addTab(tabLayout.newTab().setText("Best"));
     }
 
     @Override
