@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
     private StoriesPresenter storiesPresenter;
-    private StoryIdDatabase storyIdDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,6 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         );
 
         final FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
-        storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "topstories");
         final ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
 
         mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -67,18 +65,21 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 String tabText = tab.getText() != null ? tab.getText().toString() : "broken";
                 if (tabText.equalsIgnoreCase("Top Stories")) {
-                    storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "topstories");
-                    createPresenter(storyIdDatabase, itemsDatabase, storiesViewPresenter);
+                    storiesPresenter = createPresenter(
+                            new FirebaseStoryIdDatabase(firebaseDatabase, "topstories"), itemsDatabase, storiesViewPresenter
+                    );
                     storiesPresenter.present();
                 }
                 if (tabText.equalsIgnoreCase("New")) {
-                    storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "newstories");
-                    createPresenter(storyIdDatabase, itemsDatabase, storiesViewPresenter);
+                    storiesPresenter = createPresenter(
+                            new FirebaseStoryIdDatabase(firebaseDatabase, "newstories"), itemsDatabase, storiesViewPresenter
+                    );
                     storiesPresenter.present();
                 }
                 if (tabText.equalsIgnoreCase("Best")) {
-                    storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, "beststories");
-                    createPresenter(storyIdDatabase, itemsDatabase, storiesViewPresenter);
+                    storiesPresenter = createPresenter(
+                            new FirebaseStoryIdDatabase(firebaseDatabase, "beststories"), itemsDatabase, storiesViewPresenter
+                    );
                     storiesPresenter.present();
                 }
             }
@@ -94,13 +95,13 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
             }
         });
 
-        createPresenter(storyIdDatabase, itemsDatabase, storiesViewPresenter);
+        storiesPresenter = createPresenter(new FirebaseStoryIdDatabase(firebaseDatabase, "topstories"), itemsDatabase, storiesViewPresenter);
     }
 
-    private void createPresenter(
+    private StoriesPresenter createPresenter(
             StoryIdDatabase storyIdDatabase, ItemsDatabase itemsDatabase, AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter
     ) {
-        storiesPresenter = new StoriesPresenter(
+        return new StoriesPresenter(
                 storyIdDatabase,
                 itemsDatabase,
                 storiesViewPresenter,
