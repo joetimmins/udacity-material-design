@@ -3,11 +3,14 @@ Hacker News meets Material Design.
 
 In order to showcase some of the cool techniques detailed in Udacity's Material Design course, I've created a small app that lets you browse Hacker News.
 
-Material effects that are planned include:
+Material effects include:
 - Collapsing app bar with tabs, to switch between the top, new and best stories
-- Seam-to-step transition when selecting a story to read
-- A floating action button for submitting new articles
+- Seam-to-step transition when scrolling through the article list
+- A floating action button
+
+Coming soon:
 - Fancy view animations for nice transitions!
+- A comments page!
 
 Some other attempted techniques on show here include:
 - Hexagonal architecture, with the code split between `mobile` and `core` modules
