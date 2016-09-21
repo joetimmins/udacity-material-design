@@ -34,20 +34,23 @@ class StoriesTabSelectedListener implements TabLayout.OnTabSelectedListener {
     public void onTabSelected(TabLayout.Tab tab) {
         String tabText = tab.getText() != null ? tab.getText().toString() : "broken";
         if (tabText.equalsIgnoreCase("Top Stories")) {
+            FirebaseStoryIdDatabase topStoriesIds = new FirebaseStoryIdDatabase(firebaseDatabase, "topstories");
             StoriesPresenter presenter = new StoriesPresenter(
-                    new FirebaseStoryIdDatabase(firebaseDatabase, "topstories"), itemsDatabase, storiesViewPresenter, navigator
+                    topStoriesIds, itemsDatabase, storiesViewPresenter, navigator
             );
             multipleTabView.usePresenter(presenter);
         }
         if (tabText.equalsIgnoreCase("New")) {
+            FirebaseStoryIdDatabase newStoriesIds = new FirebaseStoryIdDatabase(firebaseDatabase, "newstories");
             StoriesPresenter presenter = new StoriesPresenter(
-                    new FirebaseStoryIdDatabase(firebaseDatabase, "newstories"), itemsDatabase, storiesViewPresenter, navigator
+                    newStoriesIds, itemsDatabase, storiesViewPresenter, navigator
             );
             multipleTabView.usePresenter(presenter);
         }
         if (tabText.equalsIgnoreCase("Best")) {
+            FirebaseStoryIdDatabase bestStoriesIds = new FirebaseStoryIdDatabase(firebaseDatabase, "beststories");
             StoriesPresenter presenter = new StoriesPresenter(
-                    new FirebaseStoryIdDatabase(firebaseDatabase, "beststories"), itemsDatabase, storiesViewPresenter, navigator
+                    bestStoriesIds, itemsDatabase, storiesViewPresenter, navigator
             );
             multipleTabView.usePresenter(presenter);
         }

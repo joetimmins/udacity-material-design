@@ -16,12 +16,12 @@ import static org.mockito.Mockito.*;
 
 class FakeFirebase {
 
-    public static FirebaseDatabase getTopStoriesFirebaseDatabase(final List<Long> expectedTopStories) {
+    public static FirebaseDatabase getDatabaseForStoryType(String storyType, final List<Long> expectedTopStories) {
         FirebaseDatabase mockFirebaseDatabase = mock(FirebaseDatabase.class);
         DatabaseReference mockDatabaseReference = mock(DatabaseReference.class);
 
         when(mockFirebaseDatabase.getReference("v0")).thenReturn(mockDatabaseReference);
-        when(mockDatabaseReference.child("topstories")).thenReturn(mockDatabaseReference);
+        when(mockDatabaseReference.child(storyType)).thenReturn(mockDatabaseReference);
 
         doAnswer(new Answer<Void>() {
             @Override

@@ -27,8 +27,8 @@ public class FirebaseItemsDatabaseTest {
     }
 
     private class CapturingValueCallback implements ValueCallback<Story> {
-        public Story first;
-        public Story second;
+        Story first;
+        Story second;
 
         @Override
         public void onValueRetrieved(Story value) {
