@@ -9,14 +9,20 @@ import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 class StoriesTabSelectedListener implements TabLayout.OnTabSelectedListener {
+
+    private final static Map<String, String> tabTextStoryTypeMap = new HashMap<>();
+
     private final FirebaseDatabase firebaseDatabase;
     private final ItemsDatabase itemsDatabase;
     private final AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter;
     private final MultipleTabView multipleTabView;
     private final Navigator navigator;
 
-    public StoriesTabSelectedListener(
+    StoriesTabSelectedListener(
             FirebaseDatabase firebaseDatabase,
             ItemsDatabase itemsDatabase,
             AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter,
@@ -30,30 +36,21 @@ class StoriesTabSelectedListener implements TabLayout.OnTabSelectedListener {
         this.multipleTabView = multipleTabView;
     }
 
+    static {
+        tabTextStoryTypeMap.put("Top Stories", "topstories");
+        tabTextStoryTypeMap.put("New", "newstories");
+        tabTextStoryTypeMap.put("Best", "beststories");
+    }
+
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        String tabText = tab.getText() != null ? tab.getText().toString() : "broken";
-        if (tabText.equalsIgnoreCase("Top Stories")) {
-            FirebaseStoryIdDatabase topStoriesIds = new FirebaseStoryIdDatabase(firebaseDatabase, "topstories");
-            StoriesPresenter presenter = new StoriesPresenter(
-                    topStoriesIds, itemsDatabase, storiesViewPresenter, navigator
-            );
-            multipleTabView.usePresenter(presenter);
-        }
-        if (tabText.equalsIgnoreCase("New")) {
-            FirebaseStoryIdDatabase newStoriesIds = new FirebaseStoryIdDatabase(firebaseDatabase, "newstories");
-            StoriesPresenter presenter = new StoriesPresenter(
-                    newStoriesIds, itemsDatabase, storiesViewPresenter, navigator
-            );
-            multipleTabView.usePresenter(presenter);
-        }
-        if (tabText.equalsIgnoreCase("Best")) {
-            FirebaseStoryIdDatabase bestStoriesIds = new FirebaseStoryIdDatabase(firebaseDatabase, "beststories");
-            StoriesPresenter presenter = new StoriesPresenter(
-                    bestStoriesIds, itemsDatabase, storiesViewPresenter, navigator
-            );
-            multipleTabView.usePresenter(presenter);
-        }
+        String tabText = tab.getText() != null ? tab.getText().toString() : "Top Stories";
+        String storyType = tabTextStoryTypeMap.get(tabText);
+        FirebaseStoryIdDatabase storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase, storyType);
+        StoriesPresenter presenter = new StoriesPresenter(
+                storyIdDatabase, itemsDatabase, storiesViewPresenter, navigator
+        );
+        multipleTabView.usePresenter(presenter);
     }
 
     @Override
