@@ -6,28 +6,27 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public final class SingleTypeAdapter<T extends ViewModel, U extends View & ModelledView<T>> extends RecyclerView.Adapter {
+final class SingleTypeAdapter<T extends ViewModel, V extends View & ModelledView<T>> extends RecyclerView.Adapter<ModelledViewHolder<V>> {
     private final List<T> viewModels;
-    private final ModelledViewInflater<U> viewInflater;
+    private final ModelledViewInflater<V> viewInflater;
 
-    public SingleTypeAdapter(List<T> viewModels, ModelledViewInflater<U> viewInflater) {
+    SingleTypeAdapter(List<T> viewModels, ModelledViewInflater<V> viewInflater) {
         this.viewModels = viewModels;
         this.viewInflater = viewInflater;
         setHasStableIds(true);
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = viewInflater.inflateUsing(parent);
-        return new RecyclerView.ViewHolder(view) {
-        };
+    public ModelledViewHolder<V> onCreateViewHolder(ViewGroup parent, int viewType) {
+        V view = viewInflater.inflateUsing(parent);
+        return new ModelledViewHolder<>(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ModelledView<T> view = (ModelledView<T>) holder.itemView;
-        T data = viewModels.get(position);
-        view.updateWith(data);
+    public void onBindViewHolder(ModelledViewHolder<V> holder, int position) {
+        V view = holder.obtainHeldView();
+        T viewModel = viewModels.get(position);
+        view.updateWith(viewModel);
     }
 
     @Override
@@ -40,7 +39,7 @@ public final class SingleTypeAdapter<T extends ViewModel, U extends View & Model
         return viewModels.get(position).getViewData().getId();
     }
 
-    public void updateWith(T newItem) {
+    void updateWith(T newItem) {
         for (int i = 0; i < viewModels.size(); i++) {
             if (shouldUpdate(i, newItem)) {
                 viewModels.set(i, newItem);

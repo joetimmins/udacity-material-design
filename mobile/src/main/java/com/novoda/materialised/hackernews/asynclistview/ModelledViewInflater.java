@@ -6,16 +6,16 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
 
-public final class ModelledViewInflater<T extends View & ModelledView> {
-    private final Class<T> viewClass;
+final class ModelledViewInflater<V extends View & ModelledView<? extends ViewModel>> {
+    private final Class<V> viewClass;
 
-    public ModelledViewInflater(Class<T> viewClass) {
+    public ModelledViewInflater(Class<V> viewClass) {
         this.viewClass = viewClass;
     }
 
-    public T inflateUsing(ViewGroup parent) {
-        Constructor<T> constructor;
-        T result;
+    V inflateUsing(ViewGroup parent) {
+        Constructor<V> constructor;
+        V result;
         try {
             constructor = viewClass.getDeclaredConstructor(Context.class);
             result = constructor.newInstance(parent.getContext());

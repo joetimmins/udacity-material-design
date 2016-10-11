@@ -5,15 +5,19 @@ import android.view.View;
 
 import java.util.List;
 
-public final class AsyncListViewPresenter<T extends ViewModel, U extends View & ModelledView<T>> implements AsyncListView<T> {
+public final class AsyncListViewPresenter<T extends ViewModel, V extends View & ModelledView<T>> implements AsyncListView<T> {
 
     private final View loadingView;
     private final RecyclerView topStoriesView;
-    private final ModelledViewInflater<U> viewInflater;
+    private final ModelledViewInflater<V> viewInflater;
 
-    private SingleTypeAdapter<T, U> adapter;
+    private SingleTypeAdapter<T, V> adapter;
 
-    public AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView, ModelledViewInflater<U> viewInflater) {
+    public AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView, Class<V> viewClass) {
+        this(loadingView, topStoriesView, new ModelledViewInflater<>(viewClass));
+    }
+
+    private AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView, ModelledViewInflater<V> viewInflater) {
         this.loadingView = loadingView;
         this.topStoriesView = topStoriesView;
         this.viewInflater = viewInflater;

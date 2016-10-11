@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
+import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
-import com.novoda.materialised.hackernews.asynclistview.ModelledViewInflater;
 import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
 import com.novoda.materialised.hackernews.firebase.FirebaseStoryIdDatabase;
@@ -44,23 +44,23 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity implement
                 }
         );
 
-        AsyncListViewPresenter<StoryViewModel, StoryCardView> storiesViewPresenter = new AsyncListViewPresenter<>(
+        AsyncListView<StoryViewModel> asyncListView = new AsyncListViewPresenter<>(
                 mainActivityLayout.loadingView,
                 mainActivityLayout.storiesView,
-                new ModelledViewInflater<>(StoryCardView.class)
+                StoryCardView.class
         );
 
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
         ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
 
         mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(
-                new StoriesTabSelectedListener(firebaseDatabase, itemsDatabase, storiesViewPresenter, new IntentNavigator(this), this)
+                new StoriesTabSelectedListener(firebaseDatabase, itemsDatabase, asyncListView, new IntentNavigator(this), this)
         );
 
         storiesPresenter = new StoriesPresenter(
                 new FirebaseStoryIdDatabase(firebaseDatabase, "topstories"),
                 itemsDatabase,
-                storiesViewPresenter,
+                asyncListView,
                 new IntentNavigator(this)
         );
     }
