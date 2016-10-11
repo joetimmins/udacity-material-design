@@ -18,13 +18,16 @@ class StoriesPresenter(
         storyIdDatabase.readTopStoriesIds(callbackWithAllStoriesInList(topStoriesView))
     }
 
-    private fun callbackWithAllStoriesInList(topStoriesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {
-        return valueCallbackFor {
-            if (it.size > 0) {
-                topStoriesView.updateWith(createIdOnlyViewModels(it))
-                itemsDatabase.readItems(convertLongsToInts(it), callbackToStoriesViewWithSingleStoryViewModel(topStoriesView))
+    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {
+        return valueCallbackFor { idList ->
+            if (idList.size > 0) {
+                val idOnlyViewModels = createIdOnlyViewModels(idList)
+                storiesView.updateWith(idOnlyViewModels)
+                val ids = convertLongsToInts(idList)
+                val viewUpdater = viewUpdaterFor(storiesView)
+                itemsDatabase.readItems(ids, viewUpdater)
             } else {
-                topStoriesView.showError()
+                storiesView.showError()
             }
         }
     }
@@ -38,15 +41,16 @@ class StoriesPresenter(
         return StoryViewModel(dataWithIdOnly, NoOpClickListener())
     }
 
-    private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map { it.toInt() }
+    private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map(Long::toInt)
 
-    private fun callbackToStoriesViewWithSingleStoryViewModel(topStoriesView: AsyncListView<StoryViewModel>): ValueCallback<Story> {
-        return valueCallbackFor {
-            topStoriesView.updateWith(buildViewModelFor(it))
+    private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewModel>): ValueCallback<Story> {
+        return valueCallbackFor { story ->
+            val storyViewModel = convertStoryToStoryViewModel(story)
+            storiesView.updateWith(storyViewModel)
         }
     }
 
-    private fun buildViewModelFor(story: Story): StoryViewModel {
+    private fun convertStoryToStoryViewModel(story: Story): StoryViewModel {
         val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
         return StoryViewModel(storyViewData, StoryClickListener(navigator))
     }
