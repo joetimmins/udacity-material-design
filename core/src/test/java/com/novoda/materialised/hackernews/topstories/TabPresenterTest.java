@@ -1,5 +1,8 @@
 package com.novoda.materialised.hackernews.topstories;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -17,11 +20,12 @@ public class TabPresenterTest {
         tabPresenter.resume();
 
         // Assert
-        assertThat(storiesPresenter.presentedType).isEqualTo("topstories");
+        String actual = storiesPresenter.presentedTypes.get(0);
+        assertThat(actual).isEqualTo("topstories");
     }
 
     @Test
-    public void tabListenerMapsTopStoriesTypeCorrectly() {
+    public void tabPresenterMapsTopStoriesTypeCorrectly() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
         TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
@@ -30,11 +34,12 @@ public class TabPresenterTest {
         tabPresenter.tabSelected("Top Stories");
 
         // Assert
-        assertThat(storiesPresenter.presentedType).isEqualTo("topstories");
+        String actual = storiesPresenter.presentedTypes.get(0);
+        assertThat(actual).isEqualTo("topstories");
     }
 
     @Test
-    public void tabListenerMapsNewTypeCorrectly() {
+    public void tabPresenterMapsNewTypeCorrectly() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
         TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
@@ -43,11 +48,12 @@ public class TabPresenterTest {
         tabPresenter.tabSelected("New");
 
         // Assert
-        assertThat(storiesPresenter.presentedType).isEqualTo("newstories");
+        String actual = storiesPresenter.presentedTypes.get(0);
+        assertThat(actual).isEqualTo("newstories");
     }
 
     @Test
-    public void tabListenerMapsBestTypeCorrectly() {
+    public void tabPresenterMapsBestTypeCorrectly() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
         TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
@@ -56,15 +62,32 @@ public class TabPresenterTest {
         tabPresenter.tabSelected("Best");
 
         // Assert
-        assertThat(storiesPresenter.presentedType).isEqualTo("beststories");
+        String actual = storiesPresenter.presentedTypes.get(0);
+        assertThat(actual).isEqualTo("beststories");
+    }
+
+    @Test
+    public void tabPresenterRefreshesContentPresenter_WhenResuming() {
+        // Arrange
+        CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
+        TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
+
+        // Act
+        tabPresenter.tabSelected("Top Stories");
+        tabPresenter.tabSelected("Best");
+        tabPresenter.resume();
+
+        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo("topstories");
+        assertThat(storiesPresenter.presentedTypes.get(1)).isEqualTo("beststories");
+        assertThat(storiesPresenter.presentedTypes.get(2)).isEqualTo("beststories");
     }
 
     private class CapturingTypedPresenter implements TypedPresenter<String> {
-        String presentedType;
+        List<String> presentedTypes = new ArrayList<>();
 
         @Override
         public void present(@NotNull String type) {
-            presentedType = type;
+            presentedTypes.add(type);
         }
     }
 }
