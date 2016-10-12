@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class FirebaseTopStoriesTest {
+public class FirebaseStoryIdDatabaseTest {
 
     @Test
     public void testThatTopStoriesCallsBackWithIdList() {
@@ -21,7 +21,7 @@ public class FirebaseTopStoriesTest {
         FirebaseDatabase topStoriesFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(topstories, expectedStoryIds);
 
         // Act
-        new FirebaseStoryIdDatabase(topStoriesFirebaseDatabase, topstories).readStoryIds(, callback);
+        new FirebaseStoryIdDatabase(topStoriesFirebaseDatabase).readStoryIds(topstories, callback);
 
         // Assert
         assertThat(callback.topStoryIds).isEqualTo(expectedStoryIds);
