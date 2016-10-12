@@ -14,8 +14,8 @@ class StoriesPresenter(
         val topStoriesView: AsyncListView<StoryViewModel>,
         val navigator: Navigator
 ) {
-    fun present() {
-        storyIdDatabase.readTopStoriesIds(callbackWithAllStoriesInList(topStoriesView))
+    fun present(storyType: String) {
+        storyIdDatabase.readStoryIds(storyType, callbackWithAllStoriesInList(topStoriesView))
     }
 
     private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {

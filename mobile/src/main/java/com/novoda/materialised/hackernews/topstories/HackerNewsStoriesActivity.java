@@ -24,6 +24,7 @@ import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 public final class HackerNewsStoriesActivity extends AppCompatActivity implements MultipleTabView {
 
     private StoriesPresenter storiesPresenter;
+    private String selectedTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +55,23 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity implement
         ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
 
         mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(
-                new StoriesTabSelectedListener(firebaseDatabase, itemsDatabase, asyncListView, new IntentNavigator(this), this)
+                new StoriesTabSelectedListener(this)
         );
 
         storiesPresenter = new StoriesPresenter(
-                new FirebaseStoryIdDatabase(firebaseDatabase, "topstories"),
+                new FirebaseStoryIdDatabase(firebaseDatabase),
                 itemsDatabase,
                 asyncListView,
                 new IntentNavigator(this)
         );
+
+        selectedTab = "topstories";
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        storiesPresenter.present();
+        storiesPresenter.present(selectedTab);
     }
 
     @Override
@@ -94,8 +97,8 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity implement
     }
 
     @Override
-    public void usePresenter(StoriesPresenter presenter) {
-        storiesPresenter = presenter;
-        storiesPresenter.present();
+    public void onTabSelected(String selectedTabName) {
+        selectedTab = selectedTabName;
+        storiesPresenter.present(selectedTab);
     }
 }

@@ -21,7 +21,7 @@ public class FirebaseTopStoriesTest {
         FirebaseDatabase topStoriesFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(topstories, expectedStoryIds);
 
         // Act
-        new FirebaseStoryIdDatabase(topStoriesFirebaseDatabase, topstories).readTopStoriesIds(callback);
+        new FirebaseStoryIdDatabase(topStoriesFirebaseDatabase, topstories).readStoryIds(, callback);
 
         // Assert
         assertThat(callback.topStoryIds).isEqualTo(expectedStoryIds);

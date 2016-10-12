@@ -8,6 +8,7 @@ import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.database.Story;
 import com.novoda.materialised.hackernews.topstories.database.StoryIdDatabase;
 import com.novoda.materialised.hackernews.topstories.database.ValueCallback;
+import com.novoda.materialised.hackernews.topstories.view.StoryClickListener;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewData;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
@@ -58,11 +59,11 @@ public class StoriesPresenterTest {
 
         presentWith(topStoryIds, Arrays.asList(aStory, anotherStory), storiesView);
 
-        StoryViewModel storyViewModel = convert(aStory, new NoOpClickListener<StoryViewData>());
-        StoryViewModel anotherStoryViewModel = convert(anotherStory, new NoOpClickListener<StoryViewData>());
+        StoryViewModel storyViewModel = convert(aStory, new StoryClickListener(spyingNavigator));
+        StoryViewModel anotherStoryViewModel = convert(anotherStory, new StoryClickListener(spyingNavigator));
 
-        assertThat(storiesView.firstUpdatedStoryViewModel.getViewData()).isEqualTo(storyViewModel.getViewData());
-        assertThat(storiesView.secondUpdatedStoryViewModel.getViewData()).isEqualTo(anotherStoryViewModel.getViewData());
+        assertThat(storiesView.firstUpdatedStoryViewModel).isEqualTo(storyViewModel);
+        assertThat(storiesView.secondUpdatedStoryViewModel).isEqualTo(anotherStoryViewModel);
     }
 
     private StoryViewModel convert(Story story, ClickListener<StoryViewData> clickListener) {
@@ -77,9 +78,9 @@ public class StoriesPresenterTest {
                 new StubbedStoryIdDatabase(topStoryIds),
                 new StubbedItemsDatabase(stories),
                 storiesView,
-                new SpyingNavigator()
+                spyingNavigator
         );
-        presenter.present();
+        presenter.present("anything");
     }
 
     private Story buildStory() {
@@ -99,14 +100,14 @@ public class StoriesPresenterTest {
     }
 
     private static class StubbedStoryIdDatabase implements StoryIdDatabase {
-        public final List<Long> ids;
+        final List<Long> ids;
 
         private StubbedStoryIdDatabase(List<Long> ids) {
             this.ids = ids;
         }
 
         @Override
-        public void readTopStoriesIds(@NotNull ValueCallback<? super List<Long>> callback) {
+        public void readStoryIds(@NotNull String storyType, @NotNull ValueCallback<? super List<Long>> callback) {
             callback.onValueRetrieved(ids);
         }
     }
@@ -114,7 +115,7 @@ public class StoriesPresenterTest {
     private static class StubbedItemsDatabase implements ItemsDatabase {
         private List<Story> stories;
 
-        public StubbedItemsDatabase(List<Story> stories) {
+        StubbedItemsDatabase(List<Story> stories) {
             this.stories = stories;
         }
 
@@ -152,12 +153,12 @@ public class StoriesPresenterTest {
         }
     }
 
-    private static class SpyingNavigator implements Navigator {
-        public String uri;
+    private static Navigator spyingNavigator = new Navigator() {
+        String uri;
 
         @Override
         public void navigateTo(@NotNull String uri) {
             this.uri = uri;
         }
-    }
+    };
 }
