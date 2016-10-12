@@ -19,12 +19,13 @@ import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
 import com.novoda.materialised.hackernews.firebase.FirebaseStoryIdDatabase;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
+import com.novoda.materialised.hackernews.topstories.view.StoryCardView;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
-public final class HackerNewsStoriesActivity extends AppCompatActivity implements MultipleTabView {
+public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
     private StoriesPresenter storiesPresenter;
-    private String selectedTab;
+    private TabPresenter tabPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +55,6 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity implement
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
         ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
 
-        mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(
-                new StoriesTabSelectedListener(this)
-        );
-
         storiesPresenter = new StoriesPresenter(
                 new FirebaseStoryIdDatabase(firebaseDatabase),
                 itemsDatabase,
@@ -65,13 +62,17 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity implement
                 new IntentNavigator(this)
         );
 
-        selectedTab = "topstories";
+        tabPresenter = new TabPresenter(storiesPresenter);
+
+        mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(
+                new StoriesTabSelectedListener(tabPresenter)
+        );
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        storiesPresenter.present(selectedTab);
+        tabPresenter.resume();
     }
 
     @Override
@@ -94,11 +95,5 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity implement
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onTabSelected(String selectedTabName) {
-        selectedTab = selectedTabName;
-        storiesPresenter.present(selectedTab);
     }
 }

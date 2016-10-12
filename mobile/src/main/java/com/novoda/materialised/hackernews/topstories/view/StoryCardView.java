@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews.topstories;
+package com.novoda.materialised.hackernews.topstories.view;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.StoryCardBinding;
 import com.novoda.materialised.hackernews.asynclistview.ModelledView;
-import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 public final class StoryCardView
         extends LinearLayout
