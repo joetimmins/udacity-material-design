@@ -77,6 +77,7 @@ public class TabPresenterTest {
         tabPresenter.tabSelected("Best");
         tabPresenter.resume();
 
+        // Assert
         assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo("topstories");
         assertThat(storiesPresenter.presentedTypes.get(1)).isEqualTo("beststories");
         assertThat(storiesPresenter.presentedTypes.get(2)).isEqualTo("beststories");
