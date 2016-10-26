@@ -33,7 +33,7 @@ class StoriesPresenter(
     }
 
     private fun createIdOnlyViewModels(listOfLongs: List<Long>): List<StoryViewModel> {
-        return listOfLongs.map { createIdOnlyViewModel(it) }
+        return listOfLongs.map { storyId -> createIdOnlyViewModel(storyId) }
     }
 
     private fun createIdOnlyViewModel(storyId: Long): StoryViewModel {
