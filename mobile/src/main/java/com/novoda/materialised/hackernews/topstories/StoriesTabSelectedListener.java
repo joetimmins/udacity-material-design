@@ -12,8 +12,7 @@ class StoriesTabSelectedListener implements TabLayout.OnTabSelectedListener {
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        String tabText = tab.getText() != null ? tab.getText().toString() : "";
-        tabPresenter.tabSelected(tabText);
+        tabPresenter.tabSelected(tab.getText());
     }
 
     @Override

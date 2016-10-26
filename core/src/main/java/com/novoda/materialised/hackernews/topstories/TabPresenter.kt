@@ -15,8 +15,9 @@ class TabPresenter(
         refreshContent()
     }
 
-    fun tabSelected(tabName: String) {
-        val selectedStoryType = storyTypeMap.getOrElse(tabName, {"topstories"})
+    fun tabSelected(tabName: CharSequence?) {
+        val selectedTabName = tabName?.toString() ?: ""
+        val selectedStoryType = storyTypeMap.getOrElse(selectedTabName, { "topstories" })
         storyType = selectedStoryType
         refreshContent()
     }

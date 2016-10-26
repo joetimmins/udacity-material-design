@@ -83,6 +83,19 @@ public class TabPresenterTest {
         assertThat(storiesPresenter.presentedTypes.get(2)).isEqualTo("beststories");
     }
 
+    @Test
+    public void tabPresenterShowsTopStories_WhenTabNameIsNull() {
+        // Arrange
+        CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
+        TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
+
+        // Act
+        tabPresenter.tabSelected(null);
+
+        // Assert
+        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo("topstories");
+    }
+
     private class CapturingTypedPresenter implements TypedPresenter<String> {
         List<String> presentedTypes = new ArrayList<>();
 
