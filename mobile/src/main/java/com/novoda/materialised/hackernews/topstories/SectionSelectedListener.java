@@ -2,17 +2,17 @@ package com.novoda.materialised.hackernews.topstories;
 
 import android.support.design.widget.TabLayout;
 
-class StoriesTabSelectedListener implements TabLayout.OnTabSelectedListener {
+class SectionSelectedListener implements TabLayout.OnTabSelectedListener {
 
-    private final TabPresenter tabPresenter;
+    private final SectionPresenter sectionPresenter;
 
-    StoriesTabSelectedListener(TabPresenter tabPresenter) {
-        this.tabPresenter = tabPresenter;
+    SectionSelectedListener(SectionPresenter sectionPresenter) {
+        this.sectionPresenter = sectionPresenter;
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        tabPresenter.tabSelected(tab.getText());
+        sectionPresenter.tabSelected(tab.getText());
     }
 
     @Override

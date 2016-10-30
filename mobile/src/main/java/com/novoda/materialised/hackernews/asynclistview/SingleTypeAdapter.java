@@ -6,7 +6,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-final class SingleTypeAdapter<T extends ViewModel, V extends View & ModelledView<T>> extends RecyclerView.Adapter<ModelledViewHolder<V>> {
+final class SingleTypeAdapter<T extends ViewModel, V extends View & ModelledView<T>>
+        extends RecyclerView.Adapter<ModelledViewHolder<V>> {
     private final List<T> viewModels;
     private final ModelledViewInflater<V> viewInflater;
 

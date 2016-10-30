@@ -8,16 +8,16 @@ import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class TabPresenterTest {
+public class SectionPresenterTest {
 
     @Test
     public void tabPresenterShowsTopStories_ByDefault() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
-        TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
+        SectionPresenter sectionPresenter = new SectionPresenter(storiesPresenter);
 
         // Act
-        tabPresenter.resume();
+        sectionPresenter.resume();
 
         // Assert
         String actual = storiesPresenter.presentedTypes.get(0);
@@ -28,10 +28,10 @@ public class TabPresenterTest {
     public void tabPresenterMapsTopStoriesTypeCorrectly() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
-        TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
+        SectionPresenter sectionPresenter = new SectionPresenter(storiesPresenter);
 
         // Act
-        tabPresenter.tabSelected("Top Stories");
+        sectionPresenter.tabSelected("Top Stories");
 
         // Assert
         String actual = storiesPresenter.presentedTypes.get(0);
@@ -42,10 +42,10 @@ public class TabPresenterTest {
     public void tabPresenterMapsNewTypeCorrectly() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
-        TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
+        SectionPresenter sectionPresenter = new SectionPresenter(storiesPresenter);
 
         // Act
-        tabPresenter.tabSelected("New");
+        sectionPresenter.tabSelected("New");
 
         // Assert
         String actual = storiesPresenter.presentedTypes.get(0);
@@ -56,10 +56,10 @@ public class TabPresenterTest {
     public void tabPresenterMapsBestTypeCorrectly() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
-        TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
+        SectionPresenter sectionPresenter = new SectionPresenter(storiesPresenter);
 
         // Act
-        tabPresenter.tabSelected("Best");
+        sectionPresenter.tabSelected("Best");
 
         // Assert
         String actual = storiesPresenter.presentedTypes.get(0);
@@ -70,12 +70,12 @@ public class TabPresenterTest {
     public void tabPresenterRefreshesContentPresenter_WhenResuming() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
-        TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
+        SectionPresenter sectionPresenter = new SectionPresenter(storiesPresenter);
 
         // Act
-        tabPresenter.tabSelected("Top Stories");
-        tabPresenter.tabSelected("Best");
-        tabPresenter.resume();
+        sectionPresenter.tabSelected("Top Stories");
+        sectionPresenter.tabSelected("Best");
+        sectionPresenter.resume();
 
         // Assert
         assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo("topstories");
@@ -87,10 +87,10 @@ public class TabPresenterTest {
     public void tabPresenterShowsTopStories_WhenTabNameIsNull() {
         // Arrange
         CapturingTypedPresenter storiesPresenter = new CapturingTypedPresenter();
-        TabPresenter tabPresenter = new TabPresenter(storiesPresenter);
+        SectionPresenter sectionPresenter = new SectionPresenter(storiesPresenter);
 
         // Act
-        tabPresenter.tabSelected(null);
+        sectionPresenter.tabSelected(null);
 
         // Assert
         assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo("topstories");

@@ -19,13 +19,13 @@ import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
 import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
 import com.novoda.materialised.hackernews.firebase.FirebaseStoryIdDatabase;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
+import com.novoda.materialised.hackernews.topstories.database.StoryIdDatabase;
 import com.novoda.materialised.hackernews.topstories.view.StoryCardView;
 import com.novoda.materialised.hackernews.topstories.view.StoryViewModel;
 
 public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
-    private StoriesPresenter storiesPresenter;
-    private TabPresenter tabPresenter;
+    private SectionPresenter sectionPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,25 +54,26 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
         ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
+        StoryIdDatabase storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase);
 
-        storiesPresenter = new StoriesPresenter(
-                new FirebaseStoryIdDatabase(firebaseDatabase),
+        StoriesPresenter storiesPresenter = new StoriesPresenter(
+                storyIdDatabase,
                 itemsDatabase,
                 asyncListView,
                 new IntentNavigator(this)
         );
 
-        tabPresenter = new TabPresenter(storiesPresenter);
+        sectionPresenter = new SectionPresenter(storiesPresenter);
 
         mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(
-                new StoriesTabSelectedListener(tabPresenter)
+                new SectionSelectedListener(sectionPresenter)
         );
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        tabPresenter.resume();
+        sectionPresenter.resume();
     }
 
     @Override
