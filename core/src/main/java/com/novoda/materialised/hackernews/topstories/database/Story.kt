@@ -12,4 +12,4 @@ data class Story(
         val title: String = "",
         val type: String = "",
         val url: String = ""
-) {}
+)

@@ -20,7 +20,7 @@ class StoriesPresenter(
 
     private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {
         return valueCallbackFor { idList ->
-            if (idList.size > 0) {
+            if (idList.isNotEmpty()) {
                 val idOnlyViewModels = createIdOnlyViewModels(idList)
                 storiesView.updateWith(idOnlyViewModels)
                 val ids = convertLongsToInts(idList)
