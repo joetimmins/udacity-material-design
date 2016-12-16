@@ -14,9 +14,9 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-class FakeFirebase {
+final class FakeFirebase {
 
-    public static FirebaseDatabase getDatabaseForStoryType(String storyType, final List<Long> expectedTopStories) {
+    static FirebaseDatabase getDatabaseForStoryType(String storyType, final List<Long> expectedTopStories) {
         FirebaseDatabase mockFirebaseDatabase = mock(FirebaseDatabase.class);
         DatabaseReference mockDatabaseReference = mock(DatabaseReference.class);
 
@@ -38,7 +38,7 @@ class FakeFirebase {
         return mockFirebaseDatabase;
     }
 
-    public static FirebaseDatabase getItemsDatabase(final List<Story> stories) {
+    static FirebaseDatabase getItemsDatabase(final List<Story> stories) {
         FirebaseDatabase mockFirebaseDatabase = mock(FirebaseDatabase.class);
         DatabaseReference mockDatabaseReference = mock(DatabaseReference.class);
 
