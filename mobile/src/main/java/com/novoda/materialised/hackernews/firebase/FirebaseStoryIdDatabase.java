@@ -11,10 +11,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class FirebaseStoryIdDatabase implements StoryIdDatabase {
+final class FirebaseStoryIdDatabase implements StoryIdDatabase {
     private final FirebaseDatabase firebaseDatabase;
 
-    public FirebaseStoryIdDatabase(FirebaseDatabase firebaseDatabase) {
+    FirebaseStoryIdDatabase(FirebaseDatabase firebaseDatabase) {
         this.firebaseDatabase = firebaseDatabase;
     }
 

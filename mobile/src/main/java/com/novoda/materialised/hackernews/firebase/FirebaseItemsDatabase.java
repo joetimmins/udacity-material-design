@@ -7,18 +7,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.novoda.materialised.hackernews.topstories.database.ValueCallback;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.database.Story;
+import com.novoda.materialised.hackernews.topstories.database.ValueCallback;
 
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class FirebaseItemsDatabase implements ItemsDatabase {
-    private FirebaseDatabase firebaseDatabase;
+final class FirebaseItemsDatabase implements ItemsDatabase {
+    private final FirebaseDatabase firebaseDatabase;
 
-    public FirebaseItemsDatabase(FirebaseDatabase firebaseDatabase) {
+    FirebaseItemsDatabase(FirebaseDatabase firebaseDatabase) {
         this.firebaseDatabase = firebaseDatabase;
     }
 

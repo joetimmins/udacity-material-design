@@ -10,14 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
-import com.novoda.materialised.hackernews.firebase.FirebaseItemsDatabase;
-import com.novoda.materialised.hackernews.firebase.FirebaseSingleton;
-import com.novoda.materialised.hackernews.firebase.FirebaseStoryIdDatabase;
+import com.novoda.materialised.hackernews.firebase.FirebaseFactory;
 import com.novoda.materialised.hackernews.topstories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.topstories.database.StoryIdDatabase;
 import com.novoda.materialised.hackernews.topstories.view.StoryCardView;
@@ -52,9 +49,8 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 StoryCardView.class
         );
 
-        FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(this);
-        ItemsDatabase itemsDatabase = new FirebaseItemsDatabase(firebaseDatabase);
-        StoryIdDatabase storyIdDatabase = new FirebaseStoryIdDatabase(firebaseDatabase);
+        ItemsDatabase itemsDatabase = FirebaseFactory.newItemsDatabase(this);
+        StoryIdDatabase storyIdDatabase = FirebaseFactory.newStoryIdDatabase(this);
 
         StoriesPresenter storiesPresenter = new StoriesPresenter(
                 storyIdDatabase,
