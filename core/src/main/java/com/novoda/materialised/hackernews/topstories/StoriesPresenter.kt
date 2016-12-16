@@ -11,11 +11,11 @@ import com.novoda.materialised.hackernews.topstories.view.StoryViewModel
 class StoriesPresenter(
         val storyIdDatabase: StoryIdDatabase,
         val itemsDatabase: ItemsDatabase,
-        val topStoriesView: AsyncListView<StoryViewModel>,
+        val storiesView: AsyncListView<StoryViewModel>,
         val navigator: Navigator
 ) : TypedPresenter<String> {
     override fun present(type: String) {
-        storyIdDatabase.readStoryIds(type, callbackWithAllStoriesInList(topStoriesView))
+        storyIdDatabase.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
     }
 
     private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {
@@ -38,7 +38,7 @@ class StoriesPresenter(
 
     private fun createIdOnlyViewModel(storyId: Long): StoryViewModel {
         val dataWithIdOnly = StoryViewData().copy(id = storyId.toInt())
-        return StoryViewModel(dataWithIdOnly, NoOpClickListener())
+        return StoryViewModel(dataWithIdOnly, NoOpClickListener.INSTANCE)
     }
 
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map(Long::toInt)

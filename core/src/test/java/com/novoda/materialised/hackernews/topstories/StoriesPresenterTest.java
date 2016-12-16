@@ -96,7 +96,7 @@ public class StoriesPresenterTest {
         StoryViewData idOnly = new StoryViewData(
                 empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
-        return new StoryViewModel(idOnly, new NoOpClickListener<StoryViewData>());
+        return new StoryViewModel(idOnly, NoOpClickListener.INSTANCE);
     }
 
     private static class StubbedStoryIdDatabase implements StoryIdDatabase {
