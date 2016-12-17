@@ -11,7 +11,7 @@ data class StoryViewData(
         val score: Int = 0,
         val title: String = "",
         val url: String = ""
-) : ViewData {
+) : ViewData<Int> {
     fun submittedFrom(): String {
         val domainName = URI.create(url).host ?: ""
         val prefix = "www."

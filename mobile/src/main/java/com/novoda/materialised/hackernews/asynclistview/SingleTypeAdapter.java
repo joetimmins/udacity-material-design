@@ -6,13 +6,14 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-final class SingleTypeAdapter<T extends ViewModel, V extends View & ModelledView<T>>
+final class SingleTypeAdapter
+        <T extends AdapterViewModel<? extends ViewData<Integer>>, V extends View & ModelledView<T>>
         extends RecyclerView.Adapter<ModelledViewHolder<V>> {
     private final List<T> viewModels;
     private final ModelledViewInflater<V> viewInflater;
 
-    SingleTypeAdapter(List<T> viewModels, ModelledViewInflater<V> viewInflater) {
-        this.viewModels = viewModels;
+    SingleTypeAdapter(List<T> partiallyPopulatedViewModels, ModelledViewInflater<V> viewInflater) {
+        this.viewModels = partiallyPopulatedViewModels;
         this.viewInflater = viewInflater;
         setHasStableIds(true);
     }
@@ -40,17 +41,19 @@ final class SingleTypeAdapter<T extends ViewModel, V extends View & ModelledView
         return viewModels.get(position).getViewData().getId();
     }
 
-    void updateWith(T newItem) {
+    void updateWith(T fullyPopulatedViewModel) {
         for (int i = 0; i < viewModels.size(); i++) {
-            if (shouldUpdate(i, newItem)) {
-                viewModels.set(i, newItem);
+            if (shouldUpdate(i, fullyPopulatedViewModel)) {
+                viewModels.set(i, fullyPopulatedViewModel);
                 notifyItemChanged(i);
                 break;
             }
         }
     }
 
-    private boolean shouldUpdate(int position, T newItem) {
-        return viewModels.get(position).getViewData().getId() == newItem.getViewData().getId();
+    private boolean shouldUpdate(int position, T fullyPopulatedViewModel) {
+        Integer id = viewModels.get(position).getViewData().getId();
+        Integer fullyPopulatedViewModelId = fullyPopulatedViewModel.getViewData().getId();
+        return id.equals(fullyPopulatedViewModelId);
     }
 }

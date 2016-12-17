@@ -1,5 +1,5 @@
 package com.novoda.materialised.hackernews.asynclistview
 
-interface ViewData {
-    val id: Int
+interface ViewData<out T> {
+    val id: T
 }

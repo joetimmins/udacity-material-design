@@ -5,7 +5,9 @@ import android.view.View;
 
 import java.util.List;
 
-public final class AsyncListViewPresenter<T extends ViewModel, V extends View & ModelledView<T>> implements AsyncListView<T> {
+public final class AsyncListViewPresenter<T extends AdapterViewModel<? extends ViewData<Integer>>,
+        V extends View & ModelledView<T>>
+        implements AsyncListView<T> {
 
     private final View loadingView;
     private final RecyclerView topStoriesView;
