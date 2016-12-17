@@ -1,6 +1,6 @@
 package com.novoda.materialised.hackernews.stories
 
-class SectionPresenter(
+internal class SectionPresenter(
         private val contentPresenter: TypedPresenter<String>
 ) {
     var storyType: String = "topstories"

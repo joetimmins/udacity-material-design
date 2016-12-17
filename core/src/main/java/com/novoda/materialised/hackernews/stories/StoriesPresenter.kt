@@ -8,7 +8,7 @@ import com.novoda.materialised.hackernews.stories.view.StoryClickListener
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import com.novoda.materialised.hackernews.stories.view.StoryViewModel
 
-class StoriesPresenter(
+internal class StoriesPresenter(
         val storyIdDatabase: StoryIdDatabase,
         val itemsDatabase: ItemsDatabase,
         val storiesView: AsyncListView<StoryViewModel>,
