@@ -5,7 +5,7 @@
 
     <variable
       name="viewModel"
-      type="com.novoda.materialised.hackernews.topstories.view.StoryViewModel" />
+      type="com.novoda.materialised.hackernews.stories.view.StoryViewModel" />
 
   </data>
 
