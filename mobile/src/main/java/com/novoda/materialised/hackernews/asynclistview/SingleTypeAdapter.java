@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-final class SingleTypeAdapter
-        <T extends AdapterViewModel<? extends ViewData<Integer>>, V extends View & ModelledView<T>>
+final class SingleTypeAdapter<T extends ViewModel<? extends ViewData<Integer>>,
+        V extends View & ModelledView<T>>
         extends RecyclerView.Adapter<ModelledViewHolder<V>> {
     private final List<T> viewModels;
     private final ModelledViewInflater<V> viewInflater;
@@ -38,7 +38,7 @@ final class SingleTypeAdapter
 
     @Override
     public long getItemId(int position) {
-        return viewModels.get(position).getViewData().getId();
+        return viewModels.get(position).viewData().getId();
     }
 
     void updateWith(T fullyPopulatedViewModel) {
@@ -52,8 +52,8 @@ final class SingleTypeAdapter
     }
 
     private boolean shouldUpdate(int position, T fullyPopulatedViewModel) {
-        Integer id = viewModels.get(position).getViewData().getId();
-        Integer fullyPopulatedViewModelId = fullyPopulatedViewModel.getViewData().getId();
+        Integer id = viewModels.get(position).viewData().getId();
+        Integer fullyPopulatedViewModelId = fullyPopulatedViewModel.viewData().getId();
         return id.equals(fullyPopulatedViewModelId);
     }
 }

@@ -19,7 +19,8 @@ internal class StoriesPresenter(
     }
 
     private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {
-        return valueCallbackFor { idList ->
+        return valueCallbackOf {
+            idList ->
             if (idList.isNotEmpty()) {
                 val idOnlyViewModels = createIdOnlyViewModels(idList)
                 storiesView.updateWith(idOnlyViewModels)
@@ -44,7 +45,8 @@ internal class StoriesPresenter(
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map(Long::toInt)
 
     private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewModel>): ValueCallback<Story> {
-        return valueCallbackFor { story ->
+        return valueCallbackOf {
+            story ->
             val storyViewModel = convertStoryToStoryViewModel(story)
             storiesView.updateWith(storyViewModel)
         }

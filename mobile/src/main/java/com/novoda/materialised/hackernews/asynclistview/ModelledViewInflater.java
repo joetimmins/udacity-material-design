@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
 
-final class ModelledViewInflater<V extends View & ModelledView<? extends ViewModel>> {
+final class ModelledViewInflater<V extends View & ModelledView> {
     private final Class<V> viewClass;
 
     ModelledViewInflater(Class<V> viewClass) {

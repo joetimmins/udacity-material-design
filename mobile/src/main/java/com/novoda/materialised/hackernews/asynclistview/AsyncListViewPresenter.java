@@ -5,7 +5,7 @@ import android.view.View;
 
 import java.util.List;
 
-public final class AsyncListViewPresenter<T extends AdapterViewModel<? extends ViewData<Integer>>,
+public final class AsyncListViewPresenter<T extends ViewModel<? extends ViewData<Integer>>,
         V extends View & ModelledView<T>>
         implements AsyncListView<T> {
 
