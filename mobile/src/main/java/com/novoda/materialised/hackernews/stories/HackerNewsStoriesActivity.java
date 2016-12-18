@@ -61,7 +61,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
         sectionPresenter = new SectionPresenter(storiesPresenter);
 
-        mainActivityLayout.storyTypeTabLayout.addOnTabSelectedListener(
+        mainActivityLayout.sectionTabLayout.addOnTabSelectedListener(
                 new SectionSelectedListener(sectionPresenter)
         );
     }

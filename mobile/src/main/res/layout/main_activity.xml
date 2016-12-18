@@ -32,7 +32,7 @@
           app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <android.support.design.widget.TabLayout
-          android:id="@+id/story_type_tab_layout"
+          android:id="@+id/section_tab_layout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="bottom"
