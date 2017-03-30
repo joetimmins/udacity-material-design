@@ -4,11 +4,8 @@ interface ClickListener<in T> {
     fun onClick(data: T)
 }
 
-enum class NoOpClickListener : ClickListener<Any> {
-
-    INSTANCE {
-        override fun onClick(data: Any) {
-            // No-op
-        }
-    };
+object NoOpClickListener : ClickListener<Any> {
+    override fun onClick(data: Any) {
+        // No-op
+    }
 }

@@ -22,9 +22,9 @@ internal class StoriesPresenter(
         return valueCallbackOf {
             idList ->
             if (idList.isNotEmpty()) {
-                val idOnlyViewModels = createIdOnlyViewModels(idList)
-                storiesView.updateWith(idOnlyViewModels)
                 val ids = convertLongsToInts(idList)
+                val idOnlyViewModels = createIdOnlyViewModels(ids)
+                storiesView.updateWith(idOnlyViewModels)
                 val viewUpdater = viewUpdaterFor(storiesView)
                 itemsDatabase.readItems(ids, viewUpdater)
             } else {
@@ -33,16 +33,15 @@ internal class StoriesPresenter(
         }
     }
 
-    private fun createIdOnlyViewModels(listOfLongs: List<Long>): List<StoryViewModel> {
-        return listOfLongs.map { storyId -> createIdOnlyViewModel(storyId) }
-    }
-
-    private fun createIdOnlyViewModel(storyId: Long): StoryViewModel {
-        val dataWithIdOnly = StoryViewData().copy(id = storyId.toInt())
-        return StoryViewModel(dataWithIdOnly, NoOpClickListener.INSTANCE)
-    }
-
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map(Long::toInt)
+
+    private fun createIdOnlyViewModels(listOfIdInts: List<Int>): List<StoryViewModel> {
+        return listOfIdInts.map { storyId -> createIdOnlyViewModel(storyId) }
+    }
+
+    private fun createIdOnlyViewModel(storyId: Int): StoryViewModel {
+        return StoryViewModel(StoryViewData(id = storyId), NoOpClickListener)
+    }
 
     private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewModel>): ValueCallback<Story> {
         return valueCallbackOf {
