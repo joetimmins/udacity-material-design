@@ -153,7 +153,7 @@ public class StoriesPresenterTest {
         }
     }
 
-    private static Navigator spyingNavigator = new Navigator() {
+    private static final Navigator spyingNavigator = new Navigator() {
         String uri;
 
         @Override
