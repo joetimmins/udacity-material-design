@@ -9,10 +9,10 @@ import java.util.List;
 final class SingleTypeAdapter<T extends ViewData<Integer>,
         V extends View & ModelledView<T>>
         extends RecyclerView.Adapter<ModelledViewHolder<V>> {
-    private final List<DefaultViewModel<T>> viewModels;
+    private final List<ViewModel<T>> viewModels;
     private final ModelledViewInflater<V> viewInflater;
 
-    SingleTypeAdapter(List<DefaultViewModel<T>> partiallyPopulatedViewModels, ModelledViewInflater<V> viewInflater) {
+    SingleTypeAdapter(List<ViewModel<T>> partiallyPopulatedViewModels, ModelledViewInflater<V> viewInflater) {
         this.viewModels = partiallyPopulatedViewModels;
         this.viewInflater = viewInflater;
         setHasStableIds(true);
@@ -27,7 +27,7 @@ final class SingleTypeAdapter<T extends ViewData<Integer>,
     @Override
     public void onBindViewHolder(ModelledViewHolder<V> holder, int position) {
         V view = holder.obtainHeldView();
-        DefaultViewModel<T> viewModel = viewModels.get(position);
+        ViewModel<T> viewModel = viewModels.get(position);
         view.updateWith(viewModel);
     }
 
@@ -41,7 +41,7 @@ final class SingleTypeAdapter<T extends ViewData<Integer>,
         return viewModels.get(position).getViewData().getId();
     }
 
-    void updateWith(DefaultViewModel<T> fullyPopulatedViewModel) {
+    void updateWith(ViewModel<T> fullyPopulatedViewModel) {
         for (int i = 0; i < viewModels.size(); i++) {
             if (shouldUpdate(i, fullyPopulatedViewModel)) {
                 viewModels.set(i, fullyPopulatedViewModel);
@@ -51,7 +51,7 @@ final class SingleTypeAdapter<T extends ViewData<Integer>,
         }
     }
 
-    private boolean shouldUpdate(int position, DefaultViewModel<T> fullyPopulatedViewModel) {
+    private boolean shouldUpdate(int position, ViewModel<T> fullyPopulatedViewModel) {
         Integer id = viewModels.get(position).getViewData().getId();
         Integer fullyPopulatedViewModelId = fullyPopulatedViewModel.getViewData().getId();
         return id.equals(fullyPopulatedViewModelId);

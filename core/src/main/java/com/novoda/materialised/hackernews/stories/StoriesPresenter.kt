@@ -1,7 +1,7 @@
 package com.novoda.materialised.hackernews.stories
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
-import com.novoda.materialised.hackernews.asynclistview.DefaultViewModel
+import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.stories.database.*
@@ -35,12 +35,12 @@ internal class StoriesPresenter(
 
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map(Long::toInt)
 
-    private fun createIdOnlyViewModels(listOfIdInts: List<Int>): List<DefaultViewModel<StoryViewData>> {
+    private fun createIdOnlyViewModels(listOfIdInts: List<Int>): List<ViewModel<StoryViewData>> {
         return listOfIdInts.map { storyId -> createIdOnlyViewModel(storyId) }
     }
 
-    private fun createIdOnlyViewModel(storyId: Int): DefaultViewModel<StoryViewData> {
-        return DefaultViewModel(StoryViewData(id = storyId), NoOpClickListener)
+    private fun createIdOnlyViewModel(storyId: Int): ViewModel<StoryViewData> {
+        return ViewModel(StoryViewData(id = storyId), NoOpClickListener)
     }
 
     private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewData>): ValueCallback<Story> {
@@ -51,8 +51,8 @@ internal class StoriesPresenter(
         }
     }
 
-    private fun convertStoryToStoryViewModel(story: Story): DefaultViewModel<StoryViewData> {
+    private fun convertStoryToStoryViewModel(story: Story): ViewModel<StoryViewData> {
         val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
-        return DefaultViewModel(storyViewData, StoryClickListener(navigator))
+        return ViewModel(storyViewData, StoryClickListener(navigator))
     }
 }

@@ -26,14 +26,14 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
     }
 
     @Override
-    public void updateWith(List<DefaultViewModel<T>> initialViewModelList) {
+    public void updateWith(List<ViewModel<T>> initialViewModelList) {
         loadingView.setVisibility(View.GONE);
         adapter = new SingleTypeAdapter<>(initialViewModelList, viewInflater);
         topStoriesView.swapAdapter(adapter, false);
     }
 
     @Override
-    public void updateWith(DefaultViewModel<T> viewModel) {
+    public void updateWith(ViewModel<T> viewModel) {
         adapter.updateWith(viewModel);
     }
 

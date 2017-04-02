@@ -2,7 +2,7 @@ package com.novoda.materialised.hackernews.stories;
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ClickListener;
-import com.novoda.materialised.hackernews.asynclistview.DefaultViewModel;
+import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.stories.database.ItemsDatabase;
@@ -33,10 +33,10 @@ public class StoriesPresenterTest {
 
     @Test
     public void presenterGivesCorrectListOfIdsToView_AsViewModels_WhenPresentingMultipleStories() {
-        DefaultViewModel<StoryViewData> firstIdOnlyViewModel = buildIdOnlyViewModel(firstStoryId);
-        DefaultViewModel<StoryViewData> secondIdOnlyViewModel = buildIdOnlyViewModel(secondStoryId);
+        ViewModel<StoryViewData> firstIdOnlyViewModel = buildIdOnlyViewModel(firstStoryId);
+        ViewModel<StoryViewData> secondIdOnlyViewModel = buildIdOnlyViewModel(secondStoryId);
 
-        List<DefaultViewModel<StoryViewData>> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
+        List<ViewModel<StoryViewData>> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
         presentWith(topStoryIds, Collections.<Story>emptyList(), storiesView);
@@ -59,18 +59,18 @@ public class StoriesPresenterTest {
 
         presentWith(topStoryIds, Arrays.asList(aStory, anotherStory), storiesView);
 
-        DefaultViewModel<StoryViewData> storyViewModel = convert(aStory, new StoryClickListener(spyingNavigator));
-        DefaultViewModel<StoryViewData> anotherStoryViewModel = convert(anotherStory, new StoryClickListener(spyingNavigator));
+        ViewModel<StoryViewData> storyViewModel = convert(aStory, new StoryClickListener(spyingNavigator));
+        ViewModel<StoryViewData> anotherStoryViewModel = convert(anotherStory, new StoryClickListener(spyingNavigator));
 
         assertThat(storiesView.firstUpdatedStoryViewModel).isEqualTo(storyViewModel);
         assertThat(storiesView.secondUpdatedStoryViewModel).isEqualTo(anotherStoryViewModel);
     }
 
-    private DefaultViewModel<StoryViewData> convert(Story story, ClickListener<StoryViewData> clickListener) {
+    private ViewModel<StoryViewData> convert(Story story, ClickListener<StoryViewData> clickListener) {
         StoryViewData storyViewData = new StoryViewData(
                 story.getBy(), story.getKids(), story.getId(), story.getScore(), story.getTitle(), story.getUrl()
         );
-        return new DefaultViewModel<>(storyViewData, clickListener);
+        return new ViewModel<>(storyViewData, clickListener);
     }
 
     private void presentWith(List<Long> topStoryIds, List<Story> stories, SpyingStoriesView storiesView) {
@@ -91,12 +91,12 @@ public class StoriesPresenterTest {
         return new Story("another author", 456, (int) secondStoryId, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url");
     }
 
-    private DefaultViewModel<StoryViewData> buildIdOnlyViewModel(long storyId) {
+    private ViewModel<StoryViewData> buildIdOnlyViewModel(long storyId) {
         StoryViewData empty = new StoryViewData();
         StoryViewData idOnly = new StoryViewData(
                 empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
-        return new DefaultViewModel<>(idOnly, NoOpClickListener.INSTANCE);
+        return new ViewModel<>(idOnly, NoOpClickListener.INSTANCE);
     }
 
     private static class StubbedStoryIdDatabase implements StoryIdDatabase {
@@ -128,18 +128,18 @@ public class StoriesPresenterTest {
     }
 
     private static class SpyingStoriesView implements AsyncListView<StoryViewData> {
-        List<DefaultViewModel<StoryViewData>> updatedStoryViewModels;
-        DefaultViewModel<StoryViewData> firstUpdatedStoryViewModel;
-        DefaultViewModel<StoryViewData> secondUpdatedStoryViewModel;
+        List<ViewModel<StoryViewData>> updatedStoryViewModels;
+        ViewModel<StoryViewData> firstUpdatedStoryViewModel;
+        ViewModel<StoryViewData> secondUpdatedStoryViewModel;
         boolean errorShown;
 
         @Override
-        public void updateWith(List<DefaultViewModel<StoryViewData>> initialViewModelList) {
+        public void updateWith(List<ViewModel<StoryViewData>> initialViewModelList) {
             updatedStoryViewModels = initialViewModelList;
         }
 
         @Override
-        public void updateWith(DefaultViewModel<StoryViewData> viewModel) {
+        public void updateWith(ViewModel<StoryViewData> viewModel) {
             if (firstUpdatedStoryViewModel == null) {
                 firstUpdatedStoryViewModel = viewModel;
             } else if (secondUpdatedStoryViewModel == null) {

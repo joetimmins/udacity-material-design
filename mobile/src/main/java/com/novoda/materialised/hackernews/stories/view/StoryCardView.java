@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.StoryCardBinding;
-import com.novoda.materialised.hackernews.asynclistview.DefaultViewModel;
+import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.asynclistview.ModelledView;
 
 public final class StoryCardView
@@ -39,7 +39,7 @@ public final class StoryCardView
     }
 
     @Override
-    public void updateWith(DefaultViewModel<StoryViewData> viewModel) {
+    public void updateWith(ViewModel<StoryViewData> viewModel) {
         storyCard.setViewData(viewModel.getViewData());
         storyCard.setViewBehaviour(viewModel.getViewBehaviour());
     }
