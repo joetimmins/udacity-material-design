@@ -1,24 +1,24 @@
 package com.novoda.materialised.hackernews.stories
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
+import com.novoda.materialised.hackernews.asynclistview.DefaultViewModel
 import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.stories.database.*
 import com.novoda.materialised.hackernews.stories.view.StoryClickListener
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
-import com.novoda.materialised.hackernews.stories.view.StoryViewModel
 
 internal class StoriesPresenter(
         val storyIdDatabase: StoryIdDatabase,
         val itemsDatabase: ItemsDatabase,
-        val storiesView: AsyncListView<StoryViewModel>,
+        val storiesView: AsyncListView<StoryViewData>,
         val navigator: Navigator
 ) : TypedPresenter<String> {
     override fun present(type: String) {
         storyIdDatabase.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
     }
 
-    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewModel>): ValueCallback<List<Long>> {
+    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Long>> {
         return valueCallbackOf {
             idList ->
             if (idList.isNotEmpty()) {
@@ -35,15 +35,15 @@ internal class StoriesPresenter(
 
     private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map(Long::toInt)
 
-    private fun createIdOnlyViewModels(listOfIdInts: List<Int>): List<StoryViewModel> {
+    private fun createIdOnlyViewModels(listOfIdInts: List<Int>): List<DefaultViewModel<StoryViewData>> {
         return listOfIdInts.map { storyId -> createIdOnlyViewModel(storyId) }
     }
 
-    private fun createIdOnlyViewModel(storyId: Int): StoryViewModel {
-        return StoryViewModel(StoryViewData(id = storyId), NoOpClickListener)
+    private fun createIdOnlyViewModel(storyId: Int): DefaultViewModel<StoryViewData> {
+        return DefaultViewModel(StoryViewData(id = storyId), NoOpClickListener)
     }
 
-    private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewModel>): ValueCallback<Story> {
+    private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewData>): ValueCallback<Story> {
         return valueCallbackOf {
             story ->
             val storyViewModel = convertStoryToStoryViewModel(story)
@@ -51,8 +51,8 @@ internal class StoriesPresenter(
         }
     }
 
-    private fun convertStoryToStoryViewModel(story: Story): StoryViewModel {
+    private fun convertStoryToStoryViewModel(story: Story): DefaultViewModel<StoryViewData> {
         val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
-        return StoryViewModel(storyViewData, StoryClickListener(navigator))
+        return DefaultViewModel(storyViewData, StoryClickListener(navigator))
     }
 }
