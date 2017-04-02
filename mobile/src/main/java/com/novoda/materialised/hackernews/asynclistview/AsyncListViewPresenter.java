@@ -5,7 +5,7 @@ import android.view.View;
 
 import java.util.List;
 
-public final class AsyncListViewPresenter<T extends ViewModel<? extends ViewData<Integer>>,
+public final class AsyncListViewPresenter<T extends ViewData<Integer>,
         V extends View & ModelledView<T>>
         implements AsyncListView<T> {
 
@@ -26,14 +26,14 @@ public final class AsyncListViewPresenter<T extends ViewModel<? extends ViewData
     }
 
     @Override
-    public void updateWith(List<T> initialViewModelList) {
+    public void updateWith(List<DefaultViewModel<T>> initialViewModelList) {
         loadingView.setVisibility(View.GONE);
         adapter = new SingleTypeAdapter<>(initialViewModelList, viewInflater);
         topStoriesView.swapAdapter(adapter, false);
     }
 
     @Override
-    public void updateWith(T viewModel) {
+    public void updateWith(DefaultViewModel<T> viewModel) {
         adapter.updateWith(viewModel);
     }
 

@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-final class SingleTypeAdapter<T extends ViewModel<? extends ViewData<Integer>>,
+final class SingleTypeAdapter<T extends ViewData<Integer>,
         V extends View & ModelledView<T>>
         extends RecyclerView.Adapter<ModelledViewHolder<V>> {
-    private final List<T> viewModels;
+    private final List<DefaultViewModel<T>> viewModels;
     private final ModelledViewInflater<V> viewInflater;
 
-    SingleTypeAdapter(List<T> partiallyPopulatedViewModels, ModelledViewInflater<V> viewInflater) {
+    SingleTypeAdapter(List<DefaultViewModel<T>> partiallyPopulatedViewModels, ModelledViewInflater<V> viewInflater) {
         this.viewModels = partiallyPopulatedViewModels;
         this.viewInflater = viewInflater;
         setHasStableIds(true);
@@ -27,7 +27,7 @@ final class SingleTypeAdapter<T extends ViewModel<? extends ViewData<Integer>>,
     @Override
     public void onBindViewHolder(ModelledViewHolder<V> holder, int position) {
         V view = holder.obtainHeldView();
-        T viewModel = viewModels.get(position);
+        DefaultViewModel<T> viewModel = viewModels.get(position);
         view.updateWith(viewModel);
     }
 
@@ -38,10 +38,10 @@ final class SingleTypeAdapter<T extends ViewModel<? extends ViewData<Integer>>,
 
     @Override
     public long getItemId(int position) {
-        return viewModels.get(position).viewData().getId();
+        return viewModels.get(position).getViewData().getId();
     }
 
-    void updateWith(T fullyPopulatedViewModel) {
+    void updateWith(DefaultViewModel<T> fullyPopulatedViewModel) {
         for (int i = 0; i < viewModels.size(); i++) {
             if (shouldUpdate(i, fullyPopulatedViewModel)) {
                 viewModels.set(i, fullyPopulatedViewModel);
@@ -51,9 +51,9 @@ final class SingleTypeAdapter<T extends ViewModel<? extends ViewData<Integer>>,
         }
     }
 
-    private boolean shouldUpdate(int position, T fullyPopulatedViewModel) {
-        Integer id = viewModels.get(position).viewData().getId();
-        Integer fullyPopulatedViewModelId = fullyPopulatedViewModel.viewData().getId();
+    private boolean shouldUpdate(int position, DefaultViewModel<T> fullyPopulatedViewModel) {
+        Integer id = viewModels.get(position).getViewData().getId();
+        Integer fullyPopulatedViewModelId = fullyPopulatedViewModel.getViewData().getId();
         return id.equals(fullyPopulatedViewModelId);
     }
 }
