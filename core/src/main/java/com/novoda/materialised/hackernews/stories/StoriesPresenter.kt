@@ -1,11 +1,11 @@
 package com.novoda.materialised.hackernews.stories
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
-import com.novoda.materialised.hackernews.asynclistview.ViewModel
+import com.novoda.materialised.hackernews.asynclistview.ClickListener
 import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener
+import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.stories.database.*
-import com.novoda.materialised.hackernews.stories.view.StoryClickListener
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 
 internal class StoriesPresenter(
@@ -53,6 +53,12 @@ internal class StoriesPresenter(
 
     private fun convertStoryToStoryViewModel(story: Story): ViewModel<StoryViewData> {
         val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
-        return ViewModel(storyViewData, StoryClickListener(navigator))
+        return ViewModel(storyViewData, storyClickListener)
+    }
+
+    val storyClickListener: ClickListener<StoryViewData> = object : ClickListener<StoryViewData> {
+        override fun onClick(data: StoryViewData) {
+            navigator.navigateTo(data.url)
+        }
     }
 }

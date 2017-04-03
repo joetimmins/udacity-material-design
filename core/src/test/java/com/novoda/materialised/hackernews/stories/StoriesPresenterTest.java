@@ -2,8 +2,8 @@ package com.novoda.materialised.hackernews.stories;
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ClickListener;
-import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener;
+import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.stories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.stories.database.Story;
@@ -23,23 +23,23 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class StoriesPresenterTest {
 
-    private final long firstStoryId = 56L;
-    private final long secondStoryId = 78L;
-    private final List<Long> topStoryIds = Arrays.asList(firstStoryId, secondStoryId);
+    private static final int TEST_TIME = 3471394;
+    private static final long FIRST_STORY_ID = 56L;
+    private static final long SECOND_STORY_ID = 78L;
+    private static final List<Long> TOP_STORY_IDS = Arrays.asList(FIRST_STORY_ID, SECOND_STORY_ID);
 
-    private final Story aStory = buildStory();
-    private final Story anotherStory = buildAnotherStory();
-    private final int TEST_TIME = 3471394;
+    private static final Story A_STORY = new Story("test author", 123, (int) FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url");
+    private static final Story ANOTHER_STORY = new Story("another author", 456, (int) SECOND_STORY_ID, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url");
 
     @Test
     public void presenterGivesCorrectListOfIdsToView_AsViewModels_WhenPresentingMultipleStories() {
-        ViewModel<StoryViewData> firstIdOnlyViewModel = buildIdOnlyViewModel(firstStoryId);
-        ViewModel<StoryViewData> secondIdOnlyViewModel = buildIdOnlyViewModel(secondStoryId);
+        ViewModel<StoryViewData> firstIdOnlyViewModel = buildIdOnlyViewModel(FIRST_STORY_ID);
+        ViewModel<StoryViewData> secondIdOnlyViewModel = buildIdOnlyViewModel(SECOND_STORY_ID);
 
         List<ViewModel<StoryViewData>> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(topStoryIds, Collections.<Story>emptyList(), storiesView);
+        presentWith(TOP_STORY_IDS, Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
         assertThat(storiesView.updatedStoryViewModels).isEqualTo(expectedViewModels);
     }
@@ -48,47 +48,59 @@ public class StoriesPresenterTest {
     public void presenterTellsViewToShowErrorScreen_WhenNoStoryIdsAreRetrieved() {
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(Collections.<Long>emptyList(), Collections.<Story>emptyList(), storiesView);
+        presentWith(Collections.<Long>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
         assertThat(storiesView.errorShown).isTrue();
     }
 
     @Test
-    public void presenterGivesCorrectUpdatedViewModelsToView_OneAtATime_WhenPresentingMultipleStories() {
+    public void presenterGivesViewModelsWithFullViewDataToView_OneAtATime_WhenPresentingMultipleStories() {
+        ViewModel<StoryViewData> expectedViewModel = createViewModelFrom(A_STORY, new StoryClickListener(new SpyingNavigator()));
+        ViewModel<StoryViewData> anotherExpectedViewModel = createViewModelFrom(ANOTHER_STORY, new StoryClickListener(new SpyingNavigator()));
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(topStoryIds, Arrays.asList(aStory, anotherStory), storiesView);
+        presentWith(TOP_STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, new SpyingNavigator());
 
-        ViewModel<StoryViewData> storyViewModel = convert(aStory, new StoryClickListener(spyingNavigator));
-        ViewModel<StoryViewData> anotherStoryViewModel = convert(anotherStory, new StoryClickListener(spyingNavigator));
+        StoryViewData actualViewData = storiesView.firstUpdatedViewModel.getViewData();
+        StoryViewData anotherActualViewData = storiesView.secondUpdatedViewModel.getViewData();
 
-        assertThat(storiesView.firstUpdatedStoryViewModel).isEqualTo(storyViewModel);
-        assertThat(storiesView.secondUpdatedStoryViewModel).isEqualTo(anotherStoryViewModel);
+        assertThat(actualViewData).isEqualTo(expectedViewModel.getViewData());
+        assertThat(anotherActualViewData).isEqualTo(anotherExpectedViewModel.getViewData());
     }
 
-    private ViewModel<StoryViewData> convert(Story story, ClickListener<StoryViewData> clickListener) {
-        StoryViewData storyViewData = new StoryViewData(
-                story.getBy(), story.getKids(), story.getId(), story.getScore(), story.getTitle(), story.getUrl()
-        );
+    @Test
+    public void presenterGivesViewModelWithNavigatingClickListenerToView_WhenPresenting() {
+        SpyingStoriesView storiesView = new SpyingStoriesView();
+        SpyingNavigator navigator = new SpyingNavigator();
+
+        presentWith(TOP_STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator);
+
+        ClickListener<StoryViewData> actualClickListener = storiesView.firstUpdatedViewModel.getViewBehaviour();
+
+        actualClickListener.onClick(createStoryViewDataFrom(A_STORY));
+
+        assertThat(navigator.uri).isEqualTo(A_STORY.getUrl());
+    }
+
+    private ViewModel<StoryViewData> createViewModelFrom(Story story, ClickListener<StoryViewData> clickListener) {
+        StoryViewData storyViewData = createStoryViewDataFrom(story);
         return new ViewModel<>(storyViewData, clickListener);
     }
 
-    private void presentWith(List<Long> topStoryIds, List<Story> stories, SpyingStoriesView storiesView) {
+    private StoryViewData createStoryViewDataFrom(Story story) {
+        return new StoryViewData(
+                story.getBy(), story.getKids(), story.getId(), story.getScore(), story.getTitle(), story.getUrl()
+        );
+    }
+
+    private void presentWith(List<Long> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
         StoriesPresenter presenter = new StoriesPresenter(
                 new StubbedStoryIdDatabase(topStoryIds),
                 new StubbedItemsDatabase(stories),
                 storiesView,
-                spyingNavigator
+                navigator
         );
         presenter.present("anything");
-    }
-
-    private Story buildStory() {
-        return new Story("test author", 123, (int) firstStoryId, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url");
-    }
-
-    private Story buildAnotherStory() {
-        return new Story("another author", 456, (int) secondStoryId, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url");
     }
 
     private ViewModel<StoryViewData> buildIdOnlyViewModel(long storyId) {
@@ -129,8 +141,8 @@ public class StoriesPresenterTest {
 
     private static class SpyingStoriesView implements AsyncListView<StoryViewData> {
         List<ViewModel<StoryViewData>> updatedStoryViewModels;
-        ViewModel<StoryViewData> firstUpdatedStoryViewModel;
-        ViewModel<StoryViewData> secondUpdatedStoryViewModel;
+        ViewModel<StoryViewData> firstUpdatedViewModel;
+        ViewModel<StoryViewData> secondUpdatedViewModel;
         boolean errorShown;
 
         @Override
@@ -140,10 +152,10 @@ public class StoriesPresenterTest {
 
         @Override
         public void updateWith(ViewModel<StoryViewData> viewModel) {
-            if (firstUpdatedStoryViewModel == null) {
-                firstUpdatedStoryViewModel = viewModel;
-            } else if (secondUpdatedStoryViewModel == null) {
-                secondUpdatedStoryViewModel = viewModel;
+            if (firstUpdatedViewModel == null) {
+                firstUpdatedViewModel = viewModel;
+            } else if (secondUpdatedViewModel == null) {
+                secondUpdatedViewModel = viewModel;
             }
         }
 
@@ -153,12 +165,12 @@ public class StoriesPresenterTest {
         }
     }
 
-    private static final Navigator spyingNavigator = new Navigator() {
+    private static class SpyingNavigator implements Navigator {
         String uri;
 
         @Override
         public void navigateTo(@NotNull String uri) {
             this.uri = uri;
         }
-    };
+    }
 }
