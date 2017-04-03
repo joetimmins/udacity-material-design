@@ -9,7 +9,6 @@ import com.novoda.materialised.hackernews.stories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.stories.database.Story;
 import com.novoda.materialised.hackernews.stories.database.StoryIdDatabase;
 import com.novoda.materialised.hackernews.stories.database.ValueCallback;
-import com.novoda.materialised.hackernews.stories.view.StoryClickListener;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.Arrays;
@@ -55,8 +54,8 @@ public class StoriesPresenterTest {
 
     @Test
     public void presenterGivesViewModelsWithFullViewDataToView_OneAtATime_WhenPresentingMultipleStories() {
-        ViewModel<StoryViewData> expectedViewModel = createViewModelFrom(A_STORY, new StoryClickListener(new SpyingNavigator()));
-        ViewModel<StoryViewData> anotherExpectedViewModel = createViewModelFrom(ANOTHER_STORY, new StoryClickListener(new SpyingNavigator()));
+        ViewModel<StoryViewData> expectedViewModel = createViewModelFrom(A_STORY, new SpyingNavigator());
+        ViewModel<StoryViewData> anotherExpectedViewModel = createViewModelFrom(ANOTHER_STORY, new SpyingNavigator());
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
         presentWith(TOP_STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, new SpyingNavigator());
@@ -82,8 +81,14 @@ public class StoriesPresenterTest {
         assertThat(navigator.uri).isEqualTo(A_STORY.getUrl());
     }
 
-    private ViewModel<StoryViewData> createViewModelFrom(Story story, ClickListener<StoryViewData> clickListener) {
+    private ViewModel<StoryViewData> createViewModelFrom(Story story, final Navigator navigator) {
         StoryViewData storyViewData = createStoryViewDataFrom(story);
+        ClickListener<StoryViewData> clickListener = new ClickListener<StoryViewData>() {
+            @Override
+            public void onClick(StoryViewData data) {
+                navigator.navigateTo(data.getUrl());
+            }
+        };
         return new ViewModel<>(storyViewData, clickListener);
     }
 
