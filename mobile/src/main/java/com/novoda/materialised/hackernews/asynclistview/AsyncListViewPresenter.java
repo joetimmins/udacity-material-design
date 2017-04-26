@@ -1,5 +1,6 @@
 package com.novoda.materialised.hackernews.asynclistview;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -26,14 +27,14 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
     }
 
     @Override
-    public void updateWith(List<ViewModel<T>> initialViewModelList) {
+    public void updateWith(@NonNull List<ViewModel<T>> initialViewModelList) {
         loadingView.setVisibility(View.GONE);
         adapter = new SingleTypeAdapter<>(initialViewModelList, viewInflater);
         topStoriesView.swapAdapter(adapter, false);
     }
 
     @Override
-    public void updateWith(ViewModel<T> viewModel) {
+    public void updateWith(@NonNull ViewModel<T> viewModel) {
         adapter.updateWith(viewModel);
     }
 
