@@ -2,11 +2,10 @@ package com.novoda.materialised.hackernews.stories.view
 
 import com.novoda.materialised.hackernews.asynclistview.ViewData
 import java.net.URI
-import java.util.*
 
 data class StoryViewData(
         val by: String = "",
-        val commentIds: List<Int> = Collections.emptyList(),
+        val commentIds: List<Int> = emptyList(),
         override val id: Int = 0,
         val score: Int = 0,
         val title: String = "",
