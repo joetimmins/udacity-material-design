@@ -2,7 +2,6 @@ package com.novoda.materialised.hackernews.stories
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ClickListener
-import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.stories.database.*
@@ -40,7 +39,7 @@ internal class StoriesPresenter(
     }
 
     private fun createIdOnlyViewModel(storyId: Int): ViewModel<StoryViewData> {
-        return ViewModel(StoryViewData(id = storyId), NoOpClickListener)
+        return ViewModel(StoryViewData(id = storyId), ClickListener.noOpClickListener)
     }
 
     private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewData>): ValueCallback<Story> {
