@@ -14,6 +14,7 @@ import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
+import com.novoda.materialised.hackernews.section.SectionPresenter;
 import com.novoda.materialised.hackernews.stories.database.DatabaseFactory;
 import com.novoda.materialised.hackernews.stories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.stories.database.StoryIdDatabase;

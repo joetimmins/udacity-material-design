@@ -7,7 +7,7 @@ import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.stories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.stories.database.Story;
 import com.novoda.materialised.hackernews.stories.database.StoryIdDatabase;
-import com.novoda.materialised.hackernews.stories.database.StoryType;
+import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.database.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -94,7 +94,7 @@ public class StoriesPresenterTest {
                 storiesView,
                 navigator
         );
-        presenter.present(StoryType.NEW);
+        presenter.present(Section.NEW);
     }
 
     private ViewModel<StoryViewData> buildIdOnlyViewModel(long storyId) {
@@ -113,7 +113,7 @@ public class StoriesPresenterTest {
         }
 
         @Override
-        public void readStoryIds(@NotNull StoryType storyType, @NotNull ValueCallback<? super List<Long>> callback) {
+        public void readStoryIds(@NotNull Section section, @NotNull ValueCallback<? super List<Long>> callback) {
             callback.onValueRetrieved(ids);
         }
     }

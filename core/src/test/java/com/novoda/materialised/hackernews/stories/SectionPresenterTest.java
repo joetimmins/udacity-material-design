@@ -1,6 +1,8 @@
 package com.novoda.materialised.hackernews.stories;
 
-import com.novoda.materialised.hackernews.stories.database.StoryType;
+import com.novoda.materialised.hackernews.TypedPresenter;
+import com.novoda.materialised.hackernews.section.Section;
+import com.novoda.materialised.hackernews.section.SectionPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class SectionPresenterTest {
         sectionPresenter.tabSelected("Top Stories");
 
         // Assert
-        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(StoryType.TOP_STORIES);
+        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(Section.TOP_STORIES);
     }
 
     @Test
@@ -48,7 +50,7 @@ public class SectionPresenterTest {
         sectionPresenter.tabSelected("New");
 
         // Assert
-        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(StoryType.NEW);
+        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(Section.NEW);
     }
 
     @Test
@@ -61,7 +63,7 @@ public class SectionPresenterTest {
         sectionPresenter.tabSelected("Best");
 
         // Assert
-        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(StoryType.BEST);
+        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(Section.BEST);
     }
 
     @Test
@@ -76,9 +78,9 @@ public class SectionPresenterTest {
         sectionPresenter.resume();
 
         // Assert
-        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(StoryType.TOP_STORIES);
-        assertThat(storiesPresenter.presentedTypes.get(1)).isEqualTo(StoryType.BEST);
-        assertThat(storiesPresenter.presentedTypes.get(2)).isEqualTo(StoryType.BEST);
+        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(Section.TOP_STORIES);
+        assertThat(storiesPresenter.presentedTypes.get(1)).isEqualTo(Section.BEST);
+        assertThat(storiesPresenter.presentedTypes.get(2)).isEqualTo(Section.BEST);
     }
 
     @Test
@@ -91,14 +93,14 @@ public class SectionPresenterTest {
         sectionPresenter.tabSelected(null);
 
         // Assert
-        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(StoryType.TOP_STORIES);
+        assertThat(storiesPresenter.presentedTypes.get(0)).isEqualTo(Section.TOP_STORIES);
     }
 
-    private class CapturingTypedPresenter implements TypedPresenter<StoryType> {
-        List<StoryType> presentedTypes = new ArrayList<>();
+    private class CapturingTypedPresenter implements TypedPresenter<Section> {
+        List<Section> presentedTypes = new ArrayList<>();
 
         @Override
-        public void present(StoryType type) {
+        public void present(Section type) {
             presentedTypes.add(type);
         }
     }

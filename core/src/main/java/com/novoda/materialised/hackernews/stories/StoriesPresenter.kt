@@ -1,10 +1,12 @@
 package com.novoda.materialised.hackernews.stories
 
+import com.novoda.materialised.hackernews.TypedPresenter
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ClickListener
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.stories.database.*
+import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 
 class StoriesPresenter(
@@ -12,8 +14,8 @@ class StoriesPresenter(
         val itemsDatabase: ItemsDatabase,
         val storiesView: AsyncListView<StoryViewData>,
         val navigator: Navigator
-) : TypedPresenter<StoryType> {
-    override fun present(type: StoryType) {
+) : TypedPresenter<Section> {
+    override fun present(type: Section) {
         storyIdDatabase.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
     }
 

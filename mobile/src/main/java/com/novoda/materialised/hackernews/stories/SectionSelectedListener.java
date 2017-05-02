@@ -2,6 +2,8 @@ package com.novoda.materialised.hackernews.stories;
 
 import android.support.design.widget.TabLayout;
 
+import com.novoda.materialised.hackernews.section.SectionPresenter;
+
 final class SectionSelectedListener implements TabLayout.OnTabSelectedListener {
 
     private final SectionPresenter sectionPresenter;

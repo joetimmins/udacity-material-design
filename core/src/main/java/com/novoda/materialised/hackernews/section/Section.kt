@@ -1,9 +1,9 @@
-package com.novoda.materialised.hackernews.stories.database
+package com.novoda.materialised.hackernews.section
 
 import com.novoda.materialised.hackernews.asynclistview.ViewData
 
 
-enum class StoryType(
+enum class Section(
         override val id: String,
         val userFacingName: String
 ) : ViewData<String> {

@@ -1,5 +1,7 @@
 package com.novoda.materialised.hackernews.stories.database
 
+import com.novoda.materialised.hackernews.section.Section
+
 interface StoryIdDatabase {
-    fun readStoryIds(storyType: StoryType, callback: ValueCallback<List<Long>>)
+    fun readStoryIds(section: Section, callback: ValueCallback<List<Long>>)
 }
