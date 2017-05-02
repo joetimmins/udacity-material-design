@@ -13,10 +13,9 @@ class SectionPresenter(
 
     fun tabSelected(tabName: CharSequence?) {
         val selectedTabName = tabName?.toString() ?: ""
-        val selectedStoryType = StoryType.values()
+        storyType = StoryType.values()
                 .filter { storyType -> storyType.userFacingName == selectedTabName }
                 .elementAtOrElse(index = 0, defaultValue = { StoryType.TOP_STORIES })
-        storyType = selectedStoryType
         refreshContent()
     }
 
