@@ -1,7 +1,9 @@
 package com.novoda.materialised.hackernews.stories
 
-internal class SectionPresenter(
-        private val contentPresenter: TypedPresenter<String>
+import com.novoda.materialised.hackernews.stories.database.StoryType
+
+class SectionPresenter(
+        private val contentPresenter: TypedPresenter<StoryType>
 ) {
     var storyType: String = "topstories"
 
@@ -23,7 +25,7 @@ internal class SectionPresenter(
     }
 
     private fun refreshContent() {
-        contentPresenter.present(storyType)
+        contentPresenter.present(StoryType.valueOf(storyType))
     }
 }
 

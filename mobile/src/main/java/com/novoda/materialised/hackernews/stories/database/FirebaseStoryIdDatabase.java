@@ -17,8 +17,8 @@ final class FirebaseStoryIdDatabase implements StoryIdDatabase {
     }
 
     @Override
-    public void readStoryIds(@NotNull String storyType, @NotNull final ValueCallback<? super List<Long>> callback) {
-        firebaseDatabase.getReference("v0").child(storyType).addListenerForSingleValueEvent(
+    public void readStoryIds(@NotNull StoryType storyType, @NotNull final ValueCallback<? super List<Long>> callback) {
+        firebaseDatabase.getReference("v0").child(storyType.getId()).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

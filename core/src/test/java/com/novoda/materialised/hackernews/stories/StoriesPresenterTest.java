@@ -2,12 +2,12 @@ package com.novoda.materialised.hackernews.stories;
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ClickListener;
-import com.novoda.materialised.hackernews.asynclistview.NoOpClickListener;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.stories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.stories.database.Story;
 import com.novoda.materialised.hackernews.stories.database.StoryIdDatabase;
+import com.novoda.materialised.hackernews.stories.database.StoryType;
 import com.novoda.materialised.hackernews.stories.database.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -94,7 +94,7 @@ public class StoriesPresenterTest {
                 storiesView,
                 navigator
         );
-        presenter.present("anything");
+        presenter.present(StoryType.NEW);
     }
 
     private ViewModel<StoryViewData> buildIdOnlyViewModel(long storyId) {
@@ -102,7 +102,15 @@ public class StoriesPresenterTest {
         StoryViewData idOnly = new StoryViewData(
                 empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
-        return new ViewModel<>(idOnly, NoOpClickListener.INSTANCE);
+        return new ViewModel<>(idOnly, new Something());
+    }
+
+    private static class Something implements ClickListener<StoryViewData> {
+
+        @Override
+        public void onClick(StoryViewData data) {
+
+        }
     }
 
     private static class StubbedStoryIdDatabase implements StoryIdDatabase {
@@ -113,7 +121,7 @@ public class StoriesPresenterTest {
         }
 
         @Override
-        public void readStoryIds(@NotNull String storyType, @NotNull ValueCallback<? super List<Long>> callback) {
+        public void readStoryIds(@NotNull StoryType storyType, @NotNull ValueCallback<? super List<Long>> callback) {
             callback.onValueRetrieved(ids);
         }
     }
@@ -140,7 +148,7 @@ public class StoriesPresenterTest {
         boolean errorShown;
 
         @Override
-        public void updateWith(List<ViewModel<StoryViewData>> initialViewModelList) {
+        public void updateWith(@NotNull List<ViewModel<StoryViewData>> initialViewModelList) {
             updatedStoryViewModels = initialViewModelList;
         }
 

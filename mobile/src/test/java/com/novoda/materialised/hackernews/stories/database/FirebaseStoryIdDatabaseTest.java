@@ -16,11 +16,10 @@ public class FirebaseStoryIdDatabaseTest {
         // Arrange
         List<Long> expectedStoryIds = Arrays.asList(8863L, 9001L, 9004L);
         ListValueCallback callback = new ListValueCallback();
-        String storyType = "anything";
-        FirebaseDatabase storyTypeFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(storyType, expectedStoryIds);
+        FirebaseDatabase storyTypeFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(StoryType.BEST, expectedStoryIds);
 
         // Act
-        new FirebaseStoryIdDatabase(storyTypeFirebaseDatabase).readStoryIds(storyType, callback);
+        new FirebaseStoryIdDatabase(storyTypeFirebaseDatabase).readStoryIds(StoryType.BEST, callback);
 
         // Assert
         assertThat(callback.topStoryIds).isEqualTo(expectedStoryIds);

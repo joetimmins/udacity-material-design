@@ -12,8 +12,8 @@ internal class StoriesPresenter(
         val itemsDatabase: ItemsDatabase,
         val storiesView: AsyncListView<StoryViewData>,
         val navigator: Navigator
-) : TypedPresenter<String> {
-    override fun present(type: String) {
+) : TypedPresenter<StoryType> {
+    override fun present(type: StoryType) {
         storyIdDatabase.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
     }
 

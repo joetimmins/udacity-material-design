@@ -4,7 +4,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.novoda.materialised.hackernews.stories.database.Story;
 
 import java.util.List;
 
@@ -16,12 +15,12 @@ import static org.mockito.Mockito.*;
 
 final class FakeFirebase {
 
-    static FirebaseDatabase getDatabaseForStoryType(String storyType, final List<Long> expectedTopStories) {
+    static FirebaseDatabase getDatabaseForStoryType(StoryType storyType, final List<Long> expectedTopStories) {
         FirebaseDatabase mockFirebaseDatabase = mock(FirebaseDatabase.class);
         DatabaseReference mockDatabaseReference = mock(DatabaseReference.class);
 
         when(mockFirebaseDatabase.getReference("v0")).thenReturn(mockDatabaseReference);
-        when(mockDatabaseReference.child(storyType)).thenReturn(mockDatabaseReference);
+        when(mockDatabaseReference.child(storyType.getId())).thenReturn(mockDatabaseReference);
 
         doAnswer(new Answer<Void>() {
             @Override
