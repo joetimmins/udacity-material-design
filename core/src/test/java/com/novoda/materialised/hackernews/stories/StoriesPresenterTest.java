@@ -4,10 +4,10 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ClickListener;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.navigator.Navigator;
+import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.database.ItemsDatabase;
 import com.novoda.materialised.hackernews.stories.database.Story;
 import com.novoda.materialised.hackernews.stories.database.StoryIdDatabase;
-import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.database.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -74,9 +74,7 @@ public class StoriesPresenterTest {
 
         presentWith(TOP_STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator);
 
-        ClickListener<StoryViewData> actualClickListener = storiesView.firstUpdatedViewModel.getViewBehaviour();
-
-        actualClickListener.onClick(createStoryViewDataFrom(A_STORY));
+        storiesView.firstUpdatedViewModel.onClick();
 
         assertThat(navigator.uri).isEqualTo(A_STORY.getUrl());
     }
