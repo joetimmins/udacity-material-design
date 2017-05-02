@@ -102,15 +102,7 @@ public class StoriesPresenterTest {
         StoryViewData idOnly = new StoryViewData(
                 empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
-        return new ViewModel<>(idOnly, new Something());
-    }
-
-    private static class Something implements ClickListener<StoryViewData> {
-
-        @Override
-        public void onClick(StoryViewData data) {
-
-        }
+        return new ViewModel<>(idOnly, ClickListener.noOpClickListener);
     }
 
     private static class StubbedStoryIdDatabase implements StoryIdDatabase {
