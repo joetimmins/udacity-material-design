@@ -2,6 +2,7 @@ package com.novoda.materialised.hackernews.section
 
 import com.novoda.materialised.hackernews.TypedPresenter
 
+@Deprecated("Let's use the SectionListPresenter instead!")
 class SectionPresenter(
         private val contentPresenter: TypedPresenter<Section>
 ) {
