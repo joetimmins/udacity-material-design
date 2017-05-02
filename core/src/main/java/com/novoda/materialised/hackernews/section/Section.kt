@@ -1,6 +1,5 @@
 package com.novoda.materialised.hackernews.section
 
-
 enum class Section(
         val id: String,
         val userFacingName: String
