@@ -7,7 +7,7 @@ import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.stories.database.*
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 
-internal class StoriesPresenter(
+class StoriesPresenter(
         val storyIdDatabase: StoryIdDatabase,
         val itemsDatabase: ItemsDatabase,
         val storiesView: AsyncListView<StoryViewData>,
