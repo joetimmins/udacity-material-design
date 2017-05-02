@@ -6,7 +6,7 @@ import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.database.StoryProvider;
 import com.novoda.materialised.hackernews.stories.database.Story;
-import com.novoda.materialised.hackernews.stories.database.StoryIdDatabase;
+import com.novoda.materialised.hackernews.stories.database.StoryIdProvider;
 import com.novoda.materialised.hackernews.stories.database.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -87,7 +87,7 @@ public class StoriesPresenterTest {
 
     private void presentWith(List<Long> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
         StoriesPresenter presenter = new StoriesPresenter(
-                new StubbedStoryIdDatabase(topStoryIds),
+                new StubbedStoryIdProvider(topStoryIds),
                 new StubbedStoryProvider(stories),
                 storiesView,
                 navigator
@@ -102,10 +102,10 @@ public class StoriesPresenterTest {
         );
     }
 
-    private static class StubbedStoryIdDatabase implements StoryIdDatabase {
+    private static class StubbedStoryIdProvider implements StoryIdProvider {
         final List<Long> ids;
 
-        private StubbedStoryIdDatabase(List<Long> ids) {
+        private StubbedStoryIdProvider(List<Long> ids) {
             this.ids = ids;
         }
 

@@ -19,7 +19,7 @@ import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.section.SectionPresenter;
 import com.novoda.materialised.hackernews.stories.database.DatabaseFactory;
 import com.novoda.materialised.hackernews.stories.database.StoryProvider;
-import com.novoda.materialised.hackernews.stories.database.StoryIdDatabase;
+import com.novoda.materialised.hackernews.stories.database.StoryIdProvider;
 import com.novoda.materialised.hackernews.stories.view.StoryCardView;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -53,10 +53,10 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         );
 
         StoryProvider storyProvider = DatabaseFactory.newStoryProvider(this);
-        StoryIdDatabase storyIdDatabase = DatabaseFactory.newStoryIdDatabase(this);
+        StoryIdProvider storyIdProvider = DatabaseFactory.newStoryIdDatabase(this);
 
         TypedPresenter<Section> storiesPresenter = new StoriesPresenter(
-                storyIdDatabase,
+                storyIdProvider,
                 storyProvider,
                 asyncListView,
                 new IntentNavigator(this)

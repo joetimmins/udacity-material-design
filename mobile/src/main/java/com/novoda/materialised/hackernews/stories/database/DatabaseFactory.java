@@ -8,8 +8,8 @@ public final class DatabaseFactory {
         return new FirebaseStoryProvider(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
     }
 
-    public static StoryIdDatabase newStoryIdDatabase(Context context) {
-        return new FirebaseStoryIdDatabase(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
+    public static StoryIdProvider newStoryIdDatabase(Context context) {
+        return new FirebaseStoryIdProvider(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
     }
 
 }
