@@ -10,7 +10,7 @@ import com.novoda.materialised.hackernews.stories.view.StoryViewData
 
 class StoriesPresenter(
         val storyIdDatabase: StoryIdDatabase,
-        val itemsDatabase: ItemsDatabase,
+        val storyProvider: StoryProvider,
         val storiesView: AsyncListView<StoryViewData>,
         val navigator: Navigator
 ) : TypedPresenter<Section> {
@@ -26,7 +26,7 @@ class StoriesPresenter(
                 val idOnlyViewModels = createIdOnlyViewModels(ids)
                 storiesView.updateWith(idOnlyViewModels)
                 val viewUpdater = viewUpdaterFor(storiesView)
-                itemsDatabase.readItems(ids, viewUpdater)
+                storyProvider.readItems(ids, viewUpdater)
             } else {
                 storiesView.showError()
             }

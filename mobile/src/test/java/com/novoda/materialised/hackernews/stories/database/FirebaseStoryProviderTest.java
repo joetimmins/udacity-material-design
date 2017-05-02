@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class FirebaseItemsDatabaseTest {
+public class FirebaseStoryProviderTest {
 
     @Test
     public void readItemsCallsBackOncePerValueRetrieved() {
@@ -16,7 +16,7 @@ public class FirebaseItemsDatabaseTest {
         Story firstStory = new Story("author", 890, firstStoryId, Arrays.asList(1, 2), 4, 1232, "test title", "test type", "http://test.url");
         Story secondStory = new Story("another author", 567, secondStoryId, Arrays.asList(3, 4), 5, 7897, "another title", "another type", "http://another.url");
         List<Story> stories = Arrays.asList(firstStory, secondStory);
-        FirebaseItemsDatabase firebaseItemsDatabase = new FirebaseItemsDatabase(FakeFirebase.getItemsDatabase(stories));
+        FirebaseStoryProvider firebaseItemsDatabase = new FirebaseStoryProvider(FakeFirebase.getItemsDatabase(stories));
 
         List<Integer> storyIds = Arrays.asList(firstStoryId, secondStoryId);
         CapturingValueCallback valueCallback = new CapturingValueCallback();

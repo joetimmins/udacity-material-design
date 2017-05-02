@@ -12,10 +12,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-final class FirebaseItemsDatabase implements ItemsDatabase {
+final class FirebaseStoryProvider implements StoryProvider {
     private final FirebaseDatabase firebaseDatabase;
 
-    FirebaseItemsDatabase(FirebaseDatabase firebaseDatabase) {
+    FirebaseStoryProvider(FirebaseDatabase firebaseDatabase) {
         this.firebaseDatabase = firebaseDatabase;
     }
 
