@@ -1,7 +1,6 @@
 package com.novoda.materialised.hackernews.stories;
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
-import com.novoda.materialised.hackernews.asynclistview.ClickListener;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.section.Section;
@@ -17,6 +16,9 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -100,7 +102,12 @@ public class StoriesPresenterTest {
         StoryViewData idOnly = new StoryViewData(
                 empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
-        return new ViewModel<>(idOnly, ClickListener.noOpClickListener);
+        return new ViewModel<>(idOnly, new Function1<StoryViewData, Unit>() {
+            @Override
+            public Unit invoke(StoryViewData storyViewData) {
+                return null;
+            }
+        });
     }
 
     private static class StubbedStoryIdDatabase implements StoryIdDatabase {

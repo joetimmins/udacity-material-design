@@ -12,16 +12,13 @@ class ViewModelTest {
             override val id: Int
                 get() = VIEW_ID
         }
-        val viewBehaviour = object : ClickListener<ViewData<Int>> {
-            var lastReceivedInt: Int = 0
-            override fun onClick(data: ViewData<Int>) {
-                lastReceivedInt = data.id
-            }
-        }
-        val intViewModel = ViewModel(intViewData, viewBehaviour)
+
+        var actualViewId = 0
+
+        val intViewModel = ViewModel(intViewData, { intViewData -> actualViewId = intViewData.id })
 
         intViewModel.onClick()
 
-        assertThat(viewBehaviour.lastReceivedInt).isEqualTo(VIEW_ID)
+        assertThat(actualViewId).isEqualTo(VIEW_ID)
     }
 }
