@@ -52,7 +52,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 StoryCardView.class
         );
 
-        StoryProvider storyProvider = DatabaseFactory.newItemsDatabase(this);
+        StoryProvider storyProvider = DatabaseFactory.newStoryProvider(this);
         StoryIdDatabase storyIdDatabase = DatabaseFactory.newStoryIdDatabase(this);
 
         TypedPresenter<Section> storiesPresenter = new StoriesPresenter(

@@ -4,7 +4,7 @@ import android.content.Context;
 
 public final class DatabaseFactory {
 
-    public static StoryProvider newItemsDatabase(Context context) {
+    public static StoryProvider newStoryProvider(Context context) {
         return new FirebaseStoryProvider(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
     }
 
