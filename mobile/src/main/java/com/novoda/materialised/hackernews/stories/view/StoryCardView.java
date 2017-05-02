@@ -36,7 +36,7 @@ public final class StoryCardView
     @Override
     public void updateWith(@NonNull ViewModel<StoryViewData> viewModel) {
         storyCard.setViewData(viewModel.getViewData());
-        storyCard.setViewBehaviour(viewModel.getViewBehaviour());
+        storyCard.setViewBehaviour(viewModel);
     }
 
     private void init(Context context) {
