@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
+import com.novoda.materialised.hackernews.TypedPresenter;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
+import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.section.SectionPresenter;
 import com.novoda.materialised.hackernews.stories.database.DatabaseFactory;
 import com.novoda.materialised.hackernews.stories.database.ItemsDatabase;
@@ -53,7 +55,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         ItemsDatabase itemsDatabase = DatabaseFactory.newItemsDatabase(this);
         StoryIdDatabase storyIdDatabase = DatabaseFactory.newStoryIdDatabase(this);
 
-        StoriesPresenter storiesPresenter = new StoriesPresenter(
+        TypedPresenter<Section> storiesPresenter = new StoriesPresenter(
                 storyIdDatabase,
                 itemsDatabase,
                 asyncListView,
