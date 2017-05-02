@@ -10,15 +10,13 @@ import com.novoda.materialised.hackernews.stories.database.StoryIdDatabase;
 import com.novoda.materialised.hackernews.stories.database.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
-
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -33,16 +31,16 @@ public class StoriesPresenterTest {
     private static final Story ANOTHER_STORY = new Story("another author", 456, (int) SECOND_STORY_ID, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url");
 
     @Test
-    public void presenterGivesCorrectListOfIdsToView_AsViewModels_WhenPresentingMultipleStories() {
-        ViewModel<StoryViewData> firstIdOnlyViewModel = buildIdOnlyViewModel(FIRST_STORY_ID);
-        ViewModel<StoryViewData> secondIdOnlyViewModel = buildIdOnlyViewModel(SECOND_STORY_ID);
+    public void presenterGivesCorrectListOfIdsToView_AsViewData_WhenPresentingMultipleStories() {
+        StoryViewData firstIdOnlyViewData = buildIdOnlyViewData(FIRST_STORY_ID);
+        StoryViewData secondIdOnlyViewData = buildIdOnlyViewData(SECOND_STORY_ID);
+        List<StoryViewData> expectedViewModels = Arrays.asList(firstIdOnlyViewData, secondIdOnlyViewData);
 
-        List<ViewModel<StoryViewData>> expectedViewModels = Arrays.asList(firstIdOnlyViewModel, secondIdOnlyViewModel);
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
         presentWith(TOP_STORY_IDS, Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
-        assertThat(storiesView.updatedStoryViewModels).isEqualTo(expectedViewModels);
+        assertThat(storiesView.receivedData).isEqualTo(expectedViewModels);
     }
 
     @Test
@@ -97,17 +95,11 @@ public class StoriesPresenterTest {
         presenter.present(Section.NEW);
     }
 
-    private ViewModel<StoryViewData> buildIdOnlyViewModel(long storyId) {
+    private StoryViewData buildIdOnlyViewData(long storyId) {
         StoryViewData empty = new StoryViewData();
-        StoryViewData idOnly = new StoryViewData(
+        return new StoryViewData(
                 empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
-        return new ViewModel<>(idOnly, new Function1<StoryViewData, Unit>() {
-            @Override
-            public Unit invoke(StoryViewData storyViewData) {
-                return null;
-            }
-        });
     }
 
     private static class StubbedStoryIdDatabase implements StoryIdDatabase {
@@ -139,18 +131,20 @@ public class StoriesPresenterTest {
     }
 
     private static class SpyingStoriesView implements AsyncListView<StoryViewData> {
-        List<ViewModel<StoryViewData>> updatedStoryViewModels;
+        List<StoryViewData> receivedData = new ArrayList<>();
         ViewModel<StoryViewData> firstUpdatedViewModel;
         ViewModel<StoryViewData> secondUpdatedViewModel;
         boolean errorShown;
 
         @Override
         public void updateWith(@NotNull List<ViewModel<StoryViewData>> initialViewModelList) {
-            updatedStoryViewModels = initialViewModelList;
+            for (ViewModel<StoryViewData> viewModel : initialViewModelList) {
+                receivedData.add(viewModel.getViewData());
+            }
         }
 
         @Override
-        public void updateWith(ViewModel<StoryViewData> viewModel) {
+        public void updateWith(@NotNull ViewModel<StoryViewData> viewModel) {
             if (firstUpdatedViewModel == null) {
                 firstUpdatedViewModel = viewModel;
             } else if (secondUpdatedViewModel == null) {
