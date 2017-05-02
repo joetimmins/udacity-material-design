@@ -5,13 +5,7 @@ import com.novoda.materialised.hackernews.stories.database.StoryType
 class SectionPresenter(
         private val contentPresenter: TypedPresenter<StoryType>
 ) {
-    var storyType: String = "topstories"
-
-    val storyTypeMap = hashMapOf(
-            "Top Stories" to "topstories",
-            "Best" to "beststories",
-            "New" to "newstories"
-    )
+    var storyType: StoryType = StoryType.TOP_STORIES
 
     fun resume() {
         refreshContent()
@@ -19,13 +13,15 @@ class SectionPresenter(
 
     fun tabSelected(tabName: CharSequence?) {
         val selectedTabName = tabName?.toString() ?: ""
-        val selectedStoryType = storyTypeMap.getOrElse(selectedTabName, { "topstories" })
+        val selectedStoryType = StoryType.values()
+                .filter { storyType -> storyType.userFacingName == selectedTabName }
+                .elementAtOrElse(index = 0, defaultValue = { StoryType.TOP_STORIES })
         storyType = selectedStoryType
         refreshContent()
     }
 
     private fun refreshContent() {
-        contentPresenter.present(StoryType.valueOf(storyType))
+        contentPresenter.present(storyType)
     }
 }
 
