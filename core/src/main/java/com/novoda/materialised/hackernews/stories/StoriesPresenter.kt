@@ -1,6 +1,6 @@
 package com.novoda.materialised.hackernews.stories
 
-import com.novoda.materialised.hackernews.TypedPresenter
+import com.novoda.materialised.hackernews.Presenter
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
@@ -13,7 +13,7 @@ class StoriesPresenter(
         val storyProvider: StoryProvider,
         val storiesView: AsyncListView<StoryViewData>,
         val navigator: Navigator
-) : TypedPresenter<Section> {
+) : Presenter<Section> {
     override fun present(type: Section) {
         storyIdProvider.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
     }

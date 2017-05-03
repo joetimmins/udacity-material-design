@@ -1,5 +1,5 @@
 package com.novoda.materialised.hackernews
 
-interface TypedPresenter<in T> {
+interface Presenter<in T> {
     fun present(type: T)
 }

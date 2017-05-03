@@ -34,13 +34,13 @@ public class StoriesPresenterTest {
     public void presenterGivesCorrectListOfIdsToView_AsViewData_WhenPresentingMultipleStories() {
         StoryViewData firstIdOnlyViewData = buildIdOnlyViewData(FIRST_STORY_ID);
         StoryViewData secondIdOnlyViewData = buildIdOnlyViewData(SECOND_STORY_ID);
-        List<StoryViewData> expectedViewModels = Arrays.asList(firstIdOnlyViewData, secondIdOnlyViewData);
+        List<StoryViewData> expectedViewData = Arrays.asList(firstIdOnlyViewData, secondIdOnlyViewData);
 
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
         presentWith(TOP_STORY_IDS, Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
-        assertThat(storiesView.receivedData).isEqualTo(expectedViewModels);
+        assertThat(storiesView.receivedData).isEqualTo(expectedViewData);
     }
 
     @Test

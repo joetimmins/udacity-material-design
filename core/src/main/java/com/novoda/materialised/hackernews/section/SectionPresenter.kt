@@ -1,10 +1,10 @@
 package com.novoda.materialised.hackernews.section
 
-import com.novoda.materialised.hackernews.TypedPresenter
+import com.novoda.materialised.hackernews.Presenter
 
 @Deprecated("Let's use the SectionListPresenter instead!")
 class SectionPresenter(
-        private val contentPresenter: TypedPresenter<Section>
+        private val contentPresenter: Presenter<Section>
 ) {
     var section: Section = Section.TOP_STORIES
 

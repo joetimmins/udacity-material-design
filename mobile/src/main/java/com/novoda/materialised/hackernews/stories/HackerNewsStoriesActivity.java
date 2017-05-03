@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
-import com.novoda.materialised.hackernews.TypedPresenter;
+import com.novoda.materialised.hackernews.Presenter;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
 import com.novoda.materialised.hackernews.section.Section;
@@ -55,7 +55,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         StoryProvider storyProvider = DatabaseFactory.newStoryProvider(this);
         StoryIdProvider storyIdProvider = DatabaseFactory.newStoryIdProvider(this);
 
-        TypedPresenter<Section> storiesPresenter = new StoriesPresenter(
+        Presenter<Section> storiesPresenter = new StoriesPresenter(
                 storyIdProvider,
                 storyProvider,
                 asyncListView,
@@ -67,6 +67,11 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         mainActivityLayout.sectionTabLayout.addOnTabSelectedListener(
                 new SectionSelectedListener(sectionPresenter)
         );
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
