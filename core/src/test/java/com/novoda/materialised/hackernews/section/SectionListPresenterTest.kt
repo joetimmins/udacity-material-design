@@ -24,13 +24,13 @@ class SectionListPresenterTest {
     fun firstSectionInListFromProviderIsPresented_whenPresentingStarts() {
         val provider = DummySectionProvider()
         val view = SpyingTabView()
-        val sectionPresenter = SpyingSectionPresenter()
-        val sectionListPresenter = SectionListPresenter(provider, view, sectionPresenter)
+        val spyingPresenter = SpyingSectionPresenter()
+        val sectionListPresenter = SectionListPresenter(provider, view, spyingPresenter)
 
         sectionListPresenter.startPresenting()
 
-        assertThat(sectionPresenter.presentedTypes.size).isEqualTo(1)
-        assertThat(sectionPresenter.presentedTypes.last()).isEqualTo(provider.provideSections().first())
+        assertThat(spyingPresenter.presentedTypes.size).isEqualTo(1)
+        assertThat(spyingPresenter.presentedTypes.last()).isEqualTo(provider.provideSections().first())
     }
 
     @Test
@@ -43,6 +43,11 @@ class SectionListPresenterTest {
         view.receivedViewModels.last().onClick()
 
         assertThat(spyingPresenter.presentedTypes.last()).isEqualTo(Section.TOP_STORIES)
+    }
+
+    @Test
+    fun presenterTellsViewToRefreshCurrentTab_whenPresentingResumes() {
+
     }
 }
 
