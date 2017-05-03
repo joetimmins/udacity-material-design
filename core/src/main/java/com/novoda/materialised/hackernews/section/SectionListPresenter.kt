@@ -12,7 +12,7 @@ class SectionListPresenter(val provider: SectionProvider,
         val sectionViewModels = sections
                 .map { section -> ViewModel(section, sectionSelectedListener()) }
         view.updateWith(sectionViewModels)
-        sectionPresenter.present(sections.first())
+        sectionViewModels.first().onClick()
     }
 
     private fun sectionSelectedListener(): (Section) -> Unit = { section -> sectionPresenter.present(section) }
