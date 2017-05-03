@@ -11,10 +11,21 @@ class SectionListPresenterTest {
     @Test
     fun populateViewWithViewModelsFromProvider_whenPresenting() {
         val view = SpyingTabView()
+        val provider = DummySectionProvider()
+        val expectedList: List<ViewModel<Section>> = listOf(ViewModel(Section.BEST), ViewModel(Section.TOP_STORIES))
 
-        val expectedList: List<ViewModel<Section>> = listOf(ViewModel(Section.TOP_STORIES), ViewModel(Section.BEST))
+        val sectionListPresenter = SectionListPresenter(provider, view)
+        sectionListPresenter.present()
+
         assertThat(view.receivedList).isEqualTo(expectedList)
     }
+}
+
+class DummySectionProvider : SectionProvider {
+    override fun provideSections(): List<Section> {
+        return listOf(Section.BEST, Section.TOP_STORIES)
+    }
+
 }
 
 class SpyingTabView : TabView<Section> {
