@@ -8,10 +8,12 @@ class SectionListPresenter(val provider: SectionProvider,
                            val view: TabView<Section>,
                            val sectionPresenter: Presenter<Section>) {
     fun startPresenting() {
-        val sectionViewModels = provider.provideSections()
-                .map { section -> ViewModel(section, onClick()) }
+        val sections = provider.provideSections()
+        val sectionViewModels = sections
+                .map { section -> ViewModel(section, sectionSelectedListener()) }
         view.updateWith(sectionViewModels)
+        sectionPresenter.present(sections.first())
     }
 
-    private fun onClick(): (Section) -> Unit = { section -> sectionPresenter.present(section) }
+    private fun sectionSelectedListener(): (Section) -> Unit = { section -> sectionPresenter.present(section) }
 }

@@ -10,7 +10,7 @@ import org.junit.Test
 class SectionListPresenterTest {
 
     @Test
-    fun populateViewWithViewDataFromProvider_whenStartingPresenting() {
+    fun populateViewWithViewDataFromProvider_whenPresentingStarts() {
         val view = SpyingTabView()
         val expectedViewData: List<Section> = listOf(Section.BEST, Section.TOP_STORIES)
         val sectionListPresenter = SectionListPresenter(DummySectionProvider(), view, SpyingSectionPresenter())
@@ -21,9 +21,22 @@ class SectionListPresenterTest {
     }
 
     @Test
-    fun clickingViewModelStartsPresentingThatSection() {
-        val spyingPresenter = SpyingSectionPresenter()
+    fun firstSectionInListFromProviderIsPresented_whenPresentingStarts() {
+        val provider = DummySectionProvider()
         val view = SpyingTabView()
+        val sectionPresenter = SpyingSectionPresenter()
+        val sectionListPresenter = SectionListPresenter(provider, view, sectionPresenter)
+
+        sectionListPresenter.startPresenting()
+
+        assertThat(sectionPresenter.presentedTypes.size).isEqualTo(1)
+        assertThat(sectionPresenter.presentedTypes.last()).isEqualTo(provider.provideSections().first())
+    }
+
+    @Test
+    fun clickingViewModelStartsPresentingThatSection() {
+        val view = SpyingTabView()
+        val spyingPresenter = SpyingSectionPresenter()
         val sectionListPresenter = SectionListPresenter(DummySectionProvider(), view, spyingPresenter)
 
         sectionListPresenter.startPresenting()
