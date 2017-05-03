@@ -9,7 +9,9 @@ class SectionListPresenter(val provider: SectionProvider,
                            val sectionPresenter: Presenter<Section>) {
     fun startPresenting() {
         val sectionViewModels = provider.provideSections()
-                .map { ViewModel(it, { sectionPresenter.present(it) }) }
+                .map { section -> ViewModel(section, onClick()) }
         view.updateWith(sectionViewModels)
     }
+
+    private fun onClick(): (Section) -> Unit = { section -> sectionPresenter.present(section) }
 }

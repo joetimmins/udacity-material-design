@@ -10,14 +10,14 @@ import org.junit.Test
 class SectionListPresenterTest {
 
     @Test
-    fun populateViewWithViewModelsFromProvider_whenStartingPresenting() {
+    fun populateViewWithViewDataFromProvider_whenStartingPresenting() {
         val view = SpyingTabView()
-        val expectedList: List<ViewModel<Section>> = listOf(ViewModel(Section.BEST), ViewModel(Section.TOP_STORIES))
+        val expectedViewData: List<Section> = listOf(Section.BEST, Section.TOP_STORIES)
         val sectionListPresenter = SectionListPresenter(DummySectionProvider(), view, SpyingSectionPresenter())
 
         sectionListPresenter.startPresenting()
 
-        assertThat(view.receivedList).isEqualTo(expectedList)
+        assertThat(view.receivedViewData).isEqualTo(expectedViewData)
     }
 
     @Test
@@ -27,7 +27,7 @@ class SectionListPresenterTest {
         val sectionListPresenter = SectionListPresenter(DummySectionProvider(), view, spyingPresenter)
 
         sectionListPresenter.startPresenting()
-        view.receivedList.last().onClick()
+        view.receivedViewModels.last().onClick()
 
         assertThat(spyingPresenter.presentedTypes.last()).isEqualTo(Section.TOP_STORIES)
     }
@@ -40,10 +40,12 @@ class DummySectionProvider : SectionProvider {
 }
 
 class SpyingTabView : TabView<Section> {
-    var receivedList: List<ViewModel<Section>> = emptyList()
+    var receivedViewModels: List<ViewModel<Section>> = emptyList()
+    var receivedViewData: List<Section> = emptyList()
 
     override fun updateWith(viewModels: List<ViewModel<Section>>) {
-        receivedList = viewModels
+        receivedViewModels = viewModels
+        receivedViewData = viewModels.map { it.viewData }
     }
 
 }
