@@ -72,5 +72,7 @@ class SpyingTabView : TabView<Section> {
         receivedViewData = viewModels.map { it.viewData }
     }
 
-
+    override fun refreshCurrentTab() {
+        currentTabRefreshed = true
+    }
 }

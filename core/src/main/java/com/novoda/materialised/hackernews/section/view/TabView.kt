@@ -5,4 +5,5 @@ import com.novoda.materialised.hackernews.asynclistview.ViewModel
 
 interface TabView<T : ViewData<String>> {
     fun updateWith(viewModels: List<ViewModel<T>>)
+    fun refreshCurrentTab()
 }
