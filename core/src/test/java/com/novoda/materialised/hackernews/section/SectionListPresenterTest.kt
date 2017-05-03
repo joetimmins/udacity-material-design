@@ -47,7 +47,12 @@ class SectionListPresenterTest {
 
     @Test
     fun presenterTellsViewToRefreshCurrentTab_whenPresentingResumes() {
+        val view = SpyingTabView()
+        val sectionListPresenter = SectionListPresenter(DummySectionProvider(), view, SpyingSectionPresenter())
 
+        sectionListPresenter.resumePresenting()
+
+        assertThat(view.currentTabRefreshed).isTrue
     }
 }
 
@@ -60,10 +65,12 @@ class DummySectionProvider : SectionProvider {
 class SpyingTabView : TabView<Section> {
     var receivedViewModels: List<ViewModel<Section>> = emptyList()
     var receivedViewData: List<Section> = emptyList()
+    var currentTabRefreshed: Boolean = false
 
     override fun updateWith(viewModels: List<ViewModel<Section>>) {
         receivedViewModels = viewModels
         receivedViewData = viewModels.map { it.viewData }
     }
+
 
 }

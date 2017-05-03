@@ -16,4 +16,8 @@ class SectionListPresenter(val provider: SectionProvider,
     }
 
     private fun sectionSelectedListener(): (Section) -> Unit = { section -> sectionPresenter.present(section) }
+
+    fun resumePresenting() {
+
+    }
 }
