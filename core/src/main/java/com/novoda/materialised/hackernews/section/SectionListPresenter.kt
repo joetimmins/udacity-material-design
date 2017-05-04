@@ -4,9 +4,9 @@ import com.novoda.materialised.hackernews.Presenter
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.section.view.TabView
 
-class SectionListPresenter(val provider: SectionProvider,
-                           val view: TabView<Section>,
-                           val sectionPresenter: Presenter<Section>) {
+class SectionListPresenter(private val provider: SectionProvider,
+                           private val view: TabView<Section>,
+                           private val sectionPresenter: Presenter<Section>) {
     fun startPresenting() {
         val sections = provider.provideSections()
         val sectionViewModels = sections
