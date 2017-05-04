@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DefaultSectionProvider implements SectionProvider {
+public class DefaultSectionListProvider implements SectionListProvider {
     @NotNull
     @Override
     public List<Section> provideSections() {

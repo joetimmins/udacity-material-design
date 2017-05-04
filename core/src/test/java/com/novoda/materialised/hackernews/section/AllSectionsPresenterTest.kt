@@ -7,13 +7,13 @@ import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
 
 
-class SectionListPresenterTest {
+class AllSectionsPresenterTest {
 
     @Test
     fun populateViewWithViewDataFromProvider_whenPresentingStarts() {
         val view = SpyingTabView()
         val expectedViewData: List<Section> = listOf(Section.BEST, Section.TOP_STORIES)
-        val sectionListPresenter = SectionListPresenter(DummySectionProvider(), view, SpyingSectionPresenter())
+        val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, SpyingSectionPresenter())
 
         sectionListPresenter.startPresenting()
 
@@ -22,10 +22,10 @@ class SectionListPresenterTest {
 
     @Test
     fun firstSectionInListFromProviderIsPresented_whenPresentingStarts() {
-        val provider = DummySectionProvider()
+        val provider = DummySectionListProvider()
         val view = SpyingTabView()
         val spyingPresenter = SpyingSectionPresenter()
-        val sectionListPresenter = SectionListPresenter(provider, view, spyingPresenter)
+        val sectionListPresenter = AllSectionsPresenter(provider, view, spyingPresenter)
 
         sectionListPresenter.startPresenting()
 
@@ -37,7 +37,7 @@ class SectionListPresenterTest {
     fun clickingViewModelStartsPresentingThatSection() {
         val view = SpyingTabView()
         val spyingPresenter = SpyingSectionPresenter()
-        val sectionListPresenter = SectionListPresenter(DummySectionProvider(), view, spyingPresenter)
+        val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, spyingPresenter)
 
         sectionListPresenter.startPresenting()
         view.receivedViewModels.last().onClick()
@@ -48,7 +48,7 @@ class SectionListPresenterTest {
     @Test
     fun presenterTellsViewToRefreshCurrentTab_whenPresentingResumes() {
         val view = SpyingTabView()
-        val sectionListPresenter = SectionListPresenter(DummySectionProvider(), view, SpyingSectionPresenter())
+        val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, SpyingSectionPresenter())
 
         sectionListPresenter.resumePresenting()
 
@@ -56,7 +56,7 @@ class SectionListPresenterTest {
     }
 }
 
-class DummySectionProvider : SectionProvider {
+class DummySectionListProvider : SectionListProvider {
     override fun provideSections(): List<Section> {
         return listOf(Section.BEST, Section.TOP_STORIES)
     }

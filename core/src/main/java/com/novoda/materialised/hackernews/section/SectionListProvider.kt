@@ -1,5 +1,5 @@
 package com.novoda.materialised.hackernews.section
 
-interface SectionProvider {
+interface SectionListProvider {
     fun provideSections(): List<Section>
 }
