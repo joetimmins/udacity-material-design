@@ -57,7 +57,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         StoryProvider storyProvider = DatabaseFactory.newStoryProvider(this);
         StoryIdProvider storyIdProvider = DatabaseFactory.newStoryIdProvider(this);
 
-        Presenter<Section> storiesPresenter = new StoriesPresenter(
+        Presenter<Section> storiesPresenter = new StorySectionPresenter(
                 storyIdProvider,
                 storyProvider,
                 asyncListView,

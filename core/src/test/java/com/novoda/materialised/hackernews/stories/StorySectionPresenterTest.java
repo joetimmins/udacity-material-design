@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class StoriesPresenterTest {
+public class StorySectionPresenterTest {
 
     private static final int TEST_TIME = 3471394;
     private static final long FIRST_STORY_ID = 56L;
@@ -86,7 +86,7 @@ public class StoriesPresenterTest {
     }
 
     private void presentWith(List<Long> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
-        StoriesPresenter presenter = new StoriesPresenter(
+        StorySectionPresenter presenter = new StorySectionPresenter(
                 new StubbedStoryIdProvider(topStoryIds),
                 new StubbedStoryProvider(stories),
                 storiesView,
