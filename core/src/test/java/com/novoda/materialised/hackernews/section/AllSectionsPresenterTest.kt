@@ -67,12 +67,12 @@ class SpyingTabsView : TabsView<Section> {
     var receivedViewData: List<Section> = emptyList()
     var currentTabRefreshed: Boolean = false
 
-    override fun updateWith(viewModels: List<ViewModel<Section>>) {
+    override fun updateWith(viewModels: List<ViewModel<Section>>, defaultValue: ViewModel<Section>) {
         receivedViewModels = viewModels
         receivedViewData = viewModels.map { it.viewData }
     }
 
-    override fun refreshCurrentTab() {
+    override fun refreshCurrentTab(defaultValue: ViewModel<Section>) {
         currentTabRefreshed = true
     }
 }

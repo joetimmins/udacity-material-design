@@ -11,13 +11,15 @@ class AllSectionsPresenter(private val provider: SectionListProvider,
         val sections = provider.provideSections()
         val sectionViewModels = sections
                 .map { section -> ViewModel(section, sectionSelectedListener()) }
-        view.updateWith(sectionViewModels)
+        view.updateWith(sectionViewModels, sectionViewModels.filter { (viewData) -> viewData.isDefault }.first())
         sectionViewModels.first().onClick()
     }
 
     private fun sectionSelectedListener(): (Section) -> Unit = { section -> sectionPresenter.present(section) }
 
     fun resumePresenting() {
-        view.refreshCurrentTab()
+        val sections = provider.provideSections()
+        val defaultValue = sections.filter(Section::isDefault).first()
+        view.refreshCurrentTab(ViewModel(defaultValue, sectionSelectedListener()))
     }
 }
