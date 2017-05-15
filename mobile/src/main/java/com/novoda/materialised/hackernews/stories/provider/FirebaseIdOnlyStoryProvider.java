@@ -27,7 +27,7 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
                         List<Long> idList = (List<Long>) dataSnapshot.getValue();
                         List<Story> idOnlyStories = new ArrayList<>(idList.size());
                         for (Long id : idList) {
-                            Story idOnlyStory = Story.Companion.idOnlyStory(id.intValue());
+                            Story idOnlyStory = Story.IdOnly.buildFor(id.intValue());
                             idOnlyStories.add(idOnlyStory);
                         }
                         callback.onValueRetrieved(idOnlyStories);

@@ -11,9 +11,14 @@ data class Story(
         val type: String = "",
         val url: String = ""
 ) {
-    companion object {
-        fun idOnlyStory(givenId: Int): Story {
+    companion object IdOnly {
+        fun buildFor(givenId: Int): Story {
             return Story(id = givenId)
+        }
+
+        fun check(story: Story): Boolean {
+            val idOnlyStory = Story(id = story.id)
+            return story == idOnlyStory
         }
     }
 }

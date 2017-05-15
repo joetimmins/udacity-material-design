@@ -26,8 +26,8 @@ public class StorySectionPresenterTest {
     private static final int FIRST_STORY_ID = 56;
     private static final int SECOND_STORY_ID = 78;
     private static final List<Story> TOP_STORY_IDS = Arrays.asList(
-            Story.Companion.idOnlyStory(FIRST_STORY_ID),
-            Story.Companion.idOnlyStory(SECOND_STORY_ID)
+            Story.IdOnly.buildFor(FIRST_STORY_ID),
+            Story.IdOnly.buildFor(SECOND_STORY_ID)
     );
 
     private static final Story A_STORY = new Story("test author", 123, (int) FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url");

@@ -17,9 +17,9 @@ public class FirebaseIdOnlyStoryProviderTest {
         // Arrange
         List<Long> expectedStoryIds = Arrays.asList(8863L, 9001L, 9004L);
         List<Story> expectedIdOnlyStories = Arrays.asList(
-                Story.Companion.idOnlyStory(8863),
-                Story.Companion.idOnlyStory(9001),
-                Story.Companion.idOnlyStory(9004)
+                Story.IdOnly.buildFor(8863),
+                Story.IdOnly.buildFor(9001),
+                Story.IdOnly.buildFor(9004)
         );
 
         IdOnlyStoryValueCallback callback = new IdOnlyStoryValueCallback();
