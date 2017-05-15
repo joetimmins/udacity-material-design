@@ -24,9 +24,9 @@ public class StorySectionPresenterTest {
 
     private static final Story BLANK_STORY = new Story();
     private static final int TEST_TIME = 3471394;
-    private static final long FIRST_STORY_ID = 56L;
-    private static final long SECOND_STORY_ID = 78L;
-    private static final List<Long> TOP_STORY_IDS = Arrays.asList(FIRST_STORY_ID, SECOND_STORY_ID);
+    private static final int FIRST_STORY_ID = 56;
+    private static final int SECOND_STORY_ID = 78;
+    private static final List<Integer> TOP_STORY_IDS = Arrays.asList(FIRST_STORY_ID, SECOND_STORY_ID);
 
     private static final Story A_STORY = new Story("test author", 123, (int) FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url");
     private static final Story ANOTHER_STORY = new Story("another author", 456, (int) SECOND_STORY_ID, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url");
@@ -48,7 +48,7 @@ public class StorySectionPresenterTest {
     public void presenterTellsViewToShowErrorScreen_WhenNoStoryIdsAreRetrieved() {
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(Collections.<Long>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
+        presentWith(Collections.<Integer>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
         assertThat(storiesView.errorShown).isTrue();
     }
@@ -86,9 +86,9 @@ public class StorySectionPresenterTest {
         );
     }
 
-    private void presentWith(List<Long> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
+    private void presentWith(List<Integer> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
         List<Story> idOnlyStories = new ArrayList<>(topStoryIds.size());
-        for (Long id : topStoryIds) {
+        for (Integer id : topStoryIds) {
             Story idOnlyStory = createIdOnlyStoryUsing(id);
             idOnlyStories.add(idOnlyStory);
         }
@@ -102,14 +102,14 @@ public class StorySectionPresenterTest {
         presenter.present(Section.NEW);
     }
 
-    private Story createIdOnlyStoryUsing(Long id) {
+    private Story createIdOnlyStoryUsing(Integer id) {
         return new Story(
-                BLANK_STORY.getBy(), BLANK_STORY.getDescendants(), id.intValue(), BLANK_STORY.getKids(),
+                BLANK_STORY.getBy(), BLANK_STORY.getDescendants(), id, BLANK_STORY.getKids(),
                 BLANK_STORY.getScore(), BLANK_STORY.getTime(), BLANK_STORY.getTitle(), BLANK_STORY.getType(), BLANK_STORY.getUrl()
         );
     }
 
-    private StoryViewData buildIdOnlyViewData(long storyId) {
+    private StoryViewData buildIdOnlyViewData(int storyId) {
         StoryViewData empty = new StoryViewData();
         return new StoryViewData(
                 empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()

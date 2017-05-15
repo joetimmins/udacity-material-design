@@ -10,4 +10,8 @@ data class Story(
         val title: String = "",
         val type: String = "",
         val url: String = ""
-)
+) {
+    fun idOnlyStory(givenId: Int): Story {
+        return Story(id = givenId)
+    }
+}
