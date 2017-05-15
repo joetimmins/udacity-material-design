@@ -9,13 +9,13 @@ import com.novoda.materialised.hackernews.stories.provider.*
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 
 class StorySectionPresenter(
-        val storyIdProvider: StoryIdProvider,
+        val idOnlyStoryProvider: IdOnlyStoryProvider,
         val storyProvider: StoryProvider,
         val storiesView: AsyncListView<StoryViewData>,
         val navigator: Navigator
 ) : Presenter<Section> {
     override fun present(type: Section) {
-        storyIdProvider.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
+        idOnlyStoryProvider.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
     }
 
     private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Long>> {
