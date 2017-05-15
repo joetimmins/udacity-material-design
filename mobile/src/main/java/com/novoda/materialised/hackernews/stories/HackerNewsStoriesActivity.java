@@ -18,7 +18,7 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
 import com.novoda.materialised.hackernews.section.DefaultSectionListProvider;
 import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.section.AllSectionsPresenter;
-import com.novoda.materialised.hackernews.section.view.AndroidTabView;
+import com.novoda.materialised.hackernews.section.view.AndroidTabsView;
 import com.novoda.materialised.hackernews.stories.database.DatabaseFactory;
 import com.novoda.materialised.hackernews.stories.database.StoryIdProvider;
 import com.novoda.materialised.hackernews.stories.database.StoryProvider;
@@ -66,7 +66,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
         presenter = new AllSectionsPresenter(
                 new DefaultSectionListProvider(),
-                new AndroidTabView(mainActivityLayout.sectionTabLayout),
+                new AndroidTabsView(mainActivityLayout.sectionTabLayout),
                 storiesPresenter
         );
         presenter.startPresenting();

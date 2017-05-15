@@ -1,7 +1,7 @@
 package com.novoda.materialised.hackernews.section
 
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
-import com.novoda.materialised.hackernews.section.view.TabView
+import com.novoda.materialised.hackernews.section.view.TabsView
 import com.novoda.materialised.hackernews.stories.SpyingSectionPresenter
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
@@ -11,7 +11,7 @@ class AllSectionsPresenterTest {
 
     @Test
     fun populateViewWithViewDataFromProvider_whenPresentingStarts() {
-        val view = SpyingTabView()
+        val view = SpyingTabsView()
         val expectedViewData: List<Section> = listOf(Section.BEST, Section.TOP_STORIES)
         val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, SpyingSectionPresenter())
 
@@ -23,7 +23,7 @@ class AllSectionsPresenterTest {
     @Test
     fun firstSectionInListFromProviderIsPresented_whenPresentingStarts() {
         val provider = DummySectionListProvider()
-        val view = SpyingTabView()
+        val view = SpyingTabsView()
         val spyingPresenter = SpyingSectionPresenter()
         val sectionListPresenter = AllSectionsPresenter(provider, view, spyingPresenter)
 
@@ -35,7 +35,7 @@ class AllSectionsPresenterTest {
 
     @Test
     fun clickingViewModelStartsPresentingThatSection() {
-        val view = SpyingTabView()
+        val view = SpyingTabsView()
         val spyingPresenter = SpyingSectionPresenter()
         val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, spyingPresenter)
 
@@ -47,7 +47,7 @@ class AllSectionsPresenterTest {
 
     @Test
     fun presenterTellsViewToRefreshCurrentTab_whenPresentingResumes() {
-        val view = SpyingTabView()
+        val view = SpyingTabsView()
         val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, SpyingSectionPresenter())
 
         sectionListPresenter.resumePresenting()
@@ -62,7 +62,7 @@ class DummySectionListProvider : SectionListProvider {
     }
 }
 
-class SpyingTabView : TabView<Section> {
+class SpyingTabsView : TabsView<Section> {
     var receivedViewModels: List<ViewModel<Section>> = emptyList()
     var receivedViewData: List<Section> = emptyList()
     var currentTabRefreshed: Boolean = false

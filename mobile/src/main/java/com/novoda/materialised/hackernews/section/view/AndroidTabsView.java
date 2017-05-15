@@ -9,11 +9,11 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class AndroidTabView implements TabView<Section> {
+public final class AndroidTabsView implements TabsView<Section> {
 
     private final TabLayout tabLayout;
 
-    public AndroidTabView(TabLayout tabLayout) {
+    public AndroidTabsView(TabLayout tabLayout) {
         this.tabLayout = tabLayout;
     }
 
