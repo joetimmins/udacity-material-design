@@ -89,7 +89,8 @@ public class StorySectionPresenterTest {
     private void presentWith(List<Long> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
         List<Story> idOnlyStories = new ArrayList<>(topStoryIds.size());
         for (Long id : topStoryIds) {
-            createIdOnlyStoryUsing(id);
+            Story idOnlyStory = createIdOnlyStoryUsing(id);
+            idOnlyStories.add(idOnlyStory);
         }
 
         StorySectionPresenter presenter = new StorySectionPresenter(
