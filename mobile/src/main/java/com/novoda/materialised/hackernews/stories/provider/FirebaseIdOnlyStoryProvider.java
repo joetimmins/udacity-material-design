@@ -12,8 +12,6 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
-    private static final Story BLANK_STORY = new Story();
-
     private final FirebaseDatabase firebaseDatabase;
 
     FirebaseIdOnlyStoryProvider(FirebaseDatabase firebaseDatabase) {
@@ -29,7 +27,7 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
                         List<Long> idList = (List<Long>) dataSnapshot.getValue();
                         List<Story> idOnlyStories = new ArrayList<>(idList.size());
                         for (Long id : idList) {
-                            Story idOnlyStory = createIdOnlyStoryUsing(id);
+                            Story idOnlyStory = Story.Companion.idOnlyStory(id.intValue());
                             idOnlyStories.add(idOnlyStory);
                         }
                         callback.onValueRetrieved(idOnlyStories);
@@ -40,13 +38,6 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
 
                     }
                 }
-        );
-    }
-
-    private Story createIdOnlyStoryUsing(Long id) {
-        return new Story(
-                BLANK_STORY.getBy(), BLANK_STORY.getDescendants(), id.intValue(), BLANK_STORY.getKids(),
-                BLANK_STORY.getScore(), BLANK_STORY.getTime(), BLANK_STORY.getTitle(), BLANK_STORY.getType(), BLANK_STORY.getUrl()
         );
     }
 }

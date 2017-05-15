@@ -22,11 +22,13 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class StorySectionPresenterTest {
 
-    private static final Story BLANK_STORY = new Story();
     private static final int TEST_TIME = 3471394;
     private static final int FIRST_STORY_ID = 56;
     private static final int SECOND_STORY_ID = 78;
-    private static final List<Integer> TOP_STORY_IDS = Arrays.asList(FIRST_STORY_ID, SECOND_STORY_ID);
+    private static final List<Story> TOP_STORY_IDS = Arrays.asList(
+            Story.Companion.idOnlyStory(FIRST_STORY_ID),
+            Story.Companion.idOnlyStory(SECOND_STORY_ID)
+    );
 
     private static final Story A_STORY = new Story("test author", 123, (int) FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url");
     private static final Story ANOTHER_STORY = new Story("another author", 456, (int) SECOND_STORY_ID, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url");
@@ -48,7 +50,7 @@ public class StorySectionPresenterTest {
     public void presenterTellsViewToShowErrorScreen_WhenNoStoryIdsAreRetrieved() {
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(Collections.<Integer>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
+        presentWith(Collections.<Story>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
         assertThat(storiesView.errorShown).isTrue();
     }
@@ -86,13 +88,7 @@ public class StorySectionPresenterTest {
         );
     }
 
-    private void presentWith(List<Integer> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
-        List<Story> idOnlyStories = new ArrayList<>(topStoryIds.size());
-        for (Integer id : topStoryIds) {
-            Story idOnlyStory = createIdOnlyStoryUsing(id);
-            idOnlyStories.add(idOnlyStory);
-        }
-
+    private void presentWith(List<Story> idOnlyStories, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
         StorySectionPresenter presenter = new StorySectionPresenter(
                 new StubbedIdOnlyStoryProvider(idOnlyStories),
                 new StubbedStoryProvider(stories),
@@ -102,17 +98,10 @@ public class StorySectionPresenterTest {
         presenter.present(Section.NEW);
     }
 
-    private Story createIdOnlyStoryUsing(Integer id) {
-        return new Story(
-                BLANK_STORY.getBy(), BLANK_STORY.getDescendants(), id, BLANK_STORY.getKids(),
-                BLANK_STORY.getScore(), BLANK_STORY.getTime(), BLANK_STORY.getTitle(), BLANK_STORY.getType(), BLANK_STORY.getUrl()
-        );
-    }
-
     private StoryViewData buildIdOnlyViewData(int storyId) {
         StoryViewData empty = new StoryViewData();
         return new StoryViewData(
-                empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
+                empty.getBy(), empty.getCommentIds(), storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
     }
 

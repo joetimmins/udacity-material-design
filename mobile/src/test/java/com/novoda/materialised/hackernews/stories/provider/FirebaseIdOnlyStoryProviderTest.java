@@ -3,7 +3,6 @@ package com.novoda.materialised.hackernews.stories.provider;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.materialised.hackernews.section.Section;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,15 +15,12 @@ public class FirebaseIdOnlyStoryProviderTest {
     @Test
     public void testThatTopStoriesCallsBackWithIdList() {
         // Arrange
-        Story blankStory = new Story();
         List<Long> expectedStoryIds = Arrays.asList(8863L, 9001L, 9004L);
-        List<Story> expectedIdOnlyStories = new ArrayList<>(expectedStoryIds.size());
-        for (Long id : expectedStoryIds) {
-            Story onlyId = blankStory.copy(
-                    blankStory.getBy(), blankStory.getDescendants(), id.intValue(), blankStory.getKids(), blankStory.getScore(), blankStory.getTime(), blankStory.getTitle(), blankStory.getType(), blankStory.getUrl()
-            );
-            expectedIdOnlyStories.add(onlyId);
-        }
+        List<Story> expectedIdOnlyStories = Arrays.asList(
+                Story.Companion.idOnlyStory(8863),
+                Story.Companion.idOnlyStory(9001),
+                Story.Companion.idOnlyStory(9004)
+        );
 
         IdOnlyStoryValueCallback callback = new IdOnlyStoryValueCallback();
         FirebaseDatabase storyTypeFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(Section.BEST, expectedStoryIds);
