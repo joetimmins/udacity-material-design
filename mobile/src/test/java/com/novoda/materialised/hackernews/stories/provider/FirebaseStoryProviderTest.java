@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews.stories.database;
+package com.novoda.materialised.hackernews.stories.provider;
 
 import java.util.Arrays;
 import java.util.List;

@@ -19,9 +19,9 @@ import com.novoda.materialised.hackernews.section.DefaultSectionListProvider;
 import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.section.AllSectionsPresenter;
 import com.novoda.materialised.hackernews.section.view.AndroidTabsView;
-import com.novoda.materialised.hackernews.stories.database.ProviderFactory;
-import com.novoda.materialised.hackernews.stories.database.StoryIdProvider;
-import com.novoda.materialised.hackernews.stories.database.StoryProvider;
+import com.novoda.materialised.hackernews.stories.provider.ProviderFactory;
+import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider;
+import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
 import com.novoda.materialised.hackernews.stories.view.StoryCardView;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 

@@ -4,10 +4,10 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.section.Section;
-import com.novoda.materialised.hackernews.stories.database.StoryProvider;
-import com.novoda.materialised.hackernews.stories.database.Story;
-import com.novoda.materialised.hackernews.stories.database.StoryIdProvider;
-import com.novoda.materialised.hackernews.stories.database.ValueCallback;
+import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
+import com.novoda.materialised.hackernews.stories.provider.Story;
+import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider;
+import com.novoda.materialised.hackernews.stories.provider.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.ArrayList;

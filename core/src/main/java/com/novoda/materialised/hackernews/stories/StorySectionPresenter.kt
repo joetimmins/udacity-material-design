@@ -5,7 +5,7 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.database.*
+import com.novoda.materialised.hackernews.stories.provider.*
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 
 class StorySectionPresenter(
