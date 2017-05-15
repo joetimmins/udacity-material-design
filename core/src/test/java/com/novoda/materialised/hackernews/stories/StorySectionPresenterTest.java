@@ -4,9 +4,9 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.section.Section;
-import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
-import com.novoda.materialised.hackernews.stories.provider.Story;
 import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider;
+import com.novoda.materialised.hackernews.stories.provider.Story;
+import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
 import com.novoda.materialised.hackernews.stories.provider.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -22,6 +22,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class StorySectionPresenterTest {
 
+    private static final Story BLANK_STORY = new Story();
     private static final int TEST_TIME = 3471394;
     private static final long FIRST_STORY_ID = 56L;
     private static final long SECOND_STORY_ID = 78L;
@@ -86,13 +87,25 @@ public class StorySectionPresenterTest {
     }
 
     private void presentWith(List<Long> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
+        List<Story> idOnlyStories = new ArrayList<>(topStoryIds.size());
+        for (Long id : topStoryIds) {
+            createIdOnlyStoryUsing(id);
+        }
+
         StorySectionPresenter presenter = new StorySectionPresenter(
-                new StubbedIdOnlyStoryProvider(topStoryIds),
+                new StubbedIdOnlyStoryProvider(idOnlyStories),
                 new StubbedStoryProvider(stories),
                 storiesView,
                 navigator
         );
         presenter.present(Section.NEW);
+    }
+
+    private Story createIdOnlyStoryUsing(Long id) {
+        return new Story(
+                BLANK_STORY.getBy(), BLANK_STORY.getDescendants(), id.intValue(), BLANK_STORY.getKids(),
+                BLANK_STORY.getScore(), BLANK_STORY.getTime(), BLANK_STORY.getTitle(), BLANK_STORY.getType(), BLANK_STORY.getUrl()
+        );
     }
 
     private StoryViewData buildIdOnlyViewData(long storyId) {
@@ -103,15 +116,15 @@ public class StorySectionPresenterTest {
     }
 
     private static class StubbedIdOnlyStoryProvider implements IdOnlyStoryProvider {
-        final List<Long> ids;
+        final List<Story> idOnlyStories;
 
-        private StubbedIdOnlyStoryProvider(List<Long> ids) {
-            this.ids = ids;
+        private StubbedIdOnlyStoryProvider(List<Story> stories) {
+            this.idOnlyStories = stories;
         }
 
         @Override
-        public void readStoryIds(@NotNull Section section, @NotNull ValueCallback<? super List<Long>> callback) {
-            callback.onValueRetrieved(ids);
+        public void readStoryIds(@NotNull Section section, @NotNull ValueCallback<? super List<Story>> callback) {
+            callback.onValueRetrieved(idOnlyStories);
         }
     }
 

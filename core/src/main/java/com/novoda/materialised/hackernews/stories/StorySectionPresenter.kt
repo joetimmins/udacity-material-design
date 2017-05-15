@@ -18,14 +18,14 @@ class StorySectionPresenter(
         idOnlyStoryProvider.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
     }
 
-    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Long>> {
+    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Story>> {
         return valueCallbackOf {
-            idList ->
-            if (idList.isNotEmpty()) {
-                val ids = convertLongsToInts(idList)
-                val idOnlyViewModels = createIdOnlyViewModels(ids)
+            idOnlyStories ->
+            if (idOnlyStories.isNotEmpty()) {
+                val idOnlyViewModels = createIdOnlyViewModels(idOnlyStories)
                 storiesView.updateWith(idOnlyViewModels)
                 val viewUpdater = viewUpdaterFor(storiesView)
+                val ids = idOnlyStories.map { story -> story.id }
                 storyProvider.readItems(ids, viewUpdater)
             } else {
                 storiesView.showError()
@@ -33,14 +33,12 @@ class StorySectionPresenter(
         }
     }
 
-    private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map(Long::toInt)
-
-    private fun createIdOnlyViewModels(listOfIdInts: List<Int>): List<ViewModel<StoryViewData>> {
-        return listOfIdInts.map { storyId -> createIdOnlyViewModel(storyId) }
+    private fun createIdOnlyViewModels(listOfIdOnlyStories: List<Story>): List<ViewModel<StoryViewData>> {
+        return listOfIdOnlyStories.map { storyId -> createIdOnlyViewModel(storyId) }
     }
 
-    private fun createIdOnlyViewModel(storyId: Int): ViewModel<StoryViewData> {
-        return ViewModel(StoryViewData(id = storyId))
+    private fun createIdOnlyViewModel(story: Story): ViewModel<StoryViewData> {
+        return ViewModel(StoryViewData(id = story.id))
     }
 
     private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewData>): ValueCallback<Story> {
