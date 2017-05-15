@@ -15,14 +15,14 @@ class StorySectionPresenter(
         val navigator: Navigator
 ) : Presenter<Section> {
     override fun present(type: Section) {
-        idOnlyStoryProvider.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
+        idOnlyStoryProvider.readStoryIds(type, callbackWithAllStories(storiesView))
     }
 
-    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Story>> {
+    private fun callbackWithAllStories(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Story>> {
         return valueCallbackOf {
             idOnlyStories ->
             if (idOnlyStories.isNotEmpty()) {
-                val idOnlyViewModels = createIdOnlyViewModels(idOnlyStories)
+                val idOnlyViewModels = idOnlyStories.map { story -> convertStoryToStoryViewModel(story) }
                 storiesView.updateWith(idOnlyViewModels)
                 val viewUpdater = viewUpdaterFor(storiesView)
                 val ids = idOnlyStories.map { story -> story.id }
@@ -31,14 +31,6 @@ class StorySectionPresenter(
                 storiesView.showError()
             }
         }
-    }
-
-    private fun createIdOnlyViewModels(listOfIdOnlyStories: List<Story>): List<ViewModel<StoryViewData>> {
-        return listOfIdOnlyStories.map { storyId -> createIdOnlyViewModel(storyId) }
-    }
-
-    private fun createIdOnlyViewModel(story: Story): ViewModel<StoryViewData> {
-        return ViewModel(StoryViewData(id = story.id))
     }
 
     private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewData>): ValueCallback<Story> {
@@ -50,7 +42,15 @@ class StorySectionPresenter(
     }
 
     private fun convertStoryToStoryViewModel(story: Story): ViewModel<StoryViewData> {
+        val viewBehaviour = buildViewBehaviour(story)
         val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
-        return ViewModel(storyViewData, { storyViewData -> navigator.navigateTo(storyViewData.url) })
+        return ViewModel(storyViewData, viewBehaviour)
+    }
+
+    private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
+        when {
+            Story.isIdOnly(story) -> return {}
+            else -> return { storyViewData -> navigator.navigateTo(storyViewData.url) }
+        }
     }
 }

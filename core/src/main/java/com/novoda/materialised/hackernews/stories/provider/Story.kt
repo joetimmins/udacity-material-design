@@ -16,7 +16,7 @@ data class Story(
             return Story(id = givenId)
         }
 
-        fun check(story: Story): Boolean {
+        fun isIdOnly(story: Story): Boolean {
             val idOnlyStory = Story(id = story.id)
             return story == idOnlyStory
         }
