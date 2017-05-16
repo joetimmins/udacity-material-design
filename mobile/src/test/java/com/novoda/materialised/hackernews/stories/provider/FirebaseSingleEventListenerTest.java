@@ -17,7 +17,7 @@ public class FirebaseSingleEventListenerTest {
         FirebaseDatabase firebaseDatabase = FakeFirebase.databaseFor(payload);
         DatabaseReference reference = firebaseDatabase.getReference();
 
-        FirebaseSingleEventListener.listen(reference, stringValueCallback, );
+        FirebaseSingleEventListener.listen(reference, stringValueCallback, String.class);
 
         assertThat(stringValueCallback.receivedValue).isEqualTo(payload);
     }

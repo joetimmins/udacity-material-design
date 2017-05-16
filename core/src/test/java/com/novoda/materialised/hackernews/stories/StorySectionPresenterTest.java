@@ -113,7 +113,7 @@ public class StorySectionPresenterTest {
         }
 
         @Override
-        public void readStoryIds(@NotNull Section section, @NotNull ValueCallback<? super List<Story>> callback) {
+        public void readStoryIds(@NotNull Section section, @NotNull ValueCallback<List<Story>> callback) {
             callback.onValueRetrieved(idOnlyStories);
         }
     }
@@ -126,7 +126,7 @@ public class StorySectionPresenterTest {
         }
 
         @Override
-        public void readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<? super Story> valueCallback) {
+        public void readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<Story> valueCallback) {
             for (Story story : stories) {
                 valueCallback.onValueRetrieved(story);
             }
