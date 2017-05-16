@@ -2,6 +2,7 @@ package com.novoda.materialised.hackernews.stories.provider;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ final class FirebaseStoryProvider implements StoryProvider {
 
         for (final Integer id : ids) {
             DatabaseReference item = databaseReference.child(Integer.toString(id));
-            FirebaseSingleEventListener.listen(item, valueCallback, Story.class);
+            FirebaseSingleEventListener.listen(item, valueCallback, new GenericTypeIndicator<Story>() {
+            });
         }
     }
 }

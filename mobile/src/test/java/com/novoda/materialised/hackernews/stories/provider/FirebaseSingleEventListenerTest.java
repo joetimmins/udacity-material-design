@@ -2,6 +2,7 @@ package com.novoda.materialised.hackernews.stories.provider;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 
 import org.junit.Test;
 
@@ -17,7 +18,8 @@ public class FirebaseSingleEventListenerTest {
         FirebaseDatabase firebaseDatabase = FakeFirebase.databaseFor(payload);
         DatabaseReference reference = firebaseDatabase.getReference();
 
-        FirebaseSingleEventListener.listen(reference, stringValueCallback, String.class);
+        FirebaseSingleEventListener.listen(reference, stringValueCallback, new GenericTypeIndicator<String>() {
+        });
 
         assertThat(stringValueCallback.receivedValue).isEqualTo(payload);
     }

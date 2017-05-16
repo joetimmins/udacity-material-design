@@ -2,6 +2,7 @@ package com.novoda.materialised.hackernews.stories.provider;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.novoda.materialised.hackernews.section.Section;
 
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
     public void readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
         DatabaseReference reference = firebaseDatabase.getReference("v0").child(section.getId());
 
-        //noinspection unchecked - this is the only way to get Class<List<Long>>
-        Class<List<Long>> returnClass = (Class<List<Long>>) ((Class) List.class);
+        GenericTypeIndicator<List<Long>> listTypeIndicator = new GenericTypeIndicator<List<Long>>() {
+        };
 
         FirebaseSingleEventListener.listen(reference, new ValueCallback<List<Long>>() {
             @Override
@@ -33,6 +34,6 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
                 }
                 callback.onValueRetrieved(idOnlyStories);
             }
-        }, returnClass);
+        }, listTypeIndicator);
     }
 }
