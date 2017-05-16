@@ -20,6 +20,7 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
     public void readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
         DatabaseReference reference = firebaseDatabase.getReference("v0").child(section.getId());
 
+        //noinspection unchecked - this is the only way to get Class<List<Long>>
         Class<List<Long>> returnClass = (Class<List<Long>>) ((Class) List.class);
 
         FirebaseSingleEventListener.listen(reference, new ValueCallback<List<Long>>() {

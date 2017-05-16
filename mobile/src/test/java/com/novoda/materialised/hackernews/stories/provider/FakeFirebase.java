@@ -27,7 +27,7 @@ final class FakeFirebase {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
-                when(mockDataSnapshot.getValue()).thenReturn(expectedTopStories);
+                when(mockDataSnapshot.getValue(List.class)).thenReturn(expectedTopStories);
 
                 ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
                 valueEventListener.onDataChange(mockDataSnapshot);
