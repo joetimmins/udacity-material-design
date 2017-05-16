@@ -20,25 +20,7 @@ final class FirebaseStoryProvider implements StoryProvider {
 
         for (final Integer id : ids) {
             DatabaseReference item = databaseReference.child(Integer.toString(id));
-
             FirebaseSingleEventListener.listen(item, valueCallback, Story.class);
-//
-//            item.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    Story value = dataSnapshot.getValue(Story.class);
-//                    if (value != null) {
-//                        valueCallback.onValueRetrieved(value);
-//                    } else {
-//                        Log.d("TAG", "data snapshot had no value");
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
         }
     }
 }
