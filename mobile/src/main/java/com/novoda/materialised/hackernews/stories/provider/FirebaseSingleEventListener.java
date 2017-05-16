@@ -11,11 +11,11 @@ final class FirebaseSingleEventListener {
         // nah
     }
 
-    static <T> void listen(DatabaseReference reference, final ValueCallback<T> valueCallback) {
+    static <T> void listen(DatabaseReference reference, final ValueCallback<T> valueCallback, final Class<T> returnClass) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                T value = (T) dataSnapshot.getValue();
+                T value = dataSnapshot.getValue(returnClass);
                 valueCallback.onValueRetrieved(value);
             }
 

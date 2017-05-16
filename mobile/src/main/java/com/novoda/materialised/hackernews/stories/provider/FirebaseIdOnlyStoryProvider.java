@@ -17,8 +17,10 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
     }
 
     @Override
-    public void readStoryIds(@NotNull Section section, @NotNull final ValueCallback<? super List<Story>> callback) {
+    public void readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
         DatabaseReference reference = firebaseDatabase.getReference("v0").child(section.getId());
+
+        Class<List<Long>> returnClass = (Class<List<Long>>) ((Class) List.class);
 
         FirebaseSingleEventListener.listen(reference, new ValueCallback<List<Long>>() {
             @Override
@@ -30,6 +32,6 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
                 }
                 callback.onValueRetrieved(idOnlyStories);
             }
-        });
+        }, returnClass);
     }
 }

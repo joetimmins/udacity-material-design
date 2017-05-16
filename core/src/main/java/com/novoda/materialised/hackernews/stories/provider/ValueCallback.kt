@@ -1,6 +1,7 @@
 package com.novoda.materialised.hackernews.stories.provider
 
-interface ValueCallback<in T> {
+@Suppress("AddVarianceModifier") // in T would break the signature of methods taking a ValueCallback as a parameter
+interface ValueCallback<T> {
     fun onValueRetrieved(value: T)
 }
 
