@@ -33,8 +33,7 @@ public final class AndroidTabsView implements TabsView<Section> {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(final TabLayout.Tab tab) {
-                ViewModel<Section> viewModel = handleNullable(nullableViewModelFrom(tab), defaultValue);
-                viewModel.onClick();
+                useTagToInvokeViewModelBehaviour(tab, defaultValue);
             }
 
             @Override
@@ -55,7 +54,21 @@ public final class AndroidTabsView implements TabsView<Section> {
 
         TabLayout.Tab currentTab = handleNullable(nullableTabAt(selectedTabPosition), tabLayout.newTab());
 
-        ViewModel<Section> viewModel = handleNullable(nullableViewModelFrom(currentTab), defaultValue);
+        useTagToInvokeViewModelBehaviour(currentTab, defaultValue);
+    }
+
+    @Nullable
+    private Function0<TabLayout.Tab> nullableTabAt(final int selectedTabPosition) {
+        return new Function0<TabLayout.Tab>() {
+            @Override
+            public TabLayout.Tab invoke() {
+                return tabLayout.getTabAt(selectedTabPosition);
+            }
+        };
+    }
+
+    private void useTagToInvokeViewModelBehaviour(TabLayout.Tab tab, @NotNull ViewModel<Section> defaultValue) {
+        ViewModel<Section> viewModel = handleNullable(nullableViewModelFrom(tab), defaultValue);
         viewModel.onClick();
     }
 
@@ -69,13 +82,4 @@ public final class AndroidTabsView implements TabsView<Section> {
         };
     }
 
-    @Nullable
-    private Function0<TabLayout.Tab> nullableTabAt(final int selectedTabPosition) {
-        return new Function0<TabLayout.Tab>() {
-            @Override
-            public TabLayout.Tab invoke() {
-                return tabLayout.getTabAt(selectedTabPosition);
-            }
-        };
-    }
 }
