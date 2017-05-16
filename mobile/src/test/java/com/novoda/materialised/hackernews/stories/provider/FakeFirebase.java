@@ -64,4 +64,27 @@ final class FakeFirebase {
 
         return mockFirebaseDatabase;
     }
+
+    static <T> FirebaseDatabase databaseFor(final T payload) {
+        FirebaseDatabase mockFirebaseDatabase = mock(FirebaseDatabase.class);
+        DatabaseReference mockDatabaseReference = mock(DatabaseReference.class);
+
+        when(mockFirebaseDatabase.getReference()).thenReturn(mockDatabaseReference);
+        when(mockFirebaseDatabase.getReference(anyString())).thenReturn(mockDatabaseReference);
+        when(mockDatabaseReference.child(anyString())).thenReturn(mockDatabaseReference);
+
+        doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
+                when(mockDataSnapshot.getValue()).thenReturn(payload);
+
+                ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
+                valueEventListener.onDataChange(mockDataSnapshot);
+                return null;
+            }
+        }).when(mockDatabaseReference).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        return mockFirebaseDatabase;
+    }
 }
