@@ -13,12 +13,11 @@ public class FirebaseSingleEventListenerTest {
     public void invokeValueCallbackWithCorrectValue_whenDataSnapshotReturns() {
         String payload = "a string";
         StringValueCallback stringValueCallback = new StringValueCallback();
-        FirebaseSingleEventListener singleEventListener = new FirebaseSingleEventListener();
 
         FirebaseDatabase firebaseDatabase = FakeFirebase.databaseFor(payload);
         DatabaseReference reference = firebaseDatabase.getReference();
 
-        singleEventListener.listen(reference, stringValueCallback);
+        FirebaseSingleEventListener.listen(reference, stringValueCallback);
 
         assertThat(stringValueCallback.receivedValue).isEqualTo(payload);
     }

@@ -7,7 +7,11 @@ import com.google.firebase.database.ValueEventListener;
 
 final class FirebaseSingleEventListener {
 
-    <T> void listen(DatabaseReference reference, final ValueCallback<T> valueCallback) {
+    private FirebaseSingleEventListener() {
+        // nah
+    }
+
+    static <T> void listen(DatabaseReference reference, final ValueCallback<T> valueCallback) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

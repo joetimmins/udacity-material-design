@@ -2,6 +2,7 @@ package com.novoda.materialised.hackernews.stories.provider;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.materialised.hackernews.section.Section;
@@ -20,7 +21,8 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
 
     @Override
     public void readStoryIds(@NotNull Section section, @NotNull final ValueCallback<? super List<Story>> callback) {
-        firebaseDatabase.getReference("v0").child(section.getId()).addListenerForSingleValueEvent(
+        DatabaseReference reference = firebaseDatabase.getReference("v0").child(section.getId());
+        reference.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
