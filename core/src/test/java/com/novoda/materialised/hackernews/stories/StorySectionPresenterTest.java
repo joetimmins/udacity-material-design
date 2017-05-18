@@ -95,7 +95,8 @@ public class StorySectionPresenterTest {
                 new StubbedIdOnlyStoryProvider(idOnlyStories),
                 new StubbedStoryProvider(stories),
                 storiesView,
-                navigator
+                navigator,
+                mainThread
         );
         presenter.present(Section.NEW);
     }

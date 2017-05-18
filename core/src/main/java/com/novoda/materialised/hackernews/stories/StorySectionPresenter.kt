@@ -9,24 +9,31 @@ import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider
 import com.novoda.materialised.hackernews.stories.provider.Story
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 
 class StorySectionPresenter(
         val idOnlyStoryProvider: IdOnlyStoryProvider,
         val storyProvider: StoryProvider,
         val storiesView: AsyncListView<StoryViewData>,
-        val navigator: Navigator
+        val navigator: Navigator,
+        val mainThread: Scheduler
 ) : Presenter<Section> {
 
     private var idOnlyStories: List<Story> = emptyList()
 
     override fun present(section: Section) {
         idOnlyStoryProvider.idOnlyStoriesFor(section)
+                .subscribeOn(Schedulers.io())
+                .observeOn(mainThread)
                 .subscribe(this::showErrorOnEmpty, { storiesView.showError() })
 
         storiesView.updateWith(idOnlyStories.map(this::convertStoryToStoryViewModel))
 
         val idList = idOnlyStories.map { story -> story.id }
         storyProvider.readItems(idList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(mainThread)
                 .subscribe({
                     story ->
                     val storyViewModel = convertStoryToStoryViewModel(story)
