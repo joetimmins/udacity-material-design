@@ -8,8 +8,6 @@ import org.junit.Test;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-
 public class FirebaseStoryProviderTest {
 
     @Test
@@ -27,8 +25,7 @@ public class FirebaseStoryProviderTest {
         Observable<Story> observable = firebaseItemsDatabase.readItems(storyIds, valueCallback);
         observable.subscribe(storyObserver);
 
-        assertThat(valueCallback.first).isEqualTo(firstStory);
-        assertThat(valueCallback.second).isEqualTo(secondStory);
+        storyObserver.assertValues(firstStory, secondStory);
     }
 
     private class CapturingValueCallback implements ValueCallback<Story> {

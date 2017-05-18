@@ -9,6 +9,9 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import kotlin.jvm.functions.Function1;
 
 final class FirebaseStoryProvider implements StoryProvider {
@@ -18,20 +21,35 @@ final class FirebaseStoryProvider implements StoryProvider {
         this.firebaseDatabase = firebaseDatabase;
     }
 
+    @NotNull
     @Override
     public Observable<Story> readItems(@NotNull List<Integer> ids, @NotNull final ValueCallback<Story> valueCallback) {
-        DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
+        final DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
+        final Function1<DataSnapshot, Story> converter = new Function1<DataSnapshot, Story>() {
+            @Override
+            public Story invoke(DataSnapshot dataSnapshot) {
+                return dataSnapshot.getValue(Story.class);
+            }
+        };
+        return Observable.fromIterable(ids)
+                .map(new Function<Integer, DatabaseReference>() {
+                    @Override
+                    public DatabaseReference apply(@NonNull Integer integer) throws Exception {
+                        return databaseReference.child(Integer.toString(integer));
+                    }
+                })
+                .map(new Function<DatabaseReference, Single<Story>>() {
+                    @Override
+                    public Single<Story> apply(@NonNull DatabaseReference reference) throws Exception {
+                        return FirebaseSingleEventListener.listen(reference, converter);
+                    }
+                })
+                .concatMap(new Function<Single<Story>, Observable<Story>>() {
+                    @Override
+                    public Observable<Story> apply(@NonNull Single<Story> storySingle) throws Exception {
+                        return storySingle.toObservable();
+                    }
+                });
 
-        for (final Integer id : ids) {
-            DatabaseReference item = databaseReference.child(Integer.toString(id));
-            Function1<DataSnapshot, Story> converter = new Function1<DataSnapshot, Story>() {
-                @Override
-                public Story invoke(DataSnapshot dataSnapshot) {
-                    return dataSnapshot.getValue(Story.class);
-                }
-            };
-            FirebaseSingleEventListener.listen(item, converter);
-        }
-        return null;
     }
 }
