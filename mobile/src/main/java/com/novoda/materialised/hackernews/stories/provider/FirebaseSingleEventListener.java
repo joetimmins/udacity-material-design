@@ -38,13 +38,13 @@ final class FirebaseSingleEventListener {
 
         @Override
         public void onDataChange(final DataSnapshot dataSnapshot) {
-            Function0<? extends T> something = getFunction0(dataSnapshot);
-            T retrievedValue = handleNullable(something, defaultValue);
+            Function0<? extends T> convertSnapshotAndRemoveCheckedExceptions = removeCheckedExceptions(dataSnapshot);
+            T retrievedValue = handleNullable(convertSnapshotAndRemoveCheckedExceptions, defaultValue);
 
             valueCallback.onValueRetrieved(retrievedValue);
         }
 
-        private Function0<? extends T> getFunction0(final DataSnapshot dataSnapshot) {
+        private Function0<? extends T> removeCheckedExceptions(final DataSnapshot dataSnapshot) {
             return new Function0<T>() {
                 @Override
                 public T invoke() {
