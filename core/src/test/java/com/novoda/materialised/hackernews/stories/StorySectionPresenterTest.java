@@ -116,7 +116,7 @@ public class StorySectionPresenterTest {
 
         @NotNull
         @Override
-        public Single<List<Story>> readStoryIds(@NotNull Section section) {
+        public Single<List<Story>> idOnlyStoriesFor(@NotNull Section section) {
             return Single.just(idOnlyStories);
         }
     }

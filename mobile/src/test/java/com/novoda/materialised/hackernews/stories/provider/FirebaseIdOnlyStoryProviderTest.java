@@ -28,7 +28,7 @@ public class FirebaseIdOnlyStoryProviderTest {
 
         // Act
         FirebaseIdOnlyStoryProvider provider = new FirebaseIdOnlyStoryProvider(storyTypeFirebaseDatabase);
-        Single<List<Story>> idOnlyStories = provider.readStoryIds(Section.BEST);
+        Single<List<Story>> idOnlyStories = provider.idOnlyStoriesFor(Section.BEST);
         idOnlyStories.subscribe(testObserver);
 
         // Assert
