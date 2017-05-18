@@ -1,8 +1,8 @@
 package com.novoda.materialised.hackernews.stories.provider
 
 import com.novoda.materialised.hackernews.section.Section
-import io.reactivex.Observable
+import io.reactivex.Single
 
 interface IdOnlyStoryProvider {
-    fun readStoryIds(section: Section, callback: ValueCallback<List<Story>>): Observable<MutableList<Story>>?
+    fun readStoryIds(section: Section, callback: ValueCallback<List<Story>>): Single<MutableList<Story>>
 }

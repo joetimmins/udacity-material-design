@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
@@ -23,8 +22,9 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
         this.firebaseDatabase = firebaseDatabase;
     }
 
+    @NotNull
     @Override
-    public Observable<List<Story>> readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
+    public Single<List<Story>> readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
         DatabaseReference reference = firebaseDatabase.getReference("v0").child(section.getId());
 
         Function1<DataSnapshot, List<Long>> converter = new Function1<DataSnapshot, List<Long>>() {
@@ -48,6 +48,6 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
         };
 
         Single<List<Long>> listOfStoryIds = FirebaseSingleEventListener.listen(reference, converter);
-        return listOfStoryIds.map(buildIdOnlyStories).toObservable();
+        return listOfStoryIds.map(buildIdOnlyStories);
     }
 }
