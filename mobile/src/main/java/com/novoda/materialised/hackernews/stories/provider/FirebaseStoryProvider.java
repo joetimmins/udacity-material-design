@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import io.reactivex.Observable;
 import kotlin.jvm.functions.Function1;
 
 final class FirebaseStoryProvider implements StoryProvider {
@@ -18,7 +19,7 @@ final class FirebaseStoryProvider implements StoryProvider {
     }
 
     @Override
-    public void readItems(@NotNull List<Integer> ids, @NotNull final ValueCallback<Story> valueCallback) {
+    public Observable<Story> readItems(@NotNull List<Integer> ids, @NotNull final ValueCallback<Story> valueCallback) {
         DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
 
         for (final Integer id : ids) {
@@ -31,5 +32,6 @@ final class FirebaseStoryProvider implements StoryProvider {
             };
             FirebaseSingleEventListener.listen(item, converter);
         }
+        return null;
     }
 }

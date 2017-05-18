@@ -10,6 +10,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import kotlin.jvm.functions.Function1;
 
 final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
@@ -20,27 +24,30 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
     }
 
     @Override
-    public void readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
+    public Observable<List<Story>> readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
         DatabaseReference reference = firebaseDatabase.getReference("v0").child(section.getId());
 
         Function1<DataSnapshot, List<Long>> converter = new Function1<DataSnapshot, List<Long>>() {
             @Override
             public List<Long> invoke(DataSnapshot dataSnapshot) {
-                //noinspection unchecked - we know it's a list of long because the docs tell us so
+                //noinspection unchecked - we know it's a list of longs because the docs tell us so
                 return (List<Long>) dataSnapshot.getValue();
             }
         };
-        ValueCallback<List<Long>> idListCallback = new ValueCallback<List<Long>>() {
+
+        Function<List<Long>, List<Story>> buildIdOnlyStories = new Function<List<Long>, List<Story>>() {
             @Override
-            public void onValueRetrieved(List<Long> idList) {
-                List<Story> idOnlyStories = new ArrayList<>(idList.size());
-                for (Long id : idList) {
+            public List<Story> apply(@NonNull List<Long> longs) throws Exception {
+                List<Story> idOnlyStories = new ArrayList<>(longs.size());
+                for (Long id : longs) {
                     Story idOnlyStory = Story.IdOnly.buildFor(id.intValue());
                     idOnlyStories.add(idOnlyStory);
                 }
-                callback.onValueRetrieved(idOnlyStories);
+                return idOnlyStories;
             }
         };
-        FirebaseSingleEventListener.listen(reference, converter);
+
+        Single<List<Long>> listOfStoryIds = FirebaseSingleEventListener.listen(reference, converter);
+        return listOfStoryIds.map(buildIdOnlyStories).toObservable();
     }
 }

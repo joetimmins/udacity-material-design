@@ -18,6 +18,8 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
+import io.reactivex.Observable;
+
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class StorySectionPresenterTest {
@@ -113,8 +115,9 @@ public class StorySectionPresenterTest {
         }
 
         @Override
-        public void readStoryIds(@NotNull Section section, @NotNull ValueCallback<List<Story>> callback) {
+        public Observable<List<Story>> readStoryIds(@NotNull Section section, @NotNull ValueCallback<List<Story>> callback) {
             callback.onValueRetrieved(idOnlyStories);
+            return null;
         }
     }
 
@@ -126,10 +129,11 @@ public class StorySectionPresenterTest {
         }
 
         @Override
-        public void readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<Story> valueCallback) {
+        public io.reactivex.Observable readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<Story> valueCallback) {
             for (Story story : stories) {
                 valueCallback.onValueRetrieved(story);
             }
+            return null;
         }
     }
 
