@@ -4,5 +4,5 @@ import com.novoda.materialised.hackernews.section.Section
 import io.reactivex.Single
 
 interface IdOnlyStoryProvider {
-    fun readStoryIds(section: Section, callback: ValueCallback<List<Story>>): Single<MutableList<Story>>
+    fun readStoryIds(section: Section): Single<List<Story>>
 }

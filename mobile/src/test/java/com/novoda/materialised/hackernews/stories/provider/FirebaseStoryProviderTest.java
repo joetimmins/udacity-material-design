@@ -21,24 +21,9 @@ public class FirebaseStoryProviderTest {
         FirebaseStoryProvider firebaseItemsDatabase = new FirebaseStoryProvider(FakeFirebase.getItemsDatabase(stories));
 
         List<Integer> storyIds = Arrays.asList(firstStoryId, secondStoryId);
-        CapturingValueCallback valueCallback = new CapturingValueCallback();
-        Observable<Story> observable = firebaseItemsDatabase.readItems(storyIds, valueCallback);
+        Observable<Story> observable = firebaseItemsDatabase.readItems(storyIds);
         observable.subscribe(storyObserver);
 
         storyObserver.assertValues(firstStory, secondStory);
-    }
-
-    private class CapturingValueCallback implements ValueCallback<Story> {
-        Story first;
-        Story second;
-
-        @Override
-        public void onValueRetrieved(Story value) {
-            if (first == null) {
-                first = value;
-            } else if (second == null) {
-                second = value;
-            }
-        }
     }
 }

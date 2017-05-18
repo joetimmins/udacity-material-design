@@ -24,7 +24,7 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
 
     @NotNull
     @Override
-    public Single<List<Story>> readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
+    public Single<List<Story>> readStoryIds(@NotNull Section section) {
         DatabaseReference reference = firebaseDatabase.getReference("v0").child(section.getId());
 
         Function1<DataSnapshot, List<Long>> converter = new Function1<DataSnapshot, List<Long>>() {

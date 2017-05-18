@@ -24,25 +24,14 @@ public class FirebaseIdOnlyStoryProviderTest {
                 Story.IdOnly.buildFor(9004)
         );
 
-        IdOnlyStoryValueCallback callback = new IdOnlyStoryValueCallback();
         FirebaseDatabase storyTypeFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(Section.BEST, expectedStoryIds);
 
         // Act
         FirebaseIdOnlyStoryProvider provider = new FirebaseIdOnlyStoryProvider(storyTypeFirebaseDatabase);
-        Single<List<Story>> idOnlyStories = provider.readStoryIds(Section.BEST, callback);
+        Single<List<Story>> idOnlyStories = provider.readStoryIds(Section.BEST);
         idOnlyStories.subscribe(testObserver);
 
         // Assert
         testObserver.assertValue(expectedIdOnlyStories);
-    }
-
-    private static class IdOnlyStoryValueCallback implements ValueCallback<List<Story>> {
-
-        List<Story> stories;
-
-        @Override
-        public void onValueRetrieved(List<Story> value) {
-            stories = value;
-        }
     }
 }

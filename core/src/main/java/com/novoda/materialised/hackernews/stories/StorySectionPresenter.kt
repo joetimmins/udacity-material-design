@@ -15,7 +15,7 @@ class StorySectionPresenter(
         val navigator: Navigator
 ) : Presenter<Section> {
     override fun present(type: Section) {
-        idOnlyStoryProvider.readStoryIds(type, callbackWithAllStories(storiesView))
+        idOnlyStoryProvider.readStoryIds(type)
     }
 
     private fun callbackWithAllStories(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Story>> {
@@ -26,7 +26,7 @@ class StorySectionPresenter(
                 storiesView.updateWith(idOnlyViewModels)
                 val viewUpdater = viewUpdaterFor(storiesView)
                 val ids = idOnlyStories.map { story -> story.id }
-                storyProvider.readItems(ids, viewUpdater)
+                storyProvider.readItems(ids)
             } else {
                 storiesView.showError()
             }
