@@ -8,7 +8,6 @@ import com.novoda.materialised.hackernews.section.Section;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import kotlin.jvm.functions.Function0;
 
@@ -57,7 +56,6 @@ public final class AndroidTabsView implements TabsView<Section> {
         useTagToInvokeViewModelBehaviour(currentTab, defaultValue);
     }
 
-    @Nullable
     private Function0<TabLayout.Tab> nullableTabAt(final int selectedTabPosition) {
         return new Function0<TabLayout.Tab>() {
             @Override
@@ -72,7 +70,6 @@ public final class AndroidTabsView implements TabsView<Section> {
         viewModel.onClick();
     }
 
-    @Nullable
     private Function0<ViewModel<Section>> nullableViewModelFrom(final TabLayout.Tab tab) {
         return new Function0<ViewModel<Section>>() {
             @Override

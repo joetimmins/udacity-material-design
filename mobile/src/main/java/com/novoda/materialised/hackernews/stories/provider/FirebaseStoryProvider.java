@@ -1,12 +1,15 @@
 package com.novoda.materialised.hackernews.stories.provider;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 
 final class FirebaseStoryProvider implements StoryProvider {
     private final FirebaseDatabase firebaseDatabase;
@@ -21,8 +24,13 @@ final class FirebaseStoryProvider implements StoryProvider {
 
         for (final Integer id : ids) {
             DatabaseReference item = databaseReference.child(Integer.toString(id));
-            FirebaseSingleEventListener.listen(item, valueCallback, new GenericTypeIndicator<Story>() {
-            });
+            Function<DataSnapshot, Story> converter = new Function<DataSnapshot, Story>() {
+                @Override
+                public Story apply(@NonNull DataSnapshot dataSnapshot) throws Exception {
+                    return dataSnapshot.getValue(Story.class);
+                }
+            };
+            FirebaseSingleEventListener.listen(item, converter, valueCallback, new Story());
         }
     }
 }
