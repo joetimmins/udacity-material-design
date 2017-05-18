@@ -49,7 +49,7 @@ public class StorySectionPresenterTest {
     }
 
     @Test
-    public void presenterTellsViewToShowErrorScreen_WhenNoStoryIdsAreRetrieved() {
+    public void presenterTellsViewToShowErrorScreen_WhenNoIdOnlyStoriesAreRetrieved() {
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
         presentWith(Collections.<Story>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
