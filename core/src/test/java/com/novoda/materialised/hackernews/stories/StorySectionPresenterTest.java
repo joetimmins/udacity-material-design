@@ -7,7 +7,6 @@ import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider;
 import com.novoda.materialised.hackernews.stories.provider.Story;
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
-import com.novoda.materialised.hackernews.stories.provider.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.ArrayList;
@@ -118,8 +117,7 @@ public class StorySectionPresenterTest {
         @NotNull
         @Override
         public Single<List<Story>> readStoryIds(@NotNull Section section) {
-            callback.onValueRetrieved(idOnlyStories);
-            return null;
+            return Single.just(idOnlyStories);
         }
     }
 
@@ -132,11 +130,8 @@ public class StorySectionPresenterTest {
 
         @NotNull
         @Override
-        public Observable readItems(@NotNull List<Integer> ids) {
-            for (Story story : stories) {
-                valueCallback.onValueRetrieved(story);
-            }
-            return null;
+        public Observable<Story> readItems(@NotNull List<Integer> ids) {
+            return Observable.fromIterable(stories);
         }
     }
 
