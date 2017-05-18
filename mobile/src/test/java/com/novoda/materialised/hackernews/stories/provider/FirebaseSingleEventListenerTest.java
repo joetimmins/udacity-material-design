@@ -2,42 +2,31 @@ package com.novoda.materialised.hackernews.stories.provider;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.Test;
 
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-
-import static org.fest.assertions.api.Assertions.assertThat;
+import io.reactivex.Single;
+import io.reactivex.observers.TestObserver;
+import kotlin.jvm.functions.Function1;
 
 public class FirebaseSingleEventListenerTest {
 
     @Test
     public void invokeValueCallbackWithCorrectValue_whenDataSnapshotReturns() {
+        TestObserver<String> testObserver = new TestObserver<>();
         String payload = "a string";
-        StringValueCallback stringValueCallback = new StringValueCallback();
+        DatabaseReference reference = FakeFirebase.databaseFor(payload).getReference();
 
-        FirebaseDatabase firebaseDatabase = FakeFirebase.databaseFor(payload);
-        DatabaseReference reference = firebaseDatabase.getReference();
-
-        Function<DataSnapshot, String> converter = new Function<DataSnapshot, String>() {
+        Function1<DataSnapshot, String> converter = new Function1<DataSnapshot, String>() {
             @Override
-            public String apply(@NonNull DataSnapshot dataSnapshot) throws Exception {
+            public String invoke(DataSnapshot dataSnapshot) {
                 return (String) dataSnapshot.getValue();
             }
         };
-        FirebaseSingleEventListener.listen(reference, converter, stringValueCallback, "a default value");
 
-        assertThat(stringValueCallback.receivedValue).isEqualTo(payload);
-    }
+        Single<String> stringSingle = FirebaseSingleEventListener.listen(reference, converter);
+        stringSingle.subscribe(testObserver);
 
-    private static class StringValueCallback implements ValueCallback<String> {
-        String receivedValue;
-
-        @Override
-        public void onValueRetrieved(String value) {
-            receivedValue = value;
-        }
+        testObserver.assertValue(payload);
     }
 }

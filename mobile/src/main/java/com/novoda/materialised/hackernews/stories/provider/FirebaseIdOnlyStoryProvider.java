@@ -10,8 +10,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
+import kotlin.jvm.functions.Function1;
 
 final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
     private final FirebaseDatabase firebaseDatabase;
@@ -24,9 +23,9 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
     public void readStoryIds(@NotNull Section section, @NotNull final ValueCallback<List<Story>> callback) {
         DatabaseReference reference = firebaseDatabase.getReference("v0").child(section.getId());
 
-        Function<DataSnapshot, List<Long>> converter = new Function<DataSnapshot, List<Long>>() {
+        Function1<DataSnapshot, List<Long>> converter = new Function1<DataSnapshot, List<Long>>() {
             @Override
-            public List<Long> apply(@NonNull DataSnapshot dataSnapshot) throws Exception {
+            public List<Long> invoke(DataSnapshot dataSnapshot) {
                 //noinspection unchecked - we know it's a list of long because the docs tell us so
                 return (List<Long>) dataSnapshot.getValue();
             }
@@ -42,6 +41,6 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
                 callback.onValueRetrieved(idOnlyStories);
             }
         };
-        FirebaseSingleEventListener.listen(reference, converter, idListCallback, new ArrayList<Long>());
+        FirebaseSingleEventListener.listen(reference, converter);
     }
 }

@@ -8,8 +8,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
+import kotlin.jvm.functions.Function1;
 
 final class FirebaseStoryProvider implements StoryProvider {
     private final FirebaseDatabase firebaseDatabase;
@@ -24,13 +23,13 @@ final class FirebaseStoryProvider implements StoryProvider {
 
         for (final Integer id : ids) {
             DatabaseReference item = databaseReference.child(Integer.toString(id));
-            Function<DataSnapshot, Story> converter = new Function<DataSnapshot, Story>() {
+            Function1<DataSnapshot, Story> converter = new Function1<DataSnapshot, Story>() {
                 @Override
-                public Story apply(@NonNull DataSnapshot dataSnapshot) throws Exception {
+                public Story invoke(DataSnapshot dataSnapshot) {
                     return dataSnapshot.getValue(Story.class);
                 }
             };
-            FirebaseSingleEventListener.listen(item, converter, valueCallback, new Story());
+            FirebaseSingleEventListener.listen(item, converter);
         }
     }
 }

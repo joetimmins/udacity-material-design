@@ -5,10 +5,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import io.reactivex.functions.Function;
-import kotlin.jvm.functions.Function0;
+import org.jetbrains.annotations.NotNull;
 
-import static com.novoda.materialised.hackernews.NullHandlerKt.handleNullable;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import kotlin.jvm.functions.Function1;
 
 final class FirebaseSingleEventListener {
 
@@ -16,50 +19,24 @@ final class FirebaseSingleEventListener {
         // nah
     }
 
-    static <T> void listen(
-            DatabaseReference reference,
-            final Function<DataSnapshot, T> converter,
-            final ValueCallback<T> valueCallback,
-            final T defaultValue
-    ) {
-        reference.addListenerForSingleValueEvent(new SingleValueEventListener<>(converter, valueCallback, defaultValue));
-    }
-
-    private static class SingleValueEventListener<T> implements ValueEventListener {
-        private final Function<DataSnapshot, T> converter;
-        private final ValueCallback<T> valueCallback;
-        private final T defaultValue;
-
-        SingleValueEventListener(Function<DataSnapshot, T> converter, ValueCallback<T> valueCallback, T defaultValue) {
-            this.defaultValue = defaultValue;
-            this.valueCallback = valueCallback;
-            this.converter = converter;
-        }
-
-        @Override
-        public void onDataChange(final DataSnapshot dataSnapshot) {
-            Function0<? extends T> convertSnapshotAndRemoveCheckedExceptions = removeCheckedExceptions(dataSnapshot);
-            T retrievedValue = handleNullable(convertSnapshotAndRemoveCheckedExceptions, defaultValue);
-
-            valueCallback.onValueRetrieved(retrievedValue);
-        }
-
-        private Function0<? extends T> removeCheckedExceptions(final DataSnapshot dataSnapshot) {
-            return new Function0<T>() {
-                @Override
-                public T invoke() {
-                    try {
-                        return converter.apply(dataSnapshot);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
+    @NotNull
+    static <T> Single<T> listen(final DatabaseReference reference, final Function1<DataSnapshot, T> converter) {
+        return Single.create(new SingleOnSubscribe<T>() {
+            @Override
+            public void subscribe(@NonNull final SingleEmitter<T> emitter) throws Exception {
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        T convertedDataSnapshot = converter.invoke(dataSnapshot);
+                        emitter.onSuccess(convertedDataSnapshot);
                     }
-                }
-            };
-        }
 
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        emitter.onError(databaseError.toException());
+                    }
+                });
+            }
+        });
     }
 }
