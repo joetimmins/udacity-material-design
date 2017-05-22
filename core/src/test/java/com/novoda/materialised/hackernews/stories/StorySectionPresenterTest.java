@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -27,7 +28,7 @@ public class StorySectionPresenterTest {
     private static final int TEST_TIME = 3471394;
     private static final int FIRST_STORY_ID = 56;
     private static final int SECOND_STORY_ID = 78;
-    private static final List<Story> TOP_STORY_IDS = Arrays.asList(
+    private static final List<Story> ID_ONLY_STORIES = Arrays.asList(
             Story.IdOnly.buildFor(FIRST_STORY_ID),
             Story.IdOnly.buildFor(SECOND_STORY_ID)
     );
@@ -43,7 +44,7 @@ public class StorySectionPresenterTest {
 
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(TOP_STORY_IDS, Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
+        presentWith(ID_ONLY_STORIES, Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
         assertThat(storiesView.receivedData).isEqualTo(expectedViewData);
     }
@@ -63,7 +64,7 @@ public class StorySectionPresenterTest {
         StoryViewData anotherExpectedViewData = createStoryViewDataFrom(ANOTHER_STORY);
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(TOP_STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, new SpyingNavigator());
+        presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, new SpyingNavigator());
 
         StoryViewData actualViewData = storiesView.firstUpdatedViewModel.getViewData();
         StoryViewData anotherActualViewData = storiesView.secondUpdatedViewModel.getViewData();
@@ -77,7 +78,7 @@ public class StorySectionPresenterTest {
         SpyingStoriesView storiesView = new SpyingStoriesView();
         SpyingNavigator navigator = new SpyingNavigator();
 
-        presentWith(TOP_STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator);
+        presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator);
 
         storiesView.firstUpdatedViewModel.onClick();
 
@@ -96,7 +97,8 @@ public class StorySectionPresenterTest {
                 new StubbedStoryProvider(stories),
                 storiesView,
                 navigator,
-                mainThread
+                Schedulers.trampoline(),
+                Schedulers.trampoline()
         );
         presenter.present(Section.NEW);
     }

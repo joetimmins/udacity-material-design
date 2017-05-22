@@ -17,15 +17,16 @@ class StorySectionPresenter(
         val storyProvider: StoryProvider,
         val storiesView: AsyncListView<StoryViewData>,
         val navigator: Navigator,
-        val mainThread: Scheduler
+        val observeScheduler: Scheduler,
+        val subscribeScheduler: Scheduler
 ) : Presenter<Section> {
 
     private var idOnlyStories: List<Story> = emptyList()
 
     override fun present(section: Section) {
         idOnlyStoryProvider.idOnlyStoriesFor(section)
-                .subscribeOn(Schedulers.io())
-                .observeOn(mainThread)
+                .subscribeOn(subscribeScheduler)
+                .observeOn(observeScheduler)
                 .subscribe(this::showErrorOnEmpty, { storiesView.showError() })
 
         storiesView.updateWith(idOnlyStories.map(this::convertStoryToStoryViewModel))
@@ -33,7 +34,7 @@ class StorySectionPresenter(
         val idList = idOnlyStories.map { story -> story.id }
         storyProvider.readItems(idList)
                 .subscribeOn(Schedulers.io())
-                .observeOn(mainThread)
+                .observeOn(observeScheduler)
                 .subscribe({
                     story ->
                     val storyViewModel = convertStoryToStoryViewModel(story)

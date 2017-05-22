@@ -64,7 +64,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 storyProvider,
                 asyncListView,
                 new IntentNavigator(this),
-                AndroidSchedulers.mainThread()
+                AndroidSchedulers.mainThread(),
         );
 
         presenter = new AllSectionsPresenter(
