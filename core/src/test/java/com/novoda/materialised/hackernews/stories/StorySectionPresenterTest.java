@@ -97,8 +97,7 @@ public class StorySectionPresenterTest {
                 new StubbedStoryProvider(stories),
                 storiesView,
                 navigator,
-                Schedulers.trampoline(),
-                Schedulers.trampoline()
+                Schedulers.trampoline(), Schedulers.trampoline()
         );
         presenter.present(Section.NEW);
     }

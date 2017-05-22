@@ -26,6 +26,7 @@ import com.novoda.materialised.hackernews.stories.view.StoryCardView;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
@@ -64,7 +65,8 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 storyProvider,
                 asyncListView,
                 new IntentNavigator(this),
-                AndroidSchedulers.mainThread(),
+                Schedulers.io(),
+                AndroidSchedulers.mainThread()
         );
 
         presenter = new AllSectionsPresenter(
