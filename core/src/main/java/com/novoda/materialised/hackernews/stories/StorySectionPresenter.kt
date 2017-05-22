@@ -20,20 +20,27 @@ class StorySectionPresenter(
         val observeScheduler: Scheduler
 ) : Presenter<Section> {
 
-    private var idOnlyStories: List<Story> = emptyList()
-
     override fun present(section: Section) {
         idOnlyStoryProvider.idOnlyStoriesFor(section)
-                .map { stories -> stories.map { story -> convertStoryToStoryViewModel(story) } }
-                .doAfterSuccess { storyViewModels -> storiesView.updateWith(storyViewModels) }
+                .map(convertAllStories())
+                .doAfterSuccess(updateStoriesView())
                 .map { storyViewModels -> storyViewModels.map { (viewData) -> viewData.id } }
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
                 .map { story -> convertStoryToStoryViewModel(story) }
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
                 .subscribe({ storyViewModel -> storiesView.updateWith(storyViewModel) }, { storiesView.showError() })
+    }
 
-        storiesView.updateWith(idOnlyStories.map(this::convertStoryToStoryViewModel))
+    private fun convertAllStories() = { stories: List<Story> -> stories.map { story -> convertStoryToStoryViewModel(story) } }
+
+    private fun updateStoriesView(): (List<ViewModel<StoryViewData>>) -> Unit {
+        return { storyViewModels ->
+            when {
+                storyViewModels.isEmpty() -> storiesView.showError()
+                else -> storiesView.updateWith(storyViewModels)
+            }
+        }
     }
 
     private fun convertStoryToStoryViewModel(story: Story): ViewModel<StoryViewData> {
