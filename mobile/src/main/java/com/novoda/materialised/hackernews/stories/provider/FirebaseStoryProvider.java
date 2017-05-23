@@ -37,8 +37,8 @@ final class FirebaseStoryProvider implements StoryProvider {
             DatabaseReference childReference = databaseReference.child(Integer.toString(id));
             storySingles.add(FirebaseSingleEventListener.listen(childReference, converter));
         }
-        for (int i = 0; i < storySingles.size(); i++) {
-            result = result.mergeWith(storySingles.get(i).toObservable());
+        for (Single<Story> storySingle : storySingles) {
+            result = result.mergeWith(storySingle.toObservable());
         }
         return result;
     }
