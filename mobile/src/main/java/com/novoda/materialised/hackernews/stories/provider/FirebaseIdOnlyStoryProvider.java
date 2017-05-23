@@ -10,8 +10,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import kotlin.jvm.functions.Function1;
 
@@ -35,19 +37,27 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
             }
         };
 
-        Function<List<Long>, List<Story>> buildIdOnlyStories = new Function<List<Long>, List<Story>>() {
-            @Override
-            public List<Story> apply(@NonNull List<Long> longs) throws Exception {
-                List<Story> idOnlyStories = new ArrayList<>(longs.size());
-                for (Long id : longs) {
-                    Story idOnlyStory = Story.IdOnly.buildFor(id.intValue());
-                    idOnlyStories.add(idOnlyStory);
-                }
-                return idOnlyStories;
-            }
-        };
-
         Single<List<Long>> listOfStoryIds = FirebaseSingleEventListener.listen(reference, converter);
-        return listOfStoryIds.map(buildIdOnlyStories);
+
+        return listOfStoryIds
+                .flatMapObservable(new Function<List<Long>, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> apply(@NonNull List<Long> longs) throws Exception {
+                        return Observable.fromIterable(longs);
+                    }
+                })
+                .map(new Function<Long, Story>() {
+                    @Override
+                    public Story apply(@NonNull Long rawId) throws Exception {
+                        return Story.IdOnly.buildFor(rawId.intValue());
+                    }
+                })
+                .reduce(new ArrayList<Story>(), new BiFunction<List<Story>, Story, List<Story>>() {
+                    @Override
+                    public List<Story> apply(@NonNull List<Story> stories, @NonNull Story story) throws Exception {
+                        stories.add(story);
+                        return stories;
+                    }
+                });
     }
 }
