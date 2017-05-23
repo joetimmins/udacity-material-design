@@ -11,7 +11,7 @@ import org.junit.Test;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 
-public class IdOnlyStoryProviderTest {
+public class FirebaseStoryIdProviderTest {
 
     @Test
     public void testThatReadingStoryIdsForSection_callsBackWithStoryIds() {
