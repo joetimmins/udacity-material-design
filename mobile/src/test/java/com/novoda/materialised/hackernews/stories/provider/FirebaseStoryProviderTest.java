@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class FirebaseStoryProviderTest {
 
@@ -23,9 +22,7 @@ public class FirebaseStoryProviderTest {
 
         List<Integer> storyIds = Arrays.asList(firstStoryId, secondStoryId);
         Observable<Story> observable = firebaseItemsDatabase
-                .readItems(storyIds)
-                .subscribeOn(Schedulers.trampoline())
-                .observeOn(Schedulers.trampoline());
+                .readItems(storyIds);
 
         observable.subscribe(storyObserver);
 
