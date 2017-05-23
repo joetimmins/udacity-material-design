@@ -32,7 +32,9 @@ class StorySectionPresenter(
                 .subscribe({ storyViewModel -> storiesView.updateWith(storyViewModel) }, { storiesView.showError() })
     }
 
-    private fun convertAllStories() = { stories: List<Story> -> stories.map { story -> convertStoryToStoryViewModel(story) } }
+    private fun convertAllStories(): (List<Story>) -> List<ViewModel<StoryViewData>> {
+        return { stories: List<Story> -> stories.map { story -> convertStoryToStoryViewModel(story) } }
+    }
 
     private fun updateStoriesView(): (List<ViewModel<StoryViewData>>) -> Unit {
         return { storyViewModels ->
