@@ -41,26 +41,5 @@ final class FirebaseStoryProvider implements StoryProvider {
             result = result.mergeWith(storySingles.get(i).toObservable());
         }
         return result;
-//
-//        return Observable.fromIterable(ids)
-//                .map(new Function<Integer, DatabaseReference>() {
-//                    @Override
-//                    public DatabaseReference apply(@NonNull Integer integer) throws Exception {
-//                        return databaseReference.child(Integer.toString(integer));
-//                    }
-//                })
-//                .map(new Function<DatabaseReference, Single<Story>>() {
-//                    @Override
-//                    public Single<Story> apply(@NonNull DatabaseReference reference) throws Exception {
-//                        return FirebaseSingleEventListener.listen(reference, converter);
-//                    }
-//                })
-//                .concatMap(new Function<Single<Story>, Observable<Story>>() {
-//                    @Override
-//                    public Observable<Story> apply(@NonNull Single<Story> storySingle) throws Exception {
-//                        return storySingle.toObservable();
-//                    }
-//                });
-
     }
 }
