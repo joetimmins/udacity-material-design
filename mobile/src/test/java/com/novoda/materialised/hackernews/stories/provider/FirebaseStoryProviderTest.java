@@ -1,5 +1,7 @@
 package com.novoda.materialised.hackernews.stories.provider;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +20,9 @@ public class FirebaseStoryProviderTest {
         Story firstStory = new Story("author", 890, firstStoryId, Arrays.asList(1, 2), 4, 1232, "test title", "test type", "http://test.url");
         Story secondStory = new Story("another author", 567, secondStoryId, Arrays.asList(3, 4), 5, 7897, "another title", "another type", "http://another.url");
         List<Story> stories = Arrays.asList(firstStory, secondStory);
-        FirebaseStoryProvider firebaseItemsDatabase = new FirebaseStoryProvider(FakeFirebase.getItemsDatabase(stories));
+        FirebaseDatabase itemsDatabase = FakeFirebase.getItemsDatabase(stories);
+        StoryObservableProvider storyObservableProvider = new FirebaseStoryObservableProvider(itemsDatabase);
+        FirebaseStoryProvider firebaseItemsDatabase = new FirebaseStoryProvider(storyObservableProvider);
 
         List<Integer> storyIds = Arrays.asList(firstStoryId, secondStoryId);
         Observable<Story> observable = firebaseItemsDatabase
