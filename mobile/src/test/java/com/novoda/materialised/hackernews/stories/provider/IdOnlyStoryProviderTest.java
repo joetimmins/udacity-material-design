@@ -11,7 +11,7 @@ import org.junit.Test;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 
-public class FirebaseIdOnlyStoryProviderTest {
+public class IdOnlyStoryProviderTest {
 
     @Test
     public void testThatReadingStoryIdsForSection_callsBackWithIdOnlyStoryList() {
@@ -27,7 +27,7 @@ public class FirebaseIdOnlyStoryProviderTest {
         FirebaseDatabase storyTypeFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(Section.BEST, expectedStoryIds);
 
         // Act
-        FirebaseIdOnlyStoryProvider provider = new FirebaseIdOnlyStoryProvider(storyTypeFirebaseDatabase);
+        IdOnlyStoryProvider provider = new IdOnlyStoryProvider(storyTypeFirebaseDatabase);
         Single<List<Story>> idOnlyStories = provider.idOnlyStoriesFor(Section.BEST);
         idOnlyStories.subscribe(testObserver);
 
