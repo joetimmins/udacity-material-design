@@ -23,8 +23,8 @@ final class FirebaseStoryProvider implements StoryProvider {
     @NotNull
     @Override
     public Observable<Story> readItems(@NotNull List<Integer> ids) {
-        final DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
-        final Function1<DataSnapshot, Story> converter = new Function1<DataSnapshot, Story>() {
+        DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
+        Function1<DataSnapshot, Story> converter = new Function1<DataSnapshot, Story>() {
             @Override
             public Story invoke(DataSnapshot dataSnapshot) {
                 return dataSnapshot.getValue(Story.class);
