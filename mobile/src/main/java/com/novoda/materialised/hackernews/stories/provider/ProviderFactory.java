@@ -9,7 +9,7 @@ public final class ProviderFactory {
     public static StoryProvider newStoryProvider(Context context) {
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(context);
         StoryObservableProvider storyObservableProvider = new FirebaseStoryObservableProvider(firebaseDatabase);
-        return new FirebaseStoryProvider(storyObservableProvider);
+        return new StoryProvider(storyObservableProvider);
     }
 
     public static IdOnlyStoryProvider newStoryIdProvider(Context context) {

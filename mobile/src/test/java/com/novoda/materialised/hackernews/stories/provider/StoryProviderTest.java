@@ -10,7 +10,7 @@ import org.junit.Test;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 
-public class FirebaseStoryProviderTest {
+public class StoryProviderTest {
 
     @Test
     public void readItemsCallsBackOncePerValueRetrieved() {
@@ -22,7 +22,7 @@ public class FirebaseStoryProviderTest {
         List<Story> stories = Arrays.asList(firstStory, secondStory);
         FirebaseDatabase itemsDatabase = FakeFirebase.getItemsDatabase(stories);
         StoryObservableProvider storyObservableProvider = new FirebaseStoryObservableProvider(itemsDatabase);
-        FirebaseStoryProvider firebaseItemsDatabase = new FirebaseStoryProvider(storyObservableProvider);
+        StoryProvider firebaseItemsDatabase = new StoryProvider(storyObservableProvider);
 
         List<Integer> storyIds = Arrays.asList(firstStoryId, secondStoryId);
         Observable<Story> observable = firebaseItemsDatabase
