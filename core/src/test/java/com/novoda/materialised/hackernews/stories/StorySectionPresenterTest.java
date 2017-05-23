@@ -6,6 +6,7 @@ import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider;
 import com.novoda.materialised.hackernews.stories.provider.Story;
+import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider;
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -26,11 +27,11 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class StorySectionPresenterTest {
 
     private static final int TEST_TIME = 3471394;
-    private static final int FIRST_STORY_ID = 56;
-    private static final int SECOND_STORY_ID = 78;
-    private static final List<Story> ID_ONLY_STORIES = Arrays.asList(
-            Story.IdOnly.buildFor(FIRST_STORY_ID),
-            Story.IdOnly.buildFor(SECOND_STORY_ID)
+    private static final long FIRST_STORY_ID = 56L;
+    private static final long SECOND_STORY_ID = 78L;
+    private static final List<Long> ID_ONLY_STORIES = Arrays.asList(
+            FIRST_STORY_ID,
+            SECOND_STORY_ID
     );
 
     private static final Story A_STORY = new Story("test author", 123, (int) FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url");
@@ -38,8 +39,8 @@ public class StorySectionPresenterTest {
 
     @Test
     public void presenterGivesCorrectListOfIdsToView_AsViewData_WhenPresentingMultipleStories() {
-        StoryViewData firstIdOnlyViewData = buildIdOnlyViewData(FIRST_STORY_ID);
-        StoryViewData secondIdOnlyViewData = buildIdOnlyViewData(SECOND_STORY_ID);
+        StoryViewData firstIdOnlyViewData = buildIdOnlyViewData((int) FIRST_STORY_ID);
+        StoryViewData secondIdOnlyViewData = buildIdOnlyViewData((int) SECOND_STORY_ID);
         List<StoryViewData> expectedViewData = Arrays.asList(firstIdOnlyViewData, secondIdOnlyViewData);
 
         SpyingStoriesView storiesView = new SpyingStoriesView();
@@ -53,7 +54,7 @@ public class StorySectionPresenterTest {
     public void presenterTellsViewToShowErrorScreen_WhenNoIdOnlyStoriesAreRetrieved() {
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(Collections.<Story>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
+        presentWith(Collections.<Long>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
         assertThat(storiesView.errorShown).isTrue();
     }
@@ -91,9 +92,11 @@ public class StorySectionPresenterTest {
         );
     }
 
-    private void presentWith(List<Story> idOnlyStories, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
+    private void presentWith(List<Long> storyIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
+        StubbedStoryIdProvider stubbedStoryIdProvider = new StubbedStoryIdProvider(storyIds);
+        IdOnlyStoryProvider idOnlyStoryProvider = new IdOnlyStoryProvider(stubbedStoryIdProvider);
         StorySectionPresenter presenter = new StorySectionPresenter(
-                new StubbedIdOnlyStoryProvider(idOnlyStories),
+                idOnlyStoryProvider,
                 new StubbedStoryProvider(stories),
                 storiesView,
                 navigator,
@@ -110,17 +113,17 @@ public class StorySectionPresenterTest {
         );
     }
 
-    private static class StubbedIdOnlyStoryProvider implements IdOnlyStoryProvider {
-        final List<Story> idOnlyStories;
+    private static class StubbedStoryIdProvider implements StoryIdProvider {
+        private final List<Long> ids;
 
-        private StubbedIdOnlyStoryProvider(List<Story> stories) {
-            this.idOnlyStories = stories;
+        private StubbedStoryIdProvider(List<Long> ids) {
+            this.ids = ids;
         }
 
         @NotNull
         @Override
-        public Single<List<Story>> idOnlyStoriesFor(@NotNull Section section) {
-            return Single.just(idOnlyStories);
+        public Single<List<Long>> listOfStoryIds(@NotNull Section section) {
+            return Single.just(ids);
         }
     }
 
