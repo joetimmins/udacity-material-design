@@ -14,24 +14,19 @@ import io.reactivex.observers.TestObserver;
 public class IdOnlyStoryProviderTest {
 
     @Test
-    public void testThatReadingStoryIdsForSection_callsBackWithIdOnlyStoryList() {
+    public void testThatReadingStoryIdsForSection_callsBackWithStoryIds() {
         // Arrange
-        TestObserver<List<Story>> testObserver = new TestObserver<>();
+        TestObserver<List<Long>> testObserver = new TestObserver<>();
         List<Long> expectedStoryIds = Arrays.asList(8863L, 9001L, 9004L);
-        List<Story> expectedIdOnlyStories = Arrays.asList(
-                Story.IdOnly.buildFor(8863),
-                Story.IdOnly.buildFor(9001),
-                Story.IdOnly.buildFor(9004)
-        );
 
         FirebaseDatabase storyTypeFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(Section.BEST, expectedStoryIds);
 
         // Act
-        IdOnlyStoryProvider provider = new IdOnlyStoryProvider(storyTypeFirebaseDatabase);
-        Single<List<Story>> idOnlyStories = provider.idOnlyStoriesFor(Section.BEST);
+        FirebaseStoryIdProvider provider = new FirebaseStoryIdProvider(storyTypeFirebaseDatabase);
+        Single<List<Long>> idOnlyStories = provider.listOfStoryIds(Section.BEST);
         idOnlyStories.subscribe(testObserver);
 
         // Assert
-        testObserver.assertValue(expectedIdOnlyStories);
+        testObserver.assertValue(expectedStoryIds);
     }
 }
