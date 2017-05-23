@@ -13,7 +13,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import kotlin.jvm.functions.Function1;
 
-class FirebaseStoryObservableProvider implements StoryObservableProvider {
+final class FirebaseStoryObservableProvider implements StoryObservableProvider {
     private final FirebaseDatabase firebaseDatabase;
 
     FirebaseStoryObservableProvider(FirebaseDatabase firebaseDatabase) {

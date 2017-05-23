@@ -7,6 +7,7 @@ import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider;
 import com.novoda.materialised.hackernews.stories.provider.Story;
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider;
+import com.novoda.materialised.hackernews.stories.provider.StoryObservableProvider;
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -95,9 +96,13 @@ public class StorySectionPresenterTest {
     private void presentWith(List<Long> storyIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
         StubbedStoryIdProvider stubbedStoryIdProvider = new StubbedStoryIdProvider(storyIds);
         IdOnlyStoryProvider idOnlyStoryProvider = new IdOnlyStoryProvider(stubbedStoryIdProvider);
+
+        StubbedStoryObservableProvider stubbedStoryObservableProvider = new StubbedStoryObservableProvider(stories);
+        StoryProvider storyProvider = new StoryProvider(stubbedStoryObservableProvider);
+
         StorySectionPresenter presenter = new StorySectionPresenter(
                 idOnlyStoryProvider,
-                new StubbedStoryProvider(stories),
+                storyProvider,
                 storiesView,
                 navigator,
                 Schedulers.trampoline(),
@@ -127,17 +132,21 @@ public class StorySectionPresenterTest {
         }
     }
 
-    private static class StubbedStoryProvider implements StoryProvider {
+    private static class StubbedStoryObservableProvider implements StoryObservableProvider {
         private List<Story> stories;
 
-        StubbedStoryProvider(List<Story> stories) {
+        StubbedStoryObservableProvider(List<Story> stories) {
             this.stories = stories;
         }
 
         @NotNull
         @Override
-        public Observable<Story> readItems(@NotNull List<Integer> ids) {
-            return Observable.fromIterable(stories);
+        public Observable<Observable<Story>> createStoryObservables(@NotNull List<Integer> storyIds) {
+            List<Observable<Story>> observables = new ArrayList<>(stories.size());
+            for (Story story : stories) {
+                observables.add(Observable.just(story));
+            }
+            return Observable.fromIterable(observables);
         }
     }
 
