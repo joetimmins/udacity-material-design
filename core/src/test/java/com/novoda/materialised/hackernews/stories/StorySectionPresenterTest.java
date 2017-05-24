@@ -4,11 +4,9 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.section.Section;
-import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider;
 import com.novoda.materialised.hackernews.stories.provider.Story;
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider;
 import com.novoda.materialised.hackernews.stories.provider.StoryObservableProvider;
-import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.ArrayList;
@@ -94,15 +92,10 @@ public class StorySectionPresenterTest {
     }
 
     private void presentWith(List<Long> storyIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
-        StubbedStoryIdProvider stubbedStoryIdProvider = new StubbedStoryIdProvider(storyIds);
-        IdOnlyStoryProvider idOnlyStoryProvider = new IdOnlyStoryProvider(stubbedStoryIdProvider);
-
-        StubbedStoryObservableProvider stubbedStoryObservableProvider = new StubbedStoryObservableProvider(stories);
-        StoryProvider storyProvider = new StoryProvider(stubbedStoryObservableProvider);
 
         StorySectionPresenter presenter = new StorySectionPresenter(
-                idOnlyStoryProvider,
-                storyProvider,
+                new StubbedStoryIdProvider(storyIds),
+                new StubbedStoryObservableProvider(stories),
                 storiesView,
                 navigator,
                 Schedulers.trampoline(),

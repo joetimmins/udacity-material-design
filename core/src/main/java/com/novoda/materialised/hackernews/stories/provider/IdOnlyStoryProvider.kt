@@ -4,7 +4,9 @@ import com.novoda.materialised.hackernews.section.Section
 import io.reactivex.Observable
 import io.reactivex.Single
 
-class IdOnlyStoryProvider internal constructor(private val storyIdProvider: StoryIdProvider) {
+internal class IdOnlyStoryProvider(
+        private val storyIdProvider: StoryIdProvider
+) {
 
     fun idOnlyStoriesFor(section: Section): Single<List<Story>> {
         val listOfStoryIds = storyIdProvider.listOfStoryIds(section)

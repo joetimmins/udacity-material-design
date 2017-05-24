@@ -5,13 +5,11 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider
-import com.novoda.materialised.hackernews.stories.provider.Story
-import com.novoda.materialised.hackernews.stories.provider.StoryProvider
+import com.novoda.materialised.hackernews.stories.provider.*
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Scheduler
 
-class StorySectionPresenter(
+class StorySectionPresenter private constructor(
         val idOnlyStoryProvider: IdOnlyStoryProvider,
         val storyProvider: StoryProvider,
         val storiesView: AsyncListView<StoryViewData>,
@@ -19,6 +17,22 @@ class StorySectionPresenter(
         val subscribeScheduler: Scheduler,
         val observeScheduler: Scheduler
 ) : Presenter<Section> {
+
+    constructor(
+            storyIdProvider: StoryIdProvider,
+            storyObservableProvider: StoryObservableProvider,
+            storiesView: AsyncListView<StoryViewData>,
+            navigator: Navigator,
+            subscribeScheduler: Scheduler,
+            observeScheduler: Scheduler
+    ) : this(
+            IdOnlyStoryProvider(storyIdProvider),
+            StoryProvider(storyObservableProvider),
+            storiesView,
+            navigator,
+            subscribeScheduler,
+            observeScheduler
+    )
 
     override fun present(section: Section) {
         idOnlyStoryProvider.idOnlyStoriesFor(section)
