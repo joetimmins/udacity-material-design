@@ -24,8 +24,10 @@ class StorySectionPresenter(
             if (idOnlyStories.isNotEmpty()) {
                 val idOnlyViewModels = idOnlyStories.map { idOnlyStory -> convertStoryToStoryViewModel(idOnlyStory) }
                 storiesView.updateWith(idOnlyViewModels)
+
+                val idList = idOnlyStories.map { idOnlyStory -> idOnlyStory.id }
                 val viewUpdater = viewUpdaterFor(storiesView)
-                storyProvider.readItems(ids, viewUpdater)
+                storyProvider.readItems(idList, viewUpdater)
             } else {
                 storiesView.showError()
             }

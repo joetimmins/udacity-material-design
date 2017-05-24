@@ -17,22 +17,28 @@ public class FirebaseIdOnlyStoryProviderTest {
         // Arrange
         List<Long> expectedStoryIds = Arrays.asList(8863L, 9001L, 9004L);
         ListValueCallback callback = new ListValueCallback();
+        List<Story> expectedIdOnlyStories = Arrays.asList(
+                Story.IdOnly.buildFor(8863),
+                Story.IdOnly.buildFor(9001),
+                Story.IdOnly.buildFor(9004)
+
+        );
         FirebaseDatabase storyTypeFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(Section.BEST, expectedStoryIds);
 
         // Act
         new FirebaseIdOnlyStoryProvider(storyTypeFirebaseDatabase).idOnlyStoriesFor(Section.BEST, callback);
 
         // Assert
-        assertThat(callback.topStoryIds).isEqualTo(expectedStoryIds);
+        assertThat(callback.stories).isEqualTo(expectedIdOnlyStories);
     }
 
-    private static class ListValueCallback implements ValueCallback<List<Long>> {
+    private static class ListValueCallback implements ValueCallback<List<Story>> {
 
-        List<Long> topStoryIds;
+        List<Story> stories;
 
         @Override
-        public void onValueRetrieved(List<Long> value) {
-            topStoryIds = value;
+        public void onValueRetrieved(List<Story> value) {
+            stories = value;
         }
     }
 }
