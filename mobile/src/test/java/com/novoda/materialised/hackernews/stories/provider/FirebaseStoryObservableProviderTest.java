@@ -24,22 +24,20 @@ public class FirebaseStoryObservableProviderTest {
         List<Story> stories = Arrays.asList(firstStory, secondStory);
         FirebaseStoryObservableProvider provider = new FirebaseStoryObservableProvider(FakeFirebase.getItemsDatabase(stories));
 
-        List<Integer> storyIds = Arrays.asList(firstStoryId, secondStoryId);
-        Observable<Observable<Story>> storyObservables = provider
-                .createStoryObservables(storyIds);
+        List<Observable<Story>> storyObservables = provider
+                .createStoryObservables(Arrays.asList(firstStoryId, secondStoryId));
 
         final List<Story> actualStories = new ArrayList<>();
-        storyObservables.subscribe(new OnNextObserver<Observable<Story>>() {
-            @Override
-            public void onNext(@NonNull Observable<Story> observable) {
-                observable.subscribe(new OnNextObserver<Story>() {
-                    @Override
-                    public void onNext(@NonNull Story story) {
-                        actualStories.add(story);
-                    }
-                });
-            }
-        });
+
+        for (Observable<Story> storyObservable : storyObservables) {
+            storyObservable.subscribe(new OnNextObserver<Story>() {
+                @Override
+                public void onNext(@NonNull Story story) {
+                    actualStories.add(story);
+                }
+            });
+        }
+
         assertThat(actualStories).isEqualTo(stories);
     }
 

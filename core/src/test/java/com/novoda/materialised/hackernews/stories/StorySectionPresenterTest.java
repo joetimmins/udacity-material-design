@@ -134,12 +134,12 @@ public class StorySectionPresenterTest {
 
         @NotNull
         @Override
-        public Observable<Observable<Story>> createStoryObservables(@NotNull List<Integer> storyIds) {
+        public List<Observable<Story>> createStoryObservables(@NotNull List<Integer> storyIds) {
             List<Observable<Story>> observables = new ArrayList<>(stories.size());
             for (Story story : stories) {
                 observables.add(Observable.just(story));
             }
-            return Observable.fromIterable(observables);
+            return observables;
         }
     }
 
