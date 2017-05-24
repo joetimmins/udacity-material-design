@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.materialised.hackernews.section.Section;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,13 +19,17 @@ final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
     }
 
     @Override
-    public void readStoryIds(@NotNull Section section, @NotNull final ValueCallback<? super List<Long>> callback) {
+    public void idOnlyStoriesFor(@NotNull Section section, @NotNull final ValueCallback<? super List<Story>> callback) {
         firebaseDatabase.getReference("v0").child(section.getId()).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<Long> value = (List<Long>) dataSnapshot.getValue();
-                        callback.onValueRetrieved(value);
+                        List<Long> ids = (List<Long>) dataSnapshot.getValue();
+                        List<Story> idOnlyStories = new ArrayList<>(ids.size());
+                        for (Long id : ids) {
+                            idOnlyStories.add(Story.IdOnly.buildFor(id.intValue()));
+                        }
+                        callback.onValueRetrieved(idOnlyStories);
                     }
 
                     @Override

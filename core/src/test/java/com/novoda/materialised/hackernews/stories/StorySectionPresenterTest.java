@@ -4,9 +4,9 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.section.Section;
-import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
-import com.novoda.materialised.hackernews.stories.provider.Story;
 import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider;
+import com.novoda.materialised.hackernews.stories.provider.Story;
+import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
 import com.novoda.materialised.hackernews.stories.provider.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
@@ -23,9 +23,13 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class StorySectionPresenterTest {
 
     private static final int TEST_TIME = 3471394;
-    private static final long FIRST_STORY_ID = 56L;
-    private static final long SECOND_STORY_ID = 78L;
-    private static final List<Long> TOP_STORY_IDS = Arrays.asList(FIRST_STORY_ID, SECOND_STORY_ID);
+    private static final int FIRST_STORY_ID = 56;
+    private static final int SECOND_STORY_ID = 78;
+    private static final List<Story> ID_ONLY_STORIES = Arrays.asList(
+            Story.IdOnly.buildFor(FIRST_STORY_ID),
+            Story.IdOnly.buildFor(SECOND_STORY_ID)
+
+    );
 
     private static final Story A_STORY = new Story("test author", 123, (int) FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url");
     private static final Story ANOTHER_STORY = new Story("another author", 456, (int) SECOND_STORY_ID, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url");
@@ -38,16 +42,16 @@ public class StorySectionPresenterTest {
 
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(TOP_STORY_IDS, Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
+        presentWith(ID_ONLY_STORIES, Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
         assertThat(storiesView.receivedData).isEqualTo(expectedViewData);
     }
 
     @Test
-    public void presenterTellsViewToShowErrorScreen_WhenNoStoryIdsAreRetrieved() {
+    public void presenterTellsViewToShowErrorScreen_WhenNoIdOnlyStoriesAreRetrieved() {
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(Collections.<Long>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
+        presentWith(Collections.<Story>emptyList(), Collections.<Story>emptyList(), storiesView, new SpyingNavigator());
 
         assertThat(storiesView.errorShown).isTrue();
     }
@@ -58,7 +62,7 @@ public class StorySectionPresenterTest {
         StoryViewData anotherExpectedViewData = createStoryViewDataFrom(ANOTHER_STORY);
         SpyingStoriesView storiesView = new SpyingStoriesView();
 
-        presentWith(TOP_STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, new SpyingNavigator());
+        presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, new SpyingNavigator());
 
         StoryViewData actualViewData = storiesView.firstUpdatedViewModel.getViewData();
         StoryViewData anotherActualViewData = storiesView.secondUpdatedViewModel.getViewData();
@@ -72,7 +76,7 @@ public class StorySectionPresenterTest {
         SpyingStoriesView storiesView = new SpyingStoriesView();
         SpyingNavigator navigator = new SpyingNavigator();
 
-        presentWith(TOP_STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator);
+        presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator);
 
         storiesView.firstUpdatedViewModel.onClick();
 
@@ -85,9 +89,9 @@ public class StorySectionPresenterTest {
         );
     }
 
-    private void presentWith(List<Long> topStoryIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
+    private void presentWith(List<Story> idOnlyStories, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
         StorySectionPresenter presenter = new StorySectionPresenter(
-                new StubbedIdOnlyStoryProvider(topStoryIds),
+                new StubbedIdOnlyStoryProvider(idOnlyStories),
                 new StubbedStoryProvider(stories),
                 storiesView,
                 navigator
@@ -103,14 +107,14 @@ public class StorySectionPresenterTest {
     }
 
     private static class StubbedIdOnlyStoryProvider implements IdOnlyStoryProvider {
-        final List<Long> ids;
+        final List<Story> ids;
 
-        private StubbedIdOnlyStoryProvider(List<Long> ids) {
+        private StubbedIdOnlyStoryProvider(List<Story> ids) {
             this.ids = ids;
         }
 
         @Override
-        public void readStoryIds(@NotNull Section section, @NotNull ValueCallback<? super List<Long>> callback) {
+        public void idOnlyStoriesFor(@NotNull Section section, @NotNull ValueCallback<? super List<Story>> callback) {
             callback.onValueRetrieved(ids);
         }
     }

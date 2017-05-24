@@ -20,7 +20,7 @@ public class FirebaseIdOnlyStoryProviderTest {
         FirebaseDatabase storyTypeFirebaseDatabase = FakeFirebase.getDatabaseForStoryType(Section.BEST, expectedStoryIds);
 
         // Act
-        new FirebaseIdOnlyStoryProvider(storyTypeFirebaseDatabase).readStoryIds(Section.BEST, callback);
+        new FirebaseIdOnlyStoryProvider(storyTypeFirebaseDatabase).idOnlyStoriesFor(Section.BEST, callback);
 
         // Assert
         assertThat(callback.topStoryIds).isEqualTo(expectedStoryIds);

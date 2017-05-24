@@ -15,15 +15,14 @@ class StorySectionPresenter(
         val navigator: Navigator
 ) : Presenter<Section> {
     override fun present(type: Section) {
-        idOnlyStoryProvider.readStoryIds(type, callbackWithAllStoriesInList(storiesView))
+        idOnlyStoryProvider.idOnlyStoriesFor(type, callbackWithAllStoriesInList(storiesView))
     }
 
-    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Long>> {
+    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Story>> {
         return valueCallbackOf {
-            idList ->
-            if (idList.isNotEmpty()) {
-                val ids = convertLongsToInts(idList)
-                val idOnlyViewModels = createIdOnlyViewModels(ids)
+            idOnlyStories ->
+            if (idOnlyStories.isNotEmpty()) {
+                val idOnlyViewModels = idOnlyStories.map { idOnlyStory -> convertStoryToStoryViewModel(idOnlyStory) }
                 storiesView.updateWith(idOnlyViewModels)
                 val viewUpdater = viewUpdaterFor(storiesView)
                 storyProvider.readItems(ids, viewUpdater)
@@ -32,8 +31,6 @@ class StorySectionPresenter(
             }
         }
     }
-
-    private fun convertLongsToInts(listOfLongs: List<Long>) = listOfLongs.map(Long::toInt)
 
     private fun createIdOnlyViewModels(listOfIdInts: List<Int>): List<ViewModel<StoryViewData>> {
         return listOfIdInts.map { storyId -> createIdOnlyViewModel(storyId) }
