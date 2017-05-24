@@ -2,14 +2,18 @@ package com.novoda.materialised.hackernews.stories.provider;
 
 import android.content.Context;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 public final class ProviderFactory {
 
-    public static StoryProvider newStoryProvider(Context context) {
-        return new FirebaseStoryProvider(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
+    public static StoryObservableProvider newStoryObservableProvider(Context context) {
+        FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(context);
+        return new FirebaseStoryObservableProvider(firebaseDatabase);
     }
 
-    public static IdOnlyStoryProvider newStoryIdProvider(Context context) {
-        return new FirebaseIdOnlyStoryProvider(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
+    public static StoryIdProvider newStoryIdProvider(Context context) {
+        FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(context);
+        return new FirebaseStoryIdProvider(firebaseDatabase);
     }
 
 }
