@@ -41,7 +41,16 @@ class StorySectionPresenter(
     }
 
     private fun convertStoryToStoryViewModel(story: Story): ViewModel<StoryViewData> {
+        val viewBehaviour = buildViewBehaviour(story)
         val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
-        return ViewModel(storyViewData, { storyViewData -> navigator.navigateTo(storyViewData.url) })
+        return ViewModel(storyViewData, viewBehaviour)
+    }
+
+
+    private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
+        when {
+            Story.isIdOnly(story) -> return {}
+            else -> return { storyViewData -> navigator.navigateTo(storyViewData.url) }
+        }
     }
 }
