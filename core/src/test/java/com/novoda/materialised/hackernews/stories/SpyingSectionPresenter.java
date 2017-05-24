@@ -10,7 +10,7 @@ public final class SpyingSectionPresenter implements Presenter<Section> {
     public List<Section> presentedTypes = new ArrayList<>();
 
     @Override
-    public void present(Section type) {
-        presentedTypes.add(type);
+    public void present(Section section) {
+        presentedTypes.add(section);
     }
 }

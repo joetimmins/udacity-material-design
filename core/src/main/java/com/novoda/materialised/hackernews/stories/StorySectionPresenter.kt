@@ -14,8 +14,8 @@ class StorySectionPresenter(
         val storiesView: AsyncListView<StoryViewData>,
         val navigator: Navigator
 ) : Presenter<Section> {
-    override fun present(type: Section) {
-        idOnlyStoryProvider.idOnlyStoriesFor(type, callbackWithAllStoriesInList(storiesView))
+    override fun present(section: Section) {
+        idOnlyStoryProvider.idOnlyStoriesFor(section, callbackWithAllStoriesInList(storiesView))
     }
 
     private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Story>> {
@@ -30,14 +30,6 @@ class StorySectionPresenter(
                 storiesView.showError()
             }
         }
-    }
-
-    private fun createIdOnlyViewModels(listOfIdInts: List<Int>): List<ViewModel<StoryViewData>> {
-        return listOfIdInts.map { storyId -> createIdOnlyViewModel(storyId) }
-    }
-
-    private fun createIdOnlyViewModel(storyId: Int): ViewModel<StoryViewData> {
-        return ViewModel(StoryViewData(id = storyId))
     }
 
     private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewData>): ValueCallback<Story> {
