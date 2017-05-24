@@ -8,7 +8,6 @@ import com.novoda.materialised.hackernews.section.Section;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import kotlin.jvm.functions.Function0;
 
@@ -33,8 +32,7 @@ public final class AndroidTabsView implements TabsView<Section> {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(final TabLayout.Tab tab) {
-                ViewModel<Section> viewModel = handleNullable(nullableViewModelFrom(tab), defaultValue);
-                viewModel.onClick();
+                useTagToInvokeViewModelBehaviour(tab, defaultValue);
             }
 
             @Override
@@ -55,11 +53,23 @@ public final class AndroidTabsView implements TabsView<Section> {
 
         TabLayout.Tab currentTab = handleNullable(nullableTabAt(selectedTabPosition), tabLayout.newTab());
 
-        ViewModel<Section> viewModel = handleNullable(nullableViewModelFrom(currentTab), defaultValue);
+        useTagToInvokeViewModelBehaviour(currentTab, defaultValue);
+    }
+
+    private Function0<TabLayout.Tab> nullableTabAt(final int selectedTabPosition) {
+        return new Function0<TabLayout.Tab>() {
+            @Override
+            public TabLayout.Tab invoke() {
+                return tabLayout.getTabAt(selectedTabPosition);
+            }
+        };
+    }
+
+    private void useTagToInvokeViewModelBehaviour(TabLayout.Tab tab, @NotNull ViewModel<Section> defaultValue) {
+        ViewModel<Section> viewModel = handleNullable(nullableViewModelFrom(tab), defaultValue);
         viewModel.onClick();
     }
 
-    @Nullable
     private Function0<ViewModel<Section>> nullableViewModelFrom(final TabLayout.Tab tab) {
         return new Function0<ViewModel<Section>>() {
             @Override
@@ -69,13 +79,4 @@ public final class AndroidTabsView implements TabsView<Section> {
         };
     }
 
-    @Nullable
-    private Function0<TabLayout.Tab> nullableTabAt(final int selectedTabPosition) {
-        return new Function0<TabLayout.Tab>() {
-            @Override
-            public TabLayout.Tab invoke() {
-                return tabLayout.getTabAt(selectedTabPosition);
-            }
-        };
-    }
 }
