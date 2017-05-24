@@ -99,23 +99,23 @@ public class StorySectionPresenterTest {
         presenter.present(Section.NEW);
     }
 
-    private StoryViewData buildIdOnlyViewData(long storyId) {
+    private StoryViewData buildIdOnlyViewData(int storyId) {
         StoryViewData empty = new StoryViewData();
         return new StoryViewData(
-                empty.getBy(), empty.getCommentIds(), (int) storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
+                empty.getBy(), empty.getCommentIds(), storyId, empty.getScore(), empty.getTitle(), empty.getUrl()
         );
     }
 
     private static class StubbedIdOnlyStoryProvider implements IdOnlyStoryProvider {
-        final List<Story> ids;
+        final List<Story> idOnlyStories;
 
-        private StubbedIdOnlyStoryProvider(List<Story> ids) {
-            this.ids = ids;
+        private StubbedIdOnlyStoryProvider(List<Story> stories) {
+            this.idOnlyStories = stories;
         }
 
         @Override
         public void idOnlyStoriesFor(@NotNull Section section, @NotNull ValueCallback<? super List<Story>> callback) {
-            callback.onValueRetrieved(ids);
+            callback.onValueRetrieved(idOnlyStories);
         }
     }
 
