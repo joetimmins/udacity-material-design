@@ -15,15 +15,18 @@ import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.hackernews.Presenter;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
+import com.novoda.materialised.hackernews.section.AllSectionsPresenter;
 import com.novoda.materialised.hackernews.section.DefaultSectionListProvider;
 import com.novoda.materialised.hackernews.section.Section;
-import com.novoda.materialised.hackernews.section.AllSectionsPresenter;
 import com.novoda.materialised.hackernews.section.view.AndroidTabsView;
-import com.novoda.materialised.hackernews.stories.provider.ProviderFactory;
 import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider;
+import com.novoda.materialised.hackernews.stories.provider.ProviderFactory;
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
 import com.novoda.materialised.hackernews.stories.view.StoryCardView;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
@@ -61,7 +64,9 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 idOnlyStoryProvider,
                 storyProvider,
                 asyncListView,
-                new IntentNavigator(this)
+                new IntentNavigator(this),
+                Schedulers.io(),
+                AndroidSchedulers.mainThread()
         );
 
         presenter = new AllSectionsPresenter(

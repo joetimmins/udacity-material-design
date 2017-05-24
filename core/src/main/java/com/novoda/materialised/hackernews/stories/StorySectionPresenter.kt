@@ -5,40 +5,43 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.provider.*
+import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider
+import com.novoda.materialised.hackernews.stories.provider.Story
+import com.novoda.materialised.hackernews.stories.provider.StoryProvider
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
+import io.reactivex.Scheduler
 
 class StorySectionPresenter(
         val idOnlyStoryProvider: IdOnlyStoryProvider,
         val storyProvider: StoryProvider,
         val storiesView: AsyncListView<StoryViewData>,
-        val navigator: Navigator
+        val navigator: Navigator,
+        val subscribeScheduler: Scheduler,
+        val observeScheduler: Scheduler
 ) : Presenter<Section> {
+
     override fun present(section: Section) {
-        idOnlyStoryProvider.idOnlyStoriesFor(section, callbackWithAllStoriesInList(storiesView))
+        idOnlyStoryProvider.idOnlyStoriesFor(section)
+                .map(convertAllStories())
+                .doAfterSuccess(updateStoriesView())
+                .map { storyViewModels -> storyViewModels.map { (viewData) -> viewData.id } }
+                .flatMapObservable { idList -> storyProvider.readItems(idList) }
+                .map { story -> convertStoryToStoryViewModel(story) }
+                .subscribeOn(subscribeScheduler)
+                .observeOn(observeScheduler)
+                .subscribe({ storyViewModel -> storiesView.updateWith(storyViewModel) }, { storiesView.showError() })
     }
 
-    private fun callbackWithAllStoriesInList(storiesView: AsyncListView<StoryViewData>): ValueCallback<List<Story>> {
-        return valueCallbackOf {
-            idOnlyStories ->
-            if (idOnlyStories.isNotEmpty()) {
-                val idOnlyViewModels = idOnlyStories.map { idOnlyStory -> convertStoryToStoryViewModel(idOnlyStory) }
-                storiesView.updateWith(idOnlyViewModels)
+    private fun convertAllStories(): (List<Story>) -> List<ViewModel<StoryViewData>> {
+        return { stories: List<Story> -> stories.map { story -> convertStoryToStoryViewModel(story) } }
+    }
 
-                val idList = idOnlyStories.map { idOnlyStory -> idOnlyStory.id }
-                val viewUpdater = viewUpdaterFor(storiesView)
-                storyProvider.readItems(idList, viewUpdater)
-            } else {
-                storiesView.showError()
+    private fun updateStoriesView(): (List<ViewModel<StoryViewData>>) -> Unit {
+        return { storyViewModels ->
+            when {
+                storyViewModels.isEmpty() -> storiesView.showError()
+                else -> storiesView.updateWith(storyViewModels)
             }
-        }
-    }
-
-    private fun viewUpdaterFor(storiesView: AsyncListView<StoryViewData>): ValueCallback<Story> {
-        return valueCallbackOf {
-            story ->
-            val storyViewModel = convertStoryToStoryViewModel(story)
-            storiesView.updateWith(storyViewModel)
         }
     }
 
@@ -47,7 +50,6 @@ class StorySectionPresenter(
         val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
         return ViewModel(storyViewData, viewBehaviour)
     }
-
 
     private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
         when {

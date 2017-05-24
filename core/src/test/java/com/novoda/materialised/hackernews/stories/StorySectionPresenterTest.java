@@ -7,7 +7,6 @@ import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider;
 import com.novoda.materialised.hackernews.stories.provider.Story;
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider;
-import com.novoda.materialised.hackernews.stories.provider.ValueCallback;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.ArrayList;
@@ -17,6 +16,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -28,7 +31,6 @@ public class StorySectionPresenterTest {
     private static final List<Story> ID_ONLY_STORIES = Arrays.asList(
             Story.IdOnly.buildFor(FIRST_STORY_ID),
             Story.IdOnly.buildFor(SECOND_STORY_ID)
-
     );
 
     private static final Story A_STORY = new Story("test author", 123, (int) FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url");
@@ -94,7 +96,9 @@ public class StorySectionPresenterTest {
                 new StubbedIdOnlyStoryProvider(idOnlyStories),
                 new StubbedStoryProvider(stories),
                 storiesView,
-                navigator
+                navigator,
+                Schedulers.trampoline(),
+                Schedulers.trampoline()
         );
         presenter.present(Section.NEW);
     }
@@ -113,9 +117,10 @@ public class StorySectionPresenterTest {
             this.idOnlyStories = stories;
         }
 
+        @NotNull
         @Override
-        public void idOnlyStoriesFor(@NotNull Section section, @NotNull ValueCallback<? super List<Story>> callback) {
-            callback.onValueRetrieved(idOnlyStories);
+        public Single<List<Story>> idOnlyStoriesFor(@NotNull Section section) {
+            return Single.just(idOnlyStories);
         }
     }
 
@@ -126,11 +131,10 @@ public class StorySectionPresenterTest {
             this.stories = stories;
         }
 
+        @NotNull
         @Override
-        public void readItems(@NotNull List<Integer> ids, @NotNull ValueCallback<? super Story> valueCallback) {
-            for (Story story : stories) {
-                valueCallback.onValueRetrieved(story);
-            }
+        public Observable<Story> readItems(@NotNull List<Integer> ids) {
+            return Observable.fromIterable(stories);
         }
     }
 
