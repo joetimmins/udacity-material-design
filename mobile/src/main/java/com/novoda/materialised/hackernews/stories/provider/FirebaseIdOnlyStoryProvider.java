@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-final class FirebaseStoryIdProvider implements StoryIdProvider {
+final class FirebaseIdOnlyStoryProvider implements IdOnlyStoryProvider {
     private final FirebaseDatabase firebaseDatabase;
 
-    FirebaseStoryIdProvider(FirebaseDatabase firebaseDatabase) {
+    FirebaseIdOnlyStoryProvider(FirebaseDatabase firebaseDatabase) {
         this.firebaseDatabase = firebaseDatabase;
     }
 

@@ -8,8 +8,8 @@ public final class ProviderFactory {
         return new FirebaseStoryProvider(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
     }
 
-    public static StoryIdProvider newStoryIdProvider(Context context) {
-        return new FirebaseStoryIdProvider(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
+    public static IdOnlyStoryProvider newStoryIdProvider(Context context) {
+        return new FirebaseIdOnlyStoryProvider(FirebaseSingleton.INSTANCE.getFirebaseDatabase(context));
     }
 
 }
