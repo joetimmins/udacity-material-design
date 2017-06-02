@@ -38,12 +38,16 @@ class StorySectionPresenter private constructor(
         idOnlyStoryProvider.idOnlyStoriesFor(section)
                 .map(convertAllStories())
                 .doAfterSuccess(updateStoriesView())
-                .map { storyViewModels -> storyViewModels.map { (viewData) -> viewData.id } }
+                .map(extractStoryIds())
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
                 .map { story -> convertStoryToStoryViewModel(story) }
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
                 .subscribe({ storyViewModel -> storiesView.updateWith(storyViewModel) }, { storiesView.showError() })
+    }
+
+    private fun extractStoryIds(): (List<ViewModel<StoryViewData>>) -> List<Int> {
+        return { storyViewModels: List<ViewModel<StoryViewData>> -> storyViewModels.map { (viewData) -> viewData.id } }
     }
 
     private fun convertAllStories(): (List<Story>) -> List<ViewModel<StoryViewData>> {
