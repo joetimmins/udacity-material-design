@@ -47,11 +47,11 @@ class StorySectionPresenter private constructor(
     }
 
     private fun extractStoryIds(): (List<ViewModel<StoryViewData>>) -> List<Int> {
-        return { storyViewModels: List<ViewModel<StoryViewData>> -> storyViewModels.map { (viewData) -> viewData.id } }
+        return { storyViewModels -> storyViewModels.map { (viewData) -> viewData.id } }
     }
 
     private fun convertAllStories(): (List<Story>) -> List<ViewModel<StoryViewData>> {
-        return { stories: List<Story> -> stories.map { story -> convertStoryToStoryViewModel(story) } }
+        return { stories -> stories.map { story -> convertStoryToStoryViewModel(story) } }
     }
 
     private fun updateStoriesView(): (List<ViewModel<StoryViewData>>) -> Unit {
