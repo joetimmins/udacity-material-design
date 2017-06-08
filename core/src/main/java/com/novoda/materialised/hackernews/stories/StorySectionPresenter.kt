@@ -64,9 +64,10 @@ class StorySectionPresenter private constructor(
     }
 
     private fun convertStoryToStoryViewModel(story: Story): ViewModel<StoryViewData> {
-        val viewBehaviour = buildViewBehaviour(story)
-        val storyViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
-        return ViewModel(storyViewData, viewBehaviour)
+        return ViewModel(
+                StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
+                buildViewBehaviour(story)
+        )
     }
 
     private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
