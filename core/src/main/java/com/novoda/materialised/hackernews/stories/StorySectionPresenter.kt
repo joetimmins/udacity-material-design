@@ -54,6 +54,13 @@ class StorySectionPresenter private constructor(
         )
     }
 
+    private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
+        when {
+            Story.isIdOnly(story) -> return {}
+            else -> return { storyViewData -> navigator.navigateTo(storyViewData.url) }
+        }
+    }
+
     private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = {
         storyViewModels ->
         storyViewModels.map { (viewData) -> viewData.id }
@@ -70,11 +77,4 @@ class StorySectionPresenter private constructor(
     private val onNext: (ViewModel<StoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
 
     private val onError: (Throwable) -> Unit = { storiesView.showError() }
-
-    private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
-        when {
-            Story.isIdOnly(story) -> return {}
-            else -> return { storyViewData -> navigator.navigateTo(storyViewData.url) }
-        }
-    }
 }
