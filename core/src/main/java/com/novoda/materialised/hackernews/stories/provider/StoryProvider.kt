@@ -7,8 +7,8 @@ internal class StoryProvider(
 ) {
 
     fun readItems(ids: List<Int>): Observable<Story> {
-        val createStoryObservables = storyObservableProvider.createStoryObservables(ids)
-        return Observable.fromIterable(createStoryObservables)
+        val storyObservables = storyObservableProvider.createStoryObservables(ids)
+        return Observable.fromIterable(storyObservables)
                 .reduce { storyObservable, nextStoryObservable -> storyObservable.mergeWith(nextStoryObservable) }
                 .flatMapObservable { storyObservable -> storyObservable }
     }
