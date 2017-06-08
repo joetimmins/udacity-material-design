@@ -36,39 +36,40 @@ class StorySectionPresenter private constructor(
 
     override fun present(section: Section) {
         idOnlyStoryProvider.idOnlyStoriesFor(section)
-                .map(convertAllStories())
-                .doAfterSuccess(updateStoriesView())
-                .map(extractStoryIds())
+                .map { stories -> stories.map(mapStoryToViewModel) }
+                .doAfterSuccess(updateStoriesView)
+                .map(extractStoryIds)
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
-                .map { story -> convertStoryToStoryViewModel(story) }
+                .map(mapStoryToViewModel)
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
-                .subscribe({ storyViewModel -> storiesView.updateWith(storyViewModel) }, { storiesView.showError() })
+                .subscribe(onNext, onError)
     }
 
-    private fun extractStoryIds(): (List<ViewModel<StoryViewData>>) -> List<Int> {
-        return { storyViewModels -> storyViewModels.map { (viewData) -> viewData.id } }
-    }
-
-    private fun convertAllStories(): (List<Story>) -> List<ViewModel<StoryViewData>> {
-        return { stories -> stories.map { story -> convertStoryToStoryViewModel(story) } }
-    }
-
-    private fun updateStoriesView(): (List<ViewModel<StoryViewData>>) -> Unit {
-        return { storyViewModels ->
-            when {
-                storyViewModels.isEmpty() -> storiesView.showError()
-                else -> storiesView.updateWith(storyViewModels)
-            }
-        }
-    }
-
-    private fun convertStoryToStoryViewModel(story: Story): ViewModel<StoryViewData> {
-        return ViewModel(
+    private val mapStoryToViewModel: (Story) -> ViewModel<StoryViewData> = {
+        story ->
+        ViewModel(
                 StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
                 buildViewBehaviour(story)
         )
     }
+
+    private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = {
+        storyViewModels ->
+        storyViewModels.map { (viewData) -> viewData.id }
+    }
+
+    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = {
+        storyViewModels ->
+        when {
+            storyViewModels.isEmpty() -> storiesView.showError()
+            else -> storiesView.updateWith(storyViewModels)
+        }
+    }
+
+    private val onNext: (ViewModel<StoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
+
+    private val onError: (Throwable) -> Unit = { storiesView.showError() }
 
     private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
         when {
