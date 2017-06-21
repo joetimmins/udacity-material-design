@@ -2,7 +2,6 @@ package com.novoda.materialised.hackernews.section
 
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.section.view.TabsView
-import com.novoda.materialised.hackernews.stories.SpyingSectionPresenter
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
 
@@ -13,7 +12,7 @@ class AllSectionsPresenterTest {
     fun populateViewWithViewDataFromProvider_whenPresentingStarts() {
         val view = SpyingTabsView()
         val expectedViewData: List<Section> = listOf(Section.BEST, Section.TOP_STORIES)
-        val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, SpyingSectionPresenter())
+        val sectionListPresenter = newAllSectionsPresenter(view)
 
         sectionListPresenter.startPresenting()
 
@@ -21,39 +20,16 @@ class AllSectionsPresenterTest {
     }
 
     @Test
-    fun firstSectionInListFromProviderIsPresented_whenPresentingStarts() {
-        val provider = DummySectionListProvider()
-        val view = SpyingTabsView()
-        val spyingPresenter = SpyingSectionPresenter()
-        val sectionListPresenter = AllSectionsPresenter(provider, view, spyingPresenter)
-
-        sectionListPresenter.startPresenting()
-
-        assertThat(spyingPresenter.presentedTypes.size).isEqualTo(1)
-        assertThat(spyingPresenter.presentedTypes.last()).isEqualTo(provider.provideSections().first())
-    }
-
-    @Test
-    fun clickingViewModelStartsPresentingThatSection() {
-        val view = SpyingTabsView()
-        val spyingPresenter = SpyingSectionPresenter()
-        val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, spyingPresenter)
-
-        sectionListPresenter.startPresenting()
-        view.receivedViewModels.last().onClick()
-
-        assertThat(spyingPresenter.presentedTypes.last()).isEqualTo(Section.TOP_STORIES)
-    }
-
-    @Test
     fun presenterTellsViewToRefreshCurrentTab_whenPresentingResumes() {
         val view = SpyingTabsView()
-        val sectionListPresenter = AllSectionsPresenter(DummySectionListProvider(), view, SpyingSectionPresenter())
+        val sectionListPresenter = newAllSectionsPresenter(view)
 
         sectionListPresenter.resumePresenting()
 
         assertThat(view.currentTabRefreshed).isTrue
     }
+
+    private fun newAllSectionsPresenter(view: SpyingTabsView) = AllSectionsPresenter(DummySectionListProvider(), view)
 }
 
 class DummySectionListProvider : SectionListProvider {

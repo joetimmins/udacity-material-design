@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +13,6 @@ import com.novoda.materialised.R;
 import com.novoda.materialised.databinding.MainActivityBinding;
 import com.novoda.materialised.hackernews.Presenter;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
-import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
 import com.novoda.materialised.hackernews.section.AllSectionsPresenter;
 import com.novoda.materialised.hackernews.section.DefaultSectionListProvider;
 import com.novoda.materialised.hackernews.section.Section;
@@ -22,11 +20,11 @@ import com.novoda.materialised.hackernews.section.view.AndroidTabsView;
 import com.novoda.materialised.hackernews.stories.provider.ProviderFactory;
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider;
 import com.novoda.materialised.hackernews.stories.provider.StoryObservableProvider;
-import com.novoda.materialised.hackernews.stories.view.StoryCardView;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.jvm.functions.Function1;
 
 public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
@@ -39,7 +37,6 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
         MainActivityBinding mainActivityLayout = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
         setSupportActionBar(mainActivityLayout.toolbar);
-        mainActivityLayout.storiesView.setLayoutManager(new LinearLayoutManager(this));
         mainActivityLayout.plusFab.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -51,19 +48,12 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 }
         );
 
-        AsyncListView<StoryViewData> asyncListView = new AsyncListViewPresenter<>(
-                mainActivityLayout.loadingView,
-                mainActivityLayout.storiesView,
-                StoryCardView.class
-        );
-
         StoryObservableProvider storyObservableProvider = ProviderFactory.newStoryObservableProvider(this);
         StoryIdProvider storyIdProvider = ProviderFactory.newStoryIdProvider(this);
 
-        Presenter<Section> storiesPresenter = new StorySectionPresenter(
+        Function1<AsyncListView<StoryViewData>, Presenter<Section>> sectionPresenterFactory = StorySectionPresenterKt.partialPresenter(
                 storyIdProvider,
                 storyObservableProvider,
-                asyncListView,
                 new IntentNavigator(this),
                 Schedulers.io(),
                 AndroidSchedulers.mainThread()
@@ -71,8 +61,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
         presenter = new AllSectionsPresenter(
                 new DefaultSectionListProvider(),
-                new AndroidTabsView(mainActivityLayout.sectionTabLayout),
-                storiesPresenter
+                new AndroidTabsView(mainActivityLayout.sectionTabLayout)
         );
         presenter.startPresenting();
     }
