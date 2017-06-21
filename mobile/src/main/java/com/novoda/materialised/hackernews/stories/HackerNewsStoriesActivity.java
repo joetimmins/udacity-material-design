@@ -3,6 +3,7 @@ package com.novoda.materialised.hackernews.stories;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,8 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
                 }
         );
 
+        ViewPager sectionViewPager = mainActivityLayout.viewpager;
+
         StoryObservableProvider storyObservableProvider = ProviderFactory.newStoryObservableProvider(this);
         StoryIdProvider storyIdProvider = ProviderFactory.newStoryIdProvider(this);
 
@@ -61,7 +64,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
         presenter = new AllSectionsPresenter(
                 new DefaultSectionListProvider(),
-                new AndroidTabsView(mainActivityLayout.sectionTabLayout)
+                new AndroidTabsView(sectionViewPager, mainActivityLayout.sectionTabLayout, sectionPresenterFactory)
         );
         presenter.startPresenting();
     }

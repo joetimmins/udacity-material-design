@@ -11,7 +11,6 @@ class AllSectionsPresenter(private val provider: SectionListProvider,
                 .map { section -> ViewModel(section) }
         val defaultValue = sectionViewModels.filter { (viewData) -> viewData.isDefault }.first()
         view.updateWith(sectionViewModels, defaultValue)
-        sectionViewModels.first().onClick()
     }
 
     fun resumePresenting() {
