@@ -19,7 +19,7 @@ class AllSectionsPresenter(private val provider: SectionListProvider,
 
     fun resumePresenting() {
         val sections = provider.provideSections()
-        val defaultValue = sections.filter(Section::isDefault).first()
+        val defaultValue = sections.filter { section -> section.isDefault }.first()
         view.refreshCurrentTab(ViewModel(defaultValue, sectionSelectedListener))
     }
 }
