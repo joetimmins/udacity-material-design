@@ -1,9 +1,7 @@
 package com.novoda.materialised.hackernews.asynclistview
 
 
-interface AsyncListView<T : ViewData<Any>> {
-
+interface AsyncListView<T : ViewData<Any>> : ModelledView<T> {
     fun updateWith(initialViewModelList: List<ViewModel<T>>)
-    fun updateWith(viewModel: ViewModel<T>)
     fun showError()
 }
