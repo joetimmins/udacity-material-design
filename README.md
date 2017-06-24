@@ -14,10 +14,9 @@ Coming soon:
 
 Some other attempted techniques on show here include:
 - Hexagonal architecture, with the code split between `mobile` and `core` modules
+- Feature-based unit testing - rather than using each class as a unit under test, we're writing tests for the `core` module's functionality between an input and an output. This means we're not gluing our tests directly to our implementation
 - Exclusive use of Kotlin for the `core` module of the app
 - Data pulled in from the Hacker News API using Firebase, detailed here https://github.com/HackerNews/API
 - An intention to achieve 100% test coverage of the `core` module
 - A first draft of a pattern I like to call Android-as-a-factory
 - An asynchronously-loading RecyclerView, which updates its views as their data is returned from Firebase
-
-The big thing I haven't done yet but am planning to is Rx integration. PR coming soon!
