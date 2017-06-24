@@ -17,6 +17,7 @@ Some other attempted techniques on show here include:
 - Feature-based unit testing - rather than using each class as a unit under test, we're writing tests for the `core` module's functionality between an input and an output. This means we're not gluing our tests directly to our implementation
 - Exclusive use of Kotlin for the `core` module of the app
 - Data pulled in from the Hacker News API using Firebase, detailed here https://github.com/HackerNews/API
+- Replacing all Firebase callbacks with RxJava 2.1 Singles and Observables using a generic binding system
 - An intention to achieve 100% test coverage of the `core` module
 - A first draft of a pattern I like to call Android-as-a-factory
 - An asynchronously-loading RecyclerView, which updates its views as their data is returned from Firebase
