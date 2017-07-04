@@ -2,6 +2,7 @@ package com.novoda.materialised.hackernews.section.view;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ class SectionPagerAdapter extends PagerAdapter {
 
         View loadingView = sectionView.findViewById(R.id.loading_view);
         RecyclerView recyclerView = (RecyclerView) sectionView.findViewById(R.id.stories_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         AsyncListView<StoryViewData> asyncListView = new AsyncListViewPresenter<>(loadingView, recyclerView, StoryCardView.class);
 
