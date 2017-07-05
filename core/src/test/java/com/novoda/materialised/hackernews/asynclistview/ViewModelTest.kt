@@ -15,7 +15,7 @@ class ViewModelTest {
 
         var actualViewId = 0
 
-        val intViewModel = ViewModel(intViewData, { intViewData -> actualViewId = intViewData.id })
+        val intViewModel = ViewModel(intViewData, { viewData -> actualViewId = viewData.id })
 
         intViewModel.onClick()
 

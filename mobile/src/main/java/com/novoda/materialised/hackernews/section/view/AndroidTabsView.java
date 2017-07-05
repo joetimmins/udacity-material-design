@@ -56,5 +56,4 @@ public final class AndroidTabsView implements TabsView<Section> {
             }
         };
     }
-
 }
