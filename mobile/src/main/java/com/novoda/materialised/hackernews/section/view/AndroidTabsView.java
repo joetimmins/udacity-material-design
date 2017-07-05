@@ -74,6 +74,7 @@ public final class AndroidTabsView implements TabsView<Section> {
         return new Function0<ViewModel<Section>>() {
             @Override
             public ViewModel<Section> invoke() {
+                //noinspection unchecked - any ClassCastExceptions generated here would be caught in handleNullable
                 return (ViewModel<Section>) tab.getTag();
             }
         };
