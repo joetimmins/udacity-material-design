@@ -80,7 +80,7 @@ public class StorySectionPresenterTest {
 
         presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator);
 
-        storiesView.firstUpdatedViewModel.onClick();
+        storiesView.firstUpdatedViewModel.invokeBehaviour();
 
         assertThat(navigator.uri).isEqualTo(A_STORY.getUrl());
     }
