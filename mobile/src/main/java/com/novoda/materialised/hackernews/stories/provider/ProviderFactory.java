@@ -8,7 +8,7 @@ public final class ProviderFactory {
 
     public static StorySinglesProvider newStoryObservableProvider(Context context) {
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(context);
-        return new FirebaseStorySinglesProvider(firebaseDatabase);
+        return new FirebaseStorySingleProvider(firebaseDatabase);
     }
 
     public static StoryIdProvider newStoryIdProvider(Context context) {

@@ -9,10 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import io.reactivex.Single;
 import kotlin.jvm.functions.Function1;
 
-final class FirebaseStorySinglesProvider implements StorySinglesProvider {
+final class FirebaseStorySingleProvider implements StorySinglesProvider {
     private final FirebaseDatabase firebaseDatabase;
 
-    FirebaseStorySinglesProvider(FirebaseDatabase firebaseDatabase) {
+    FirebaseStorySingleProvider(FirebaseDatabase firebaseDatabase) {
         this.firebaseDatabase = firebaseDatabase;
     }
 
