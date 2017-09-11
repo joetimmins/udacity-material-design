@@ -4,9 +4,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.Single;
@@ -21,7 +18,7 @@ final class FirebaseStorySinglesProvider implements StorySinglesProvider {
 
     @NotNull
     @Override
-    public List<Single<Story>> obtainStories(@NotNull List<Integer> storyIds) {
+    public Single<Story> obtainStory(int storyId) {
         final DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
         final Function1<DataSnapshot, Story> converter = new Function1<DataSnapshot, Story>() {
             @Override
@@ -30,12 +27,7 @@ final class FirebaseStorySinglesProvider implements StorySinglesProvider {
             }
         };
 
-        List<Single<Story>> storyObservables = new ArrayList<>(storyIds.size());
-        for (Integer storyId : storyIds) {
-            DatabaseReference childReference = databaseReference.child(Integer.toString(storyId));
-            Single<Story> storyObservable = FirebaseSingleEventListener.listen(childReference, converter);
-            storyObservables.add(storyObservable);
-        }
-        return storyObservables;
+        DatabaseReference childReference = databaseReference.child(Integer.toString(storyId));
+        return FirebaseSingleEventListener.listen(childReference, converter);
     }
 }

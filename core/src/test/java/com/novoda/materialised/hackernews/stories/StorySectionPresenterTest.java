@@ -132,12 +132,13 @@ public class StorySectionPresenterTest {
 
         @NotNull
         @Override
-        public List<Single<Story>> obtainStories(@NotNull List<Integer> storyIds) {
-            List<Single<Story>> observables = new ArrayList<>(stories.size());
+        public Single<Story> obtainStory(int storyId) {
             for (Story story : stories) {
-                observables.add(Single.just(story));
+                if (story.getId() == storyId) {
+                    return Single.just(story);
+                }
             }
-            return observables;
+            return Single.never();
         }
     }
 
