@@ -57,14 +57,6 @@ class SectionPagerAdapter extends PagerAdapter {
 
         View sectionView = (View) itemToDestroy.getFirst();
         container.removeView(sectionView);
-
-        AsyncListView asyncListView = (AsyncListView) itemToDestroy.getSecond();
-        asyncListView = null;
-
-        Presenter presenter = (Presenter) itemToDestroy.getThird();
-        presenter = null;
-
-        itemToDestroy = null;
     }
 
     @Override
