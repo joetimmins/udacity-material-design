@@ -20,7 +20,7 @@ import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.section.view.AndroidTabsView;
 import com.novoda.materialised.hackernews.stories.provider.ProviderFactory;
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider;
-import com.novoda.materialised.hackernews.stories.provider.StorySinglesProvider;
+import com.novoda.materialised.hackernews.stories.provider.StorySingleProvider;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -51,12 +51,12 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
         ViewPager sectionViewPager = mainActivityLayout.viewpager;
 
-        StorySinglesProvider storySinglesProvider = ProviderFactory.newStoryObservableProvider(this);
+        StorySingleProvider storySingleProvider = ProviderFactory.newStoryObservableProvider(this);
         StoryIdProvider storyIdProvider = ProviderFactory.newStoryIdProvider(this);
 
         Function1<AsyncListView<StoryViewData>, Presenter<Section>> sectionPresenterFactory = StorySectionPresenterKt.partialPresenter(
                 storyIdProvider,
-                storySinglesProvider,
+                storySingleProvider,
                 new IntentNavigator(this),
                 Schedulers.io(),
                 AndroidSchedulers.mainThread()

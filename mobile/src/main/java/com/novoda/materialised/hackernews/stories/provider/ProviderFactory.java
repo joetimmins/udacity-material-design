@@ -6,7 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public final class ProviderFactory {
 
-    public static StorySinglesProvider newStoryObservableProvider(Context context) {
+    public static StorySingleProvider newStoryObservableProvider(Context context) {
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.getFirebaseDatabase(context);
         return new FirebaseStorySingleProvider(firebaseDatabase);
     }
