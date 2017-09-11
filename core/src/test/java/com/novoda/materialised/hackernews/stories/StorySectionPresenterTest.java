@@ -92,7 +92,6 @@ public class StorySectionPresenterTest {
     }
 
     private void presentWith(List<Long> storyIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
-
         StorySectionPresenter presenter = new StorySectionPresenter(
                 new StubbedStoryIdProvider(storyIds),
                 new StubbedStoryObservableProvider(stories),

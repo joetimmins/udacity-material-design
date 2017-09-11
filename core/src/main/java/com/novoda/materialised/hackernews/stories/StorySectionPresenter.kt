@@ -10,12 +10,12 @@ import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Scheduler
 
 class StorySectionPresenter private constructor(
-        val idOnlyStoryProvider: IdOnlyStoryProvider,
-        val storyProvider: StoryProvider,
-        val storiesView: AsyncListView<StoryViewData>,
-        val navigator: Navigator,
-        val subscribeScheduler: Scheduler,
-        val observeScheduler: Scheduler
+        private val idOnlyStoryProvider: IdOnlyStoryProvider,
+        private val storyProvider: StoryProvider,
+        private val storiesView: AsyncListView<StoryViewData>,
+        private val navigator: Navigator,
+        private val subscribeScheduler: Scheduler,
+        private val observeScheduler: Scheduler
 ) : Presenter<Section> {
 
     constructor(
