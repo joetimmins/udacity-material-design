@@ -52,6 +52,12 @@ class SectionPagerAdapter extends PagerAdapter {
     }
 
     @Override
+    public CharSequence getPageTitle(int position) {
+        Section section = viewModels.get(position).getViewData();
+        return section.getUserFacingName();
+    }
+
+    @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         Triple itemToDestroy = (Triple) object;
 
