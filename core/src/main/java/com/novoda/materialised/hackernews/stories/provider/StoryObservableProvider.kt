@@ -1,7 +1,7 @@
 package com.novoda.materialised.hackernews.stories.provider
 
-import io.reactivex.Observable
+import io.reactivex.Single
 
 interface StoryObservableProvider {
-    fun createStoryObservables(storyIds: List<Int>): List<Observable<Story>>
+    fun obtainStories(storyIds: List<Int>): List<Single<Story>>
 }

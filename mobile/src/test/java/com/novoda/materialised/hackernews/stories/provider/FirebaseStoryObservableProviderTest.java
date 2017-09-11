@@ -25,7 +25,7 @@ public class FirebaseStoryObservableProviderTest {
         FirebaseStoryObservableProvider provider = new FirebaseStoryObservableProvider(FakeFirebase.getItemsDatabase(stories));
 
         List<Observable<Story>> storyObservables = provider
-                .createStoryObservables(Arrays.asList(firstStoryId, secondStoryId));
+                .obtainStories(Arrays.asList(firstStoryId, secondStoryId));
 
         final List<Story> actualStories = new ArrayList<>();
 

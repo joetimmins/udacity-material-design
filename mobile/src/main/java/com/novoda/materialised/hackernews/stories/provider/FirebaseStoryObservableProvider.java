@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import kotlin.jvm.functions.Function1;
 
 final class FirebaseStoryObservableProvider implements StoryObservableProvider {
@@ -21,7 +21,7 @@ final class FirebaseStoryObservableProvider implements StoryObservableProvider {
 
     @NotNull
     @Override
-    public List<Observable<Story>> createStoryObservables(@NotNull List<Integer> storyIds) {
+    public List<Single<Story>> obtainStories(@NotNull List<Integer> storyIds) {
         final DatabaseReference databaseReference = firebaseDatabase.getReference("v0").child("item");
         final Function1<DataSnapshot, Story> converter = new Function1<DataSnapshot, Story>() {
             @Override
@@ -30,10 +30,10 @@ final class FirebaseStoryObservableProvider implements StoryObservableProvider {
             }
         };
 
-        List<Observable<Story>> storyObservables = new ArrayList<>(storyIds.size());
+        List<Single<Story>> storyObservables = new ArrayList<>(storyIds.size());
         for (Integer storyId : storyIds) {
             DatabaseReference childReference = databaseReference.child(Integer.toString(storyId));
-            Observable<Story> storyObservable = FirebaseSingleEventListener.listen(childReference, converter).toObservable();
+            Single<Story> storyObservable = FirebaseSingleEventListener.listen(childReference, converter);
             storyObservables.add(storyObservable);
         }
         return storyObservables;

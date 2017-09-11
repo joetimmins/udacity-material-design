@@ -17,7 +17,6 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -133,10 +132,10 @@ public class StorySectionPresenterTest {
 
         @NotNull
         @Override
-        public List<Observable<Story>> createStoryObservables(@NotNull List<Integer> storyIds) {
-            List<Observable<Story>> observables = new ArrayList<>(stories.size());
+        public List<Single<Story>> obtainStories(@NotNull List<Integer> storyIds) {
+            List<Single<Story>> observables = new ArrayList<>(stories.size());
             for (Story story : stories) {
-                observables.add(Observable.just(story));
+                observables.add(Single.just(story));
             }
             return observables;
         }
