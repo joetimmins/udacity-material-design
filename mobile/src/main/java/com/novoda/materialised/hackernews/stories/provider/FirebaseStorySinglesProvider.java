@@ -12,10 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import io.reactivex.Single;
 import kotlin.jvm.functions.Function1;
 
-final class FirebaseStoryObservableProvider implements StoryObservableProvider {
+final class FirebaseStorySinglesProvider implements StorySinglesProvider {
     private final FirebaseDatabase firebaseDatabase;
 
-    FirebaseStoryObservableProvider(FirebaseDatabase firebaseDatabase) {
+    FirebaseStorySinglesProvider(FirebaseDatabase firebaseDatabase) {
         this.firebaseDatabase = firebaseDatabase;
     }
 

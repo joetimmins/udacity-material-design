@@ -13,7 +13,7 @@ import io.reactivex.disposables.Disposable;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class FirebaseStoryObservableProviderTest {
+public class FirebaseStorySinglesProviderTest {
 
     @Test
     public void readItemsCallsBackOncePerValueRetrieved() {
@@ -22,7 +22,7 @@ public class FirebaseStoryObservableProviderTest {
         Story firstStory = new Story("author", 890, firstStoryId, Arrays.asList(1, 2), 4, 1232, "test title", "test type", "http://test.url");
         Story secondStory = new Story("another author", 567, secondStoryId, Arrays.asList(3, 4), 5, 7897, "another title", "another type", "http://another.url");
         List<Story> stories = Arrays.asList(firstStory, secondStory);
-        FirebaseStoryObservableProvider provider = new FirebaseStoryObservableProvider(FakeFirebase.getItemsDatabase(stories));
+        FirebaseStorySinglesProvider provider = new FirebaseStorySinglesProvider(FakeFirebase.getItemsDatabase(stories));
 
         List<Observable<Story>> storyObservables = provider
                 .obtainStories(Arrays.asList(firstStoryId, secondStoryId));

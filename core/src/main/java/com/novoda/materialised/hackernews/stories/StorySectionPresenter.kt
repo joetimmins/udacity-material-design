@@ -20,14 +20,14 @@ class StorySectionPresenter private constructor(
 
     constructor(
             storyIdProvider: StoryIdProvider,
-            storyObservableProvider: StoryObservableProvider,
+            storySinglesProvider: StorySinglesProvider,
             storiesView: AsyncListView<StoryViewData>,
             navigator: Navigator,
             subscribeScheduler: Scheduler,
             observeScheduler: Scheduler
     ) : this(
             IdOnlyStoryProvider(storyIdProvider),
-            StoryProvider(storyObservableProvider),
+            StoryProvider(storySinglesProvider),
             storiesView,
             navigator,
             subscribeScheduler,
@@ -80,14 +80,14 @@ class StorySectionPresenter private constructor(
 }
 
 fun partialPresenter(storyIdProvider: StoryIdProvider,
-                     storyObservableProvider: StoryObservableProvider,
+                     storySinglesProvider: StorySinglesProvider,
                      navigator: Navigator,
                      subscribeScheduler: Scheduler,
                      observeScheduler: Scheduler): (AsyncListView<StoryViewData>) -> Presenter<Section> {
     return { asyncListView ->
         StorySectionPresenter(
                 storyIdProvider,
-                storyObservableProvider,
+                storySinglesProvider,
                 asyncListView,
                 navigator,
                 subscribeScheduler,
