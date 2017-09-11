@@ -10,16 +10,5 @@ data class Story(
         val title: String = "",
         val type: String = "",
         val url: String = ""
-) {
-    companion object IdOnly {
-        fun buildFor(givenId: Int): Story {
-            return Story(id = givenId)
-        }
-
-        fun isIdOnly(story: Story): Boolean {
-            val idOnlyStory = Story(id = story.id)
-            return story == idOnlyStory
-        }
-    }
-}
+)
 
