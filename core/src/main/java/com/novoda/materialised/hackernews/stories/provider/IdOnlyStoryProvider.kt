@@ -13,8 +13,8 @@ internal class IdOnlyStoryProvider(
 
         return listOfStoryIds
                 .flatMapObservable { longs -> Observable.fromIterable(longs) }
-                .map { rawId -> Story.buildFor(rawId!!.toInt()) }
-                .reduce(listOf(), { stories, story ->
+                .map { rawId -> Story.buildFor(rawId.toInt()) }
+                .reduce(listOf(),{ stories, story ->
                     stories.plusElement(story)
                 })
     }
