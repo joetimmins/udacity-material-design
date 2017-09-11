@@ -36,7 +36,7 @@ class StorySectionPresenter private constructor(
 
     override fun present(section: Section) {
         idOnlyStoryProvider.idOnlyStoriesFor(section)
-                .map { stories -> stories.map(mapStoryToViewModel) }
+                .map { stories -> stories.map(mapStoryToIdOnlyViewModel) }
                 .doAfterSuccess(updateStoriesView)
                 .map(extractStoryIds)
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
@@ -46,28 +46,22 @@ class StorySectionPresenter private constructor(
                 .subscribe(onNext, onError)
     }
 
-    private val mapStoryToViewModel: (Story) -> ViewModel<StoryViewData> = {
-        story ->
+    private val mapStoryToIdOnlyViewModel: (Story) -> ViewModel<StoryViewData> = { story -> ViewModel(mapStoryToViewData(story)) }
+
+    private val mapStoryToViewModel: (Story) -> ViewModel<StoryViewData> = { story ->
         ViewModel(
-                StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
-                buildViewBehaviour(story)
+                mapStoryToViewData(story),
+                { storyViewData -> navigator.navigateTo(storyViewData.url) }
         )
     }
 
-    private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
-        when {
-            Story.isIdOnly(story) -> return {}
-            else -> return { storyViewData -> navigator.navigateTo(storyViewData.url) }
-        }
-    }
+    private fun mapStoryToViewData(story: Story) = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
 
-    private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = {
-        storyViewModels ->
+    private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = { storyViewModels ->
         storyViewModels.map { (viewData) -> viewData.id }
     }
 
-    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = {
-        storyViewModels ->
+    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = { storyViewModels ->
         when {
             storyViewModels.isEmpty() -> storiesView.showError()
             else -> storiesView.updateWith(storyViewModels)
