@@ -3,7 +3,7 @@ package com.novoda.materialised.hackernews
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
 
-private val defaultValue = 23
+private val defaultValue = 236
 
 class NullHandlerKtTest {
 
