@@ -48,7 +48,7 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
     @Override
     public void showError() {
         TextView textView = (TextView) loadingView;
-        textView.setText("BORK BORK");
+        textView.setText(R.string.bork_bork);
         loadingView.setVisibility(View.VISIBLE);
     }
 
