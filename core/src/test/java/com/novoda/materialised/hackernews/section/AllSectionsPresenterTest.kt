@@ -33,9 +33,7 @@ class AllSectionsPresenterTest {
 }
 
 class DummySectionListProvider : SectionListProvider {
-    override fun provideSections(): List<Section> {
-        return listOf(Section.BEST, Section.TOP_STORIES)
-    }
+    override fun provideSections(): List<Section> = listOf(Section.BEST, Section.TOP_STORIES)
 }
 
 class SpyingTabsView : TabsView<Section> {
