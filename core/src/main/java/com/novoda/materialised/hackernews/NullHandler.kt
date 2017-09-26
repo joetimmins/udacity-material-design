@@ -8,9 +8,9 @@ fun <T> handleNullable(mightBeNullOrThrowAnException: () -> T?, defaultValue: T)
 }
 
 private fun <T> handleExceptions(mightThrowAnException: () -> T?): T? {
-    try {
-        return mightThrowAnException()
+    return try {
+        mightThrowAnException()
     } catch (e: Throwable) {
-        return null
+        null
     }
 }
