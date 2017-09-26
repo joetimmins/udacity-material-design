@@ -83,27 +83,19 @@ class StorySectionPresenterTest {
         presenter.present(Section.NEW)
     }
 
-    private fun buildIdOnlyViewData(storyId: Int): StoryViewData {
-        val (by, commentIds, _, score, title, url) = StoryViewData()
-        return StoryViewData(
-                by, commentIds, storyId, score, title, url
-        )
-    }
+    private fun buildIdOnlyViewData(storyId: Int): StoryViewData = StoryViewData(id = storyId)
 
-    private class StubbedStoryIdProvider internal constructor(private val ids: List<Long>) : StoryIdProvider {
-
+    private class StubbedStoryIdProvider(private val ids: List<Long>) : StoryIdProvider {
         override fun listOfStoryIds(section: Section): Single<List<Long>> = Single.just(ids)
     }
 
     private class StubbedSingleStoryProvider internal constructor(private val stories: List<Story>) : SingleStoryProvider {
 
         override fun obtainStory(storyId: Int): Single<Story> {
-            for (story in stories) {
-                if (story.id == storyId) {
-                    return Single.just(story)
-                }
-            }
-            return Single.never()
+            return stories
+                    .firstOrNull { it.id == storyId }
+                    ?.let { Single.just(it) }
+                    ?: Single.never()
         }
     }
 
