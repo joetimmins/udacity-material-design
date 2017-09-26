@@ -6,7 +6,7 @@ import com.novoda.materialised.hackernews.navigator.Navigator;
 import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.provider.Story;
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider;
-import com.novoda.materialised.hackernews.stories.provider.StoryObservableProvider;
+import com.novoda.materialised.hackernews.stories.provider.SingleStoryProvider;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -80,7 +79,7 @@ public class StorySectionPresenterTest {
 
         presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator);
 
-        storiesView.firstUpdatedViewModel.onClick();
+        storiesView.firstUpdatedViewModel.invokeBehaviour();
 
         assertThat(navigator.uri).isEqualTo(A_STORY.getUrl());
     }
@@ -92,10 +91,9 @@ public class StorySectionPresenterTest {
     }
 
     private void presentWith(List<Long> storyIds, List<Story> stories, AsyncListView<StoryViewData> storiesView, Navigator navigator) {
-
         StorySectionPresenter presenter = new StorySectionPresenter(
                 new StubbedStoryIdProvider(storyIds),
-                new StubbedStoryObservableProvider(stories),
+                new StubbedSingleStoryProvider(stories),
                 storiesView,
                 navigator,
                 Schedulers.trampoline(),
@@ -125,21 +123,22 @@ public class StorySectionPresenterTest {
         }
     }
 
-    private static class StubbedStoryObservableProvider implements StoryObservableProvider {
+    private static class StubbedSingleStoryProvider implements SingleStoryProvider {
         private List<Story> stories;
 
-        StubbedStoryObservableProvider(List<Story> stories) {
+        StubbedSingleStoryProvider(List<Story> stories) {
             this.stories = stories;
         }
 
         @NotNull
         @Override
-        public List<Observable<Story>> createStoryObservables(@NotNull List<Integer> storyIds) {
-            List<Observable<Story>> observables = new ArrayList<>(stories.size());
+        public Single<Story> obtainStory(int storyId) {
             for (Story story : stories) {
-                observables.add(Observable.just(story));
+                if (story.getId() == storyId) {
+                    return Single.just(story);
+                }
             }
-            return observables;
+            return Single.never();
         }
     }
 

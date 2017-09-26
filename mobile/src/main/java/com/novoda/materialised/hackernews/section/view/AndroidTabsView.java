@@ -1,50 +1,42 @@
 package com.novoda.materialised.hackernews.section.view;
 
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 
+import com.novoda.materialised.hackernews.Presenter;
+import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.section.Section;
+import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
 import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
 
 import static com.novoda.materialised.hackernews.NullHandlerKt.handleNullable;
 
 public final class AndroidTabsView implements TabsView<Section> {
 
+    private final ViewPager sectionViewPager;
     private final TabLayout tabLayout;
+    private final Function1<AsyncListView<StoryViewData>, Presenter<Section>> sectionPresenterFactory;
 
-    public AndroidTabsView(TabLayout tabLayout) {
+    public AndroidTabsView(ViewPager sectionViewPager, TabLayout tabLayout, Function1<AsyncListView<StoryViewData>, Presenter<Section>> factory) {
+        this.sectionViewPager = sectionViewPager;
         this.tabLayout = tabLayout;
+        this.sectionPresenterFactory = factory;
     }
 
     @Override
     public void updateWith(@NotNull List<ViewModel<Section>> viewModels, @NotNull final ViewModel<Section> defaultValue) {
-        for (ViewModel<Section> viewModel : viewModels) {
-            TabLayout.Tab tab = tabLayout.newTab();
-            tab.setText(viewModel.getViewData().getUserFacingName());
-            tab.setTag(viewModel);
-            tabLayout.addTab(tab);
-        }
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(final TabLayout.Tab tab) {
-                useTagToInvokeViewModelBehaviour(tab, defaultValue);
-            }
+        PagerAdapter sectionPagerAdapter = new SectionPagerAdapter(viewModels, sectionPresenterFactory);
+        sectionViewPager.setAdapter(sectionPagerAdapter);
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        tabLayout.setupWithViewPager(sectionViewPager);
     }
 
     @Override
@@ -53,7 +45,7 @@ public final class AndroidTabsView implements TabsView<Section> {
 
         TabLayout.Tab currentTab = handleNullable(nullableTabAt(selectedTabPosition), tabLayout.newTab());
 
-        useTagToInvokeViewModelBehaviour(currentTab, defaultValue);
+        currentTab.select();
     }
 
     private Function0<TabLayout.Tab> nullableTabAt(final int selectedTabPosition) {
@@ -64,20 +56,4 @@ public final class AndroidTabsView implements TabsView<Section> {
             }
         };
     }
-
-    private void useTagToInvokeViewModelBehaviour(TabLayout.Tab tab, @NotNull ViewModel<Section> defaultValue) {
-        ViewModel<Section> viewModel = handleNullable(nullableViewModelFrom(tab), defaultValue);
-        viewModel.onClick();
-    }
-
-    private Function0<ViewModel<Section>> nullableViewModelFrom(final TabLayout.Tab tab) {
-        return new Function0<ViewModel<Section>>() {
-            @Override
-            public ViewModel<Section> invoke() {
-                //noinspection unchecked - any ClassCastExceptions generated here would be caught in handleNullable
-                return (ViewModel<Section>) tab.getTag();
-            }
-        };
-    }
-
 }

@@ -5,7 +5,7 @@ data class ViewModel<T : ViewData<Any>>(
         val viewData: T,
         private val viewBehaviour: (T) -> Unit = {}
 ) {
-    fun onClick() {
+    fun invokeBehaviour() {
         viewBehaviour(viewData)
     }
 }

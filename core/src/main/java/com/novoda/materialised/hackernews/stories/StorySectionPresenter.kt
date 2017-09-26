@@ -10,24 +10,24 @@ import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Scheduler
 
 class StorySectionPresenter private constructor(
-        val idOnlyStoryProvider: IdOnlyStoryProvider,
-        val storyProvider: StoryProvider,
-        val storiesView: AsyncListView<StoryViewData>,
-        val navigator: Navigator,
-        val subscribeScheduler: Scheduler,
-        val observeScheduler: Scheduler
+        private val idOnlyStoryProvider: IdOnlyStoryProvider,
+        private val storyProvider: StoryProvider,
+        private val storiesView: AsyncListView<StoryViewData>,
+        private val navigator: Navigator,
+        private val subscribeScheduler: Scheduler,
+        private val observeScheduler: Scheduler
 ) : Presenter<Section> {
 
     constructor(
             storyIdProvider: StoryIdProvider,
-            storyObservableProvider: StoryObservableProvider,
+            singleStoryProvider: SingleStoryProvider,
             storiesView: AsyncListView<StoryViewData>,
             navigator: Navigator,
             subscribeScheduler: Scheduler,
             observeScheduler: Scheduler
     ) : this(
             IdOnlyStoryProvider(storyIdProvider),
-            StoryProvider(storyObservableProvider),
+            StoryProvider(singleStoryProvider),
             storiesView,
             navigator,
             subscribeScheduler,
@@ -36,7 +36,7 @@ class StorySectionPresenter private constructor(
 
     override fun present(section: Section) {
         idOnlyStoryProvider.idOnlyStoriesFor(section)
-                .map { stories -> stories.map(mapStoryToViewModel) }
+                .map { stories -> stories.map(mapStoryToIdOnlyViewModel) }
                 .doAfterSuccess(updateStoriesView)
                 .map(extractStoryIds)
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
@@ -46,28 +46,22 @@ class StorySectionPresenter private constructor(
                 .subscribe(onNext, onError)
     }
 
-    private val mapStoryToViewModel: (Story) -> ViewModel<StoryViewData> = {
-        story ->
+    private val mapStoryToIdOnlyViewModel: (Story) -> ViewModel<StoryViewData> = { story -> ViewModel(mapStoryToViewData(story)) }
+
+    private val mapStoryToViewModel: (Story) -> ViewModel<StoryViewData> = { story ->
         ViewModel(
-                StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
-                buildViewBehaviour(story)
+                mapStoryToViewData(story),
+                { storyViewData -> navigator.navigateTo(storyViewData.url) }
         )
     }
 
-    private fun buildViewBehaviour(story: Story): (StoryViewData) -> Unit {
-        when {
-            Story.isIdOnly(story) -> return {}
-            else -> return { storyViewData -> navigator.navigateTo(storyViewData.url) }
-        }
-    }
+    private fun mapStoryToViewData(story: Story) = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
 
-    private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = {
-        storyViewModels ->
+    private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = { storyViewModels ->
         storyViewModels.map { (viewData) -> viewData.id }
     }
 
-    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = {
-        storyViewModels ->
+    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = { storyViewModels ->
         when {
             storyViewModels.isEmpty() -> storiesView.showError()
             else -> storiesView.updateWith(storyViewModels)
@@ -77,4 +71,21 @@ class StorySectionPresenter private constructor(
     private val onNext: (ViewModel<StoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
 
     private val onError: (Throwable) -> Unit = { storiesView.showError() }
+}
+
+fun partialPresenter(storyIdProvider: StoryIdProvider,
+                     singleStoryProvider: SingleStoryProvider,
+                     navigator: Navigator,
+                     subscribeScheduler: Scheduler,
+                     observeScheduler: Scheduler): (AsyncListView<StoryViewData>) -> Presenter<Section> {
+    return { asyncListView ->
+        StorySectionPresenter(
+                storyIdProvider,
+                singleStoryProvider,
+                asyncListView,
+                navigator,
+                subscribeScheduler,
+                observeScheduler
+        )
+    }
 }

@@ -17,7 +17,7 @@ class ViewModelTest {
 
         val intViewModel = ViewModel(intViewData, { viewData -> actualViewId = viewData.id })
 
-        intViewModel.onClick()
+        intViewModel.invokeBehaviour()
 
         assertThat(actualViewId).isEqualTo(VIEW_ID)
     }

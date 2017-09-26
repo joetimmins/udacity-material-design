@@ -30,7 +30,7 @@
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> viewBehaviour.onClick()}"
+        android:onClick="@{() -> viewBehaviour.invokeBehaviour()}"
         android:paddingBottom="@dimen/story_card_vertical_padding"
         android:paddingLeft="@dimen/story_card_horizontal_padding"
         android:paddingRight="@dimen/story_card_horizontal_padding"
