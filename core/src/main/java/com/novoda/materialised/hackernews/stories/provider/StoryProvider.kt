@@ -8,6 +8,6 @@ internal class StoryProvider(
 
     fun readItems(ids: List<Int>): Observable<Story> {
         return Observable.fromIterable(ids)
-                .concatMap { id -> singleStoryProvider.obtainStory(id).toObservable() }
+                .flatMap { id -> singleStoryProvider.obtainStory(id).toObservable() }
     }
 }
