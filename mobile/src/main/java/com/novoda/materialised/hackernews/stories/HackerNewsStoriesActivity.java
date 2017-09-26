@@ -51,7 +51,7 @@ public final class HackerNewsStoriesActivity extends AppCompatActivity {
 
         ViewPager sectionViewPager = mainActivityLayout.viewpager;
 
-        SingleStoryProvider singleStoryProvider = ProviderFactory.newStoryObservableProvider(this);
+        SingleStoryProvider singleStoryProvider = ProviderFactory.newSingleStoryProvider(this);
         StoryIdProvider storyIdProvider = ProviderFactory.newStoryIdProvider(this);
 
         Function1<AsyncListView<StoryViewData>, Presenter<Section>> sectionPresenterFactory = StorySectionPresenterKt.partialPresenter(
