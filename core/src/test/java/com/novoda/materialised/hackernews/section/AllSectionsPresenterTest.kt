@@ -31,11 +31,11 @@ class AllSectionsPresenterTest {
     private fun newAllSectionsPresenter(view: SpyingTabsView) = AllSectionsPresenter(DummySectionListProvider(), view)
 }
 
-class DummySectionListProvider : SectionListProvider {
+private class DummySectionListProvider : SectionListProvider {
     override fun provideSections(): List<Section> = listOf(Section.BEST, Section.TOP_STORIES)
 }
 
-class SpyingTabsView : TabsView<Section> {
+private class SpyingTabsView : TabsView<Section> {
     var receivedViewModels: List<ViewModel<Section>> = emptyList()
     var receivedViewData: List<Section> = emptyList()
     var currentTabRefreshed: Boolean = false
