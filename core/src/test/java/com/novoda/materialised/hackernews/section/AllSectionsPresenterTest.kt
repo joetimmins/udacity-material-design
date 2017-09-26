@@ -5,7 +5,6 @@ import com.novoda.materialised.hackernews.section.view.TabsView
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
 
-
 class AllSectionsPresenterTest {
 
     @Test
