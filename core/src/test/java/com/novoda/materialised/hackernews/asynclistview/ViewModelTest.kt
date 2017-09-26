@@ -8,7 +8,7 @@ private val viewId = 4
 class ViewModelTest {
 
     @Test
-    fun viewModelInvokesOnClickOnViewBehaviour_whenItsOwnOnClickMethodIsInvoked() {
+    fun viewModelInvokesGivenBehaviour() {
         val intViewData = object : ViewData<Int> {
             override val id: Int
                 get() = viewId
