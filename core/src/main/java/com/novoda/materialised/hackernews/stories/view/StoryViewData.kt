@@ -14,13 +14,11 @@ data class StoryViewData(
     fun submittedFrom(): String {
         val domainName = URI.create(url).host ?: ""
         val prefix = "www."
-        when {
-            domainName.startsWith(prefix) -> return domainName.substring(prefix.length)
-            else -> return domainName
+        return when {
+            domainName.startsWith(prefix) -> domainName.substring(prefix.length)
+            else -> domainName
         }
     }
 
-    fun commentCount(): String {
-        return commentIds.count().toString()
-    }
+    fun commentCount(): String = commentIds.count().toString()
 }
