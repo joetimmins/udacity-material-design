@@ -89,7 +89,7 @@ class StorySectionPresenterTest {
         override fun listOfStoryIds(section: Section): Single<List<Long>> = Single.just(ids)
     }
 
-    private class StubbedSingleStoryProvider internal constructor(private val stories: List<Story>) : SingleStoryProvider {
+    private class StubbedSingleStoryProvider(private val stories: List<Story>) : SingleStoryProvider {
 
         override fun obtainStory(storyId: Int): Single<Story> {
             return stories
