@@ -21,4 +21,4 @@ Some other attempted techniques on show here include:
 - An intention to achieve 100% test coverage of the `core` module
 - A first draft of a pattern I like to call Android-as-a-factory
 - An asynchronously-loading RecyclerView, which updates its views as their data is returned from Firebase
-- A view model based ViewPager implementation which will hopefully use the new Android ViewModel arhcitecture at some point
+- A view model based ViewPager implementation which will hopefully use the new Android ViewModel architecture at some point
