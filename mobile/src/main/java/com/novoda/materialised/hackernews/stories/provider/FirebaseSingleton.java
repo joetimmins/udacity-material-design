@@ -12,7 +12,7 @@ enum FirebaseSingleton {
 
     private FirebaseApp firebaseApp;
 
-    FirebaseDatabase getFirebaseDatabase(Context context) {
+    FirebaseDatabase obtainInstance(Context context) {
         initialiseFirebaseAppIfNecessary(context);
         return FirebaseDatabase.getInstance(firebaseApp);
     }
