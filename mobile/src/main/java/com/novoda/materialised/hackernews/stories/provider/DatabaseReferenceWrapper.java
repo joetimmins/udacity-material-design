@@ -1,15 +1,11 @@
 package com.novoda.materialised.hackernews.stories.provider;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 import kotlin.jvm.functions.Function1;
 
 final class DatabaseReferenceWrapper {
@@ -28,46 +24,21 @@ final class DatabaseReferenceWrapper {
         Function1<DataSnapshot, T> singleValueConverter = new Function1<DataSnapshot, T>() {
             @Override
             public T invoke(DataSnapshot dataSnapshot) {
-                return null;
+                return dataSnapshot.getValue(returnClass);
             }
         };
 
-        return Single.create(new SingleOnSubscribe<T>() {
-            @Override
-            public void subscribe(final SingleEmitter<T> emitter) throws Exception {
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        T value = dataSnapshot.getValue(returnClass);
-                        emitter.onSuccess(value);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        emitter.onError(databaseError.toException());
-                    }
-                });
-            }
-        });
+        return FirebaseSingleEventListener.listen(databaseReference, singleValueConverter);
     }
 
     <T> Single<List<T>> singleListOf(Class<T> elementClass) {
-        return Single.create(new SingleOnSubscribe<List<T>>() {
+        Function1<DataSnapshot, List<T>> listConverter = new Function1<DataSnapshot, List<T>>() {
             @Override
-            public void subscribe(final SingleEmitter<List<T>> emitter) throws Exception {
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<T> list = (List<T>) dataSnapshot.getValue();
-                        emitter.onSuccess(list);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        emitter.onError(databaseError.toException());
-                    }
-                });
+            public List<T> invoke(DataSnapshot dataSnapshot) {
+                return (List<T>) dataSnapshot.getValue();
             }
-        });
+        };
+
+        return FirebaseSingleEventListener.listen(databaseReference, listConverter);
     }
 }
