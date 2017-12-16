@@ -19,24 +19,4 @@ final class FirebaseSingleEventListener {
         // nah
     }
 
-    @NotNull
-    static <T> Single<T> listen(final DatabaseReference reference, final Function1<DataSnapshot, T> converter) {
-        return Single.create(new SingleOnSubscribe<T>() {
-            @Override
-            public void subscribe(@NonNull final SingleEmitter<T> emitter) throws Exception {
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        T convertedDataSnapshot = converter.invoke(dataSnapshot);
-                        emitter.onSuccess(convertedDataSnapshot);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        emitter.onError(databaseError.toException());
-                    }
-                });
-            }
-        });
-    }
 }
