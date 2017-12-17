@@ -3,6 +3,7 @@ package com.novoda.materialised.hackernews.stories.provider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.materialised.hackernews.section.Section;
 
@@ -28,7 +29,8 @@ final class FakeFirebase {
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
 
-                when(mockDataSnapshot.getValue()).thenReturn(expectedTopStories);
+//                when(mockDataSnapshot.getValue()).thenReturn(expectedTopStories);
+                when(mockDataSnapshot.getValue(any(GenericTypeIndicator.class))).thenReturn(expectedTopStories);
 
                 ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
                 valueEventListener.onDataChange(mockDataSnapshot);
