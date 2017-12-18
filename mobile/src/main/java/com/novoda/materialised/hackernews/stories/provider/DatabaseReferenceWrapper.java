@@ -3,7 +3,6 @@ package com.novoda.materialised.hackernews.stories.provider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
@@ -30,13 +29,11 @@ final class DatabaseReferenceWrapper implements RemoteDatabaseNode {
     }
 
     @Override
-    public <T> Single<T> singleValue() {
+    public <T> Single<T> singleValueOf(@NotNull final Class<T> returnClass) {
         Function1<DataSnapshot, T> singleValueConverter = new Function1<DataSnapshot, T>() {
             @Override
             public T invoke(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<T> typeIndicator = new GenericTypeIndicator<T>() {
-                };
-                return dataSnapshot.getValue(typeIndicator);
+                return dataSnapshot.getValue(returnClass);
             }
         };
 
@@ -44,13 +41,11 @@ final class DatabaseReferenceWrapper implements RemoteDatabaseNode {
     }
 
     @Override
-    public <T> Single<List<T>> singleList() {
+    public <T> Single<List<T>> singleListOf(@NotNull final Class<T> returnClass) {
         Function1<DataSnapshot, List<T>> listConverter = new Function1<DataSnapshot, List<T>>() {
             @Override
             public List<T> invoke(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<T>> typeIndicator = new GenericTypeIndicator<List<T>>() {
-                };
-                return dataSnapshot.getValue(typeIndicator);
+                return ((List<T>) dataSnapshot.getValue());
             }
         };
 

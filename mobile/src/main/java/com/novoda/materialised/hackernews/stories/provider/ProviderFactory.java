@@ -6,16 +6,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public final class ProviderFactory {
 
-    public static SingleStoryProvider newSingleStoryProvider(Context context) {
+    public static StoryProvider newStoryProvider(Context context) {
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.obtainInstance(context);
         RemoteDatabase remoteDatabase = new FirebaseDatabaseWrapper(firebaseDatabase);
-        return new FirebaseSingleStoryProvider(remoteDatabase);
+        return new StoryProvider(remoteDatabase);
     }
 
-    public static StoryIdProvider newStoryIdProvider(Context context) {
+    public static IdOnlyStoryProvider newIdOnlyStoryProvider(Context context) {
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.obtainInstance(context);
         RemoteDatabase remoteDatabase = new FirebaseDatabaseWrapper(firebaseDatabase);
-        return new FirebaseStoryIdProvider(remoteDatabase);
+        return new IdOnlyStoryProvider(remoteDatabase);
     }
 
 }

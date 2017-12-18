@@ -4,7 +4,6 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.provider.SingleStoryProvider
 import com.novoda.materialised.hackernews.stories.provider.Story
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
@@ -89,7 +88,7 @@ class StorySectionPresenterTest {
         override fun listOfStoryIds(section: Section): Single<List<Long>> = Single.just(ids)
     }
 
-    private class StubbedSingleStoryProvider(private val stories: List<Story>) : SingleStoryProvider {
+    private class StubbedSingleStoryProvider(private val stories: List<Story>) {
 
         override fun obtainStory(storyId: Int): Single<Story> {
             return stories
