@@ -6,15 +6,16 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.FirebaseDatabase;
 
-enum FirebaseSingleton {
+enum RemoteDatabaseSingleton {
 
     INSTANCE;
 
     private FirebaseApp firebaseApp;
 
-    FirebaseDatabase obtainInstance(Context context) {
+    RemoteDatabase obtainInstance(Context context) {
         initialiseFirebaseAppIfNecessary(context);
-        return FirebaseDatabase.getInstance(firebaseApp);
+        FirebaseDatabase instance = FirebaseDatabase.getInstance(firebaseApp);
+        return new FirebaseDatabaseWrapper(instance);
     }
 
     private void initialiseFirebaseAppIfNecessary(Context context) {
