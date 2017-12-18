@@ -8,12 +8,14 @@ public final class ProviderFactory {
 
     public static SingleStoryProvider newSingleStoryProvider(Context context) {
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.obtainInstance(context);
-        return new FirebaseSingleStoryProvider(firebaseDatabase);
+        RemoteDatabase remoteDatabase = new FirebaseDatabaseWrapper(firebaseDatabase);
+        return new FirebaseSingleStoryProvider(remoteDatabase);
     }
 
     public static StoryIdProvider newStoryIdProvider(Context context) {
         FirebaseDatabase firebaseDatabase = FirebaseSingleton.INSTANCE.obtainInstance(context);
-        return new FirebaseStoryIdProvider(firebaseDatabase);
+        RemoteDatabase remoteDatabase = new FirebaseDatabaseWrapper(firebaseDatabase);
+        return new FirebaseStoryIdProvider(remoteDatabase);
     }
 
 }
