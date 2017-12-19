@@ -4,8 +4,9 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
+import com.novoda.materialised.hackernews.stories.provider.RemoteDatabase
+import com.novoda.materialised.hackernews.stories.provider.RemoteDatabaseNode
 import com.novoda.materialised.hackernews.stories.provider.Story
-import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -16,9 +17,9 @@ import java.util.*
 class StorySectionPresenterTest {
 
     @Test
-    fun presenterGivesCorrectListOfIdsToView_AsViewData_WhenPresentingMultipleStories() {
-        val firstIdOnlyViewData = buildIdOnlyViewData(FIRST_STORY_ID.toInt())
-        val secondIdOnlyViewData = buildIdOnlyViewData(SECOND_STORY_ID.toInt())
+    fun `When presenting multiple stories, the presenter gives a list of ids to the view, wrapped in view data objects`() {
+        val firstIdOnlyViewData = StoryViewData(id = FIRST_STORY_ID)
+        val secondIdOnlyViewData = StoryViewData(id = SECOND_STORY_ID)
         val expectedViewData = Arrays.asList(firstIdOnlyViewData, secondIdOnlyViewData)
 
         val storiesView = SpyingStoriesView()
@@ -29,7 +30,7 @@ class StorySectionPresenterTest {
     }
 
     @Test
-    fun presenterTellsViewToShowErrorScreen_WhenNoIdOnlyStoriesAreRetrieved() {
+    fun `When no id-only view data are retrieved, the presenter tells the view to show the error screen`() {
         val storiesView = SpyingStoriesView()
 
         presentWith(emptyList(), emptyList(), storiesView, SpyingNavigator())
@@ -38,22 +39,22 @@ class StorySectionPresenterTest {
     }
 
     @Test
-    fun presenterGivesViewModelsWithFullViewDataToView_OneAtATime_WhenPresentingMultipleStories() {
+    fun `When presenting multiple stories, the presenter gives view models containing full view data to the view, one at a time`() {
         val expectedViewData = createStoryViewDataFrom(A_STORY)
-        val anotherExpectedViewData = createStoryViewDataFrom(ANOTHER_STORY)
+        val moreExpectedViewData = createStoryViewDataFrom(ANOTHER_STORY)
         val storiesView = SpyingStoriesView()
 
         presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
 
         val actualViewData = storiesView.firstUpdatedViewModel!!.viewData
-        val anotherActualViewData = storiesView.secondUpdatedViewModel!!.viewData
+        val moreActualViewData = storiesView.secondUpdatedViewModel!!.viewData
 
         assertThat(actualViewData).isEqualTo(expectedViewData)
-        assertThat(anotherActualViewData).isEqualTo(anotherExpectedViewData)
+        assertThat(moreActualViewData).isEqualTo(moreExpectedViewData)
     }
 
     @Test
-    fun presenterGivesViewModelWithNavigatingClickListenerToView_WhenPresenting() {
+    fun `When a view model's behaviour is invoked, the navigator is given the url from that view model to navigate to`() {
         val storiesView = SpyingStoriesView()
         val navigator = SpyingNavigator()
 
@@ -70,7 +71,7 @@ class StorySectionPresenterTest {
         )
     }
 
-    private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
+    private fun presentWith(storyIds: List<Int>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
         val presenter = StorySectionPresenter(
                 StubbedStoryIdProvider(storyIds),
                 StubbedSingleStoryProvider(stories),
@@ -82,20 +83,20 @@ class StorySectionPresenterTest {
         presenter.present(Section.NEW)
     }
 
-    private fun buildIdOnlyViewData(storyId: Int): StoryViewData = StoryViewData(id = storyId)
-
-    private class StubbedStoryIdProvider(private val ids: List<Long>) : StoryIdProvider {
-        override fun listOfStoryIds(section: Section): Single<List<Long>> = Single.just(ids)
+    private class FakeStoriesDatabase : RemoteDatabase {
+        override fun node(name: String): RemoteDatabaseNode = CanIEvenDoThis()
     }
 
-    private class StubbedSingleStoryProvider(private val stories: List<Story>) {
+    private class CanIEvenDoThis : RemoteDatabaseNode {
+        override fun child(nodeId: String): RemoteDatabaseNode = this
 
-        override fun obtainStory(storyId: Int): Single<Story> {
-            return stories
-                    .firstOrNull { it.id == storyId }
-                    ?.let { Single.just(it) }
-                    ?: Single.never()
+        override fun <T> singleValueOf(returnClass: Class<T>): Single<T> {
+
         }
+
+        override fun <T> singleListOf(returnClass: Class<T>): Single<List<T>> {
+        }
+
     }
 
     private class SpyingStoriesView : AsyncListView<StoryViewData> {
@@ -134,14 +135,14 @@ class StorySectionPresenterTest {
     companion object {
 
         private val TEST_TIME = 3471394
-        private val FIRST_STORY_ID = 56L
-        private val SECOND_STORY_ID = 78L
+        private val FIRST_STORY_ID = 56
+        private val SECOND_STORY_ID = 78
         private val ID_ONLY_STORIES = Arrays.asList(
                 FIRST_STORY_ID,
                 SECOND_STORY_ID
         )
 
-        private val A_STORY = Story("test author", 123, FIRST_STORY_ID.toInt(), Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url")
-        private val ANOTHER_STORY = Story("another author", 456, SECOND_STORY_ID.toInt(), Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url")
+        private val A_STORY = Story("test author", 123, FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url")
+        private val ANOTHER_STORY = Story("another author", 456, SECOND_STORY_ID, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url")
     }
 }
