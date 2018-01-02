@@ -4,9 +4,7 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.provider.RemoteDatabase
-import com.novoda.materialised.hackernews.stories.provider.RemoteDatabaseNode
-import com.novoda.materialised.hackernews.stories.provider.Story
+import com.novoda.materialised.hackernews.stories.provider.*
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -18,8 +16,8 @@ class StorySectionPresenterTest {
 
     @Test
     fun `When presenting multiple stories, the presenter gives a list of ids to the view, wrapped in view data objects`() {
-        val firstIdOnlyViewData = StoryViewData(id = FIRST_STORY_ID)
-        val secondIdOnlyViewData = StoryViewData(id = SECOND_STORY_ID)
+        val firstIdOnlyViewData = StoryViewData(id = FIRST_STORY_ID.toInt())
+        val secondIdOnlyViewData = StoryViewData(id = SECOND_STORY_ID.toInt())
         val expectedViewData = Arrays.asList(firstIdOnlyViewData, secondIdOnlyViewData)
 
         val storiesView = SpyingStoriesView()
@@ -73,8 +71,8 @@ class StorySectionPresenterTest {
 
     private fun presentWith(storyIds: List<Int>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
         val presenter = StorySectionPresenter(
-                StubbedStoryIdProvider(storyIds),
-                StubbedSingleStoryProvider(stories),
+                IdOnlyStoryProvider(FakeStoriesDatabase(emptyList(), storyIds)),
+                StoryProvider(FakeStoriesDatabase(stories, emptyList())),
                 storiesView,
                 navigator,
                 Schedulers.trampoline(),
@@ -83,18 +81,24 @@ class StorySectionPresenterTest {
         presenter.present(Section.NEW)
     }
 
-    private class FakeStoriesDatabase : RemoteDatabase {
-        override fun node(name: String): RemoteDatabaseNode = CanIEvenDoThis()
+    private class FakeStoriesDatabase(private val singleReturnValues: List<Any>, private val listReturnValue: List<Any>) : RemoteDatabase {
+        override fun node(name: String): RemoteDatabaseNode = Node(singleReturnValues, listReturnValue)
     }
 
-    private class CanIEvenDoThis : RemoteDatabaseNode {
+    private class Node(private val singleReturnValues: List<Any>, private val listReturnValue: List<Any>) : RemoteDatabaseNode {
+
+        private var singleValueCount = 0
+
         override fun child(nodeId: String): RemoteDatabaseNode = this
 
         override fun <T> singleValueOf(returnClass: Class<T>): Single<T> {
-
+            val castReturnValue = singleReturnValues[singleValueCount] as T
+            return Single.just(castReturnValue)
         }
 
         override fun <T> singleListOf(returnClass: Class<T>): Single<List<T>> {
+            val castReturnValue = listReturnValue as List<T>
+            return Single.just(castReturnValue)
         }
 
     }
@@ -135,14 +139,14 @@ class StorySectionPresenterTest {
     companion object {
 
         private val TEST_TIME = 3471394
-        private val FIRST_STORY_ID = 56
-        private val SECOND_STORY_ID = 78
-        private val ID_ONLY_STORIES = Arrays.asList(
-                FIRST_STORY_ID,
-                SECOND_STORY_ID
+        private val FIRST_STORY_ID = 56L
+        private val SECOND_STORY_ID = 78L
+        private val ID_ONLY_STORIES = listOf(
+                FIRST_STORY_ID.toInt(),
+                SECOND_STORY_ID.toInt()
         )
 
-        private val A_STORY = Story("test author", 123, FIRST_STORY_ID, Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url")
-        private val ANOTHER_STORY = Story("another author", 456, SECOND_STORY_ID, Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url")
+        private val A_STORY = Story("test author", 123, FIRST_STORY_ID.toInt(), Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url")
+        private val ANOTHER_STORY = Story("another author", 456, SECOND_STORY_ID.toInt(), Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url")
     }
 }

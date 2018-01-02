@@ -41,7 +41,7 @@ class StorySectionPresenter constructor(
         )
     }
 
-    private fun mapStoryToViewData(story: Story) = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
+    private fun mapStoryToViewData(story: Story): StoryViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
 
     private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = { storyViewModels ->
         storyViewModels.map { (viewData) -> viewData.id }
