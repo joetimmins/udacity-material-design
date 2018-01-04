@@ -135,7 +135,7 @@ class StorySectionPresenterTest {
 
     companion object {
 
-        var methodCount: Int = 0;
+        var methodCount: Int = 0
 
         private val TEST_TIME = 3471394
         private val FIRST_STORY_ID = 56L
