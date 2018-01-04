@@ -90,7 +90,7 @@ class StorySectionPresenterTest {
         override fun child(nodeId: String): RemoteDatabaseNode = this
 
         override fun <T> singleValueOf(returnClass: Class<T>): Single<T> {
-            var castReturnValue = singleReturnValues[methodCount] as T
+            val castReturnValue = singleReturnValues[methodCount] as T
             val plus = methodCount.plus(1)
             methodCount = plus
             return Single.just(castReturnValue)
