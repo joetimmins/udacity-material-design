@@ -69,10 +69,10 @@ class StorySectionPresenterTest {
         )
     }
 
-    private fun presentWith(storyIds: List<Int>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
+    private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
         val presenter = StorySectionPresenter(
-                IdOnlyStoryProvider(FakeStoriesDatabase(emptyList(), storyIds)),
-                StoryProvider(FakeStoriesDatabase(stories, emptyList())),
+                IdOnlyStoryProvider(FakeStoriesDatabase(storyIds, emptyList())),
+                StoryProvider(FakeStoriesDatabase(emptyList(), stories)),
                 storiesView,
                 navigator,
                 Schedulers.trampoline(),
@@ -81,11 +81,11 @@ class StorySectionPresenterTest {
         presenter.present(Section.NEW)
     }
 
-    private class FakeStoriesDatabase(private val singleReturnValues: List<Any>, private val listReturnValue: List<Any>) : RemoteDatabase {
-        override fun node(name: String): RemoteDatabaseNode = Node(singleReturnValues, listReturnValue)
+    class FakeStoriesDatabase(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabase {
+        override fun node(name: String): RemoteDatabaseNode = Node(listReturnValue, singleReturnValues)
     }
 
-    private class Node(private val singleReturnValues: List<Any>, private val listReturnValue: List<Any>) : RemoteDatabaseNode {
+    private class Node(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabaseNode {
 
         private var singleValueCount = 0
 
@@ -110,16 +110,13 @@ class StorySectionPresenterTest {
         internal var errorShown: Boolean = false
 
         override fun updateWith(initialViewModelList: List<ViewModel<StoryViewData>>) {
-            for ((viewData) in initialViewModelList) {
-                receivedData.add(viewData)
-            }
+            initialViewModelList.forEach { viewModel -> receivedData.add(viewModel.viewData) }
         }
 
         override fun updateWith(viewModel: ViewModel<StoryViewData>) {
-            if (firstUpdatedViewModel == null) {
-                firstUpdatedViewModel = viewModel
-            } else if (secondUpdatedViewModel == null) {
-                secondUpdatedViewModel = viewModel
+            when {
+                firstUpdatedViewModel == null -> firstUpdatedViewModel = viewModel
+                secondUpdatedViewModel == null -> secondUpdatedViewModel = viewModel
             }
         }
 
@@ -142,8 +139,8 @@ class StorySectionPresenterTest {
         private val FIRST_STORY_ID = 56L
         private val SECOND_STORY_ID = 78L
         private val ID_ONLY_STORIES = listOf(
-                FIRST_STORY_ID.toInt(),
-                SECOND_STORY_ID.toInt()
+                FIRST_STORY_ID,
+                SECOND_STORY_ID
         )
 
         private val A_STORY = Story("test author", 123, FIRST_STORY_ID.toInt(), Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url")
