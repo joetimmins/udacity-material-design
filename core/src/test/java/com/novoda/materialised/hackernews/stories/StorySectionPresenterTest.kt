@@ -87,12 +87,12 @@ class StorySectionPresenterTest {
 
     private class Node(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabaseNode {
 
-        private var singleValueCount = 0
-
         override fun child(nodeId: String): RemoteDatabaseNode = this
 
         override fun <T> singleValueOf(returnClass: Class<T>): Single<T> {
-            val castReturnValue = singleReturnValues[singleValueCount] as T
+            var castReturnValue = singleReturnValues[methodCount] as T
+            val plus = methodCount.plus(1)
+            methodCount = plus
             return Single.just(castReturnValue)
         }
 
@@ -134,6 +134,8 @@ class StorySectionPresenterTest {
     }
 
     companion object {
+
+        var methodCount: Int = 0;
 
         private val TEST_TIME = 3471394
         private val FIRST_STORY_ID = 56L
