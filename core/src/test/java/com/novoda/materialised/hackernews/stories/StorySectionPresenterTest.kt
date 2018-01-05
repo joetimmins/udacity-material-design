@@ -44,8 +44,8 @@ class StorySectionPresenterTest {
 
         presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
 
-        val actualViewData = storiesView.firstUpdatedViewModel!!.viewData
-        val moreActualViewData = storiesView.secondUpdatedViewModel!!.viewData
+        val actualViewData = storiesView.firstUpdatedViewModel.viewData
+        val moreActualViewData = storiesView.secondUpdatedViewModel.viewData
 
         assertThat(actualViewData).isEqualTo(expectedViewData)
         assertThat(moreActualViewData).isEqualTo(moreExpectedViewData)
@@ -58,7 +58,7 @@ class StorySectionPresenterTest {
 
         presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator)
 
-        storiesView.firstUpdatedViewModel!!.invokeBehaviour()
+        storiesView.firstUpdatedViewModel.invokeBehaviour()
 
         assertThat(navigator.uri).isEqualTo(A_STORY.url)
     }
@@ -109,19 +109,19 @@ class StorySectionPresenterTest {
     }
 
     private class SpyingStoriesView : AsyncListView<StoryViewData> {
-        internal var receivedData: MutableList<StoryViewData> = ArrayList()
-        internal var firstUpdatedViewModel: ViewModel<StoryViewData>? = null
-        internal var secondUpdatedViewModel: ViewModel<StoryViewData>? = null
+        internal lateinit var receivedData: List<StoryViewData>
+        internal lateinit var firstUpdatedViewModel: ViewModel<StoryViewData>
+        internal lateinit var secondUpdatedViewModel: ViewModel<StoryViewData>
         internal var errorShown: Boolean = false
 
         override fun updateWith(initialViewModelList: List<ViewModel<StoryViewData>>) {
-            initialViewModelList.forEach { viewModel -> receivedData.add(viewModel.viewData) }
+            receivedData = initialViewModelList.map { viewModel -> viewModel.viewData }
         }
 
         override fun updateWith(viewModel: ViewModel<StoryViewData>) {
             when {
-                firstUpdatedViewModel == null -> firstUpdatedViewModel = viewModel
-                secondUpdatedViewModel == null -> secondUpdatedViewModel = viewModel
+                !::firstUpdatedViewModel.isInitialized -> firstUpdatedViewModel = viewModel
+                !::secondUpdatedViewModel.isInitialized -> secondUpdatedViewModel = viewModel
             }
         }
 
