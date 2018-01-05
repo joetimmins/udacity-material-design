@@ -81,9 +81,9 @@ class StorySectionPresenterTest {
         presenter.present(Section.NEW)
     }
 
-    class FakeStoriesDatabase(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabase {
+    class FakeStoriesDatabase(listReturnValue: List<Any>, singleReturnValues: List<Any>) : RemoteDatabase {
 
-        private val theOnlyNode: Node by lazy { Node(listReturnValue, singleReturnValues) }
+        private val theOnlyNode: Node = Node(listReturnValue, singleReturnValues)
 
         override fun node(name: String): RemoteDatabaseNode = theOnlyNode
     }
