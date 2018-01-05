@@ -70,9 +70,10 @@ class StorySectionPresenterTest {
     }
 
     private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
+        val remoteDatabase = FakeStoriesDatabase(storyIds, stories)
         val presenter = StorySectionPresenter(
-                IdOnlyStoryProvider(FakeStoriesDatabase(storyIds, emptyList())),
-                StoryProvider(FakeStoriesDatabase(emptyList(), stories)),
+                IdOnlyStoryProvider(remoteDatabase),
+                StoryProvider(remoteDatabase),
                 storiesView,
                 navigator,
                 Schedulers.trampoline(),
