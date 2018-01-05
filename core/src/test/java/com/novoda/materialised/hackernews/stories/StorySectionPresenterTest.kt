@@ -82,17 +82,21 @@ class StorySectionPresenterTest {
     }
 
     class FakeStoriesDatabase(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabase {
-        override fun node(name: String): RemoteDatabaseNode = Node(listReturnValue, singleReturnValues)
+
+        private val theOnlyNode: Node by lazy { Node(listReturnValue, singleReturnValues) }
+
+        override fun node(name: String): RemoteDatabaseNode = theOnlyNode
     }
 
     private class Node(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabaseNode {
 
         override fun child(nodeId: String): RemoteDatabaseNode = this
 
+        private var methodCount: Int = 0
+
         override fun <T> singleValueOf(returnClass: Class<T>): Single<T> {
             val castReturnValue = singleReturnValues[methodCount] as T
-            val plus = methodCount.plus(1)
-            methodCount = plus
+            methodCount = methodCount.plus(1)
             return Single.just(castReturnValue)
         }
 
@@ -134,8 +138,6 @@ class StorySectionPresenterTest {
     }
 
     companion object {
-
-        var methodCount: Int = 0
 
         private val TEST_TIME = 3471394
         private val FIRST_STORY_ID = 56L
