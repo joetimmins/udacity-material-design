@@ -5,14 +5,14 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.provider.IdOnlyStoryProvider
 import com.novoda.materialised.hackernews.stories.provider.Story
+import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Scheduler
 
 class StorySectionPresenter constructor(
-        private val idOnlyStoryProvider: IdOnlyStoryProvider,
+        private val storyIdProvider: StoryIdProvider,
         private val storyProvider: StoryProvider,
         private val storiesView: AsyncListView<StoryViewData>,
         private val navigator: Navigator,
@@ -21,8 +21,8 @@ class StorySectionPresenter constructor(
 ) : Presenter<Section> {
 
     override fun present(section: Section) {
-        idOnlyStoryProvider.idOnlyStoriesFor(section)
-                .map { stories -> stories.map(mapStoryToIdOnlyViewModel) }
+        storyIdProvider.storyIdsFor(section)
+                .map { stories: List<Long> -> stories.map(createBlankViewModel) }
                 .doAfterSuccess(updateStoriesView)
                 .map(extractStoryIds)
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
@@ -32,7 +32,7 @@ class StorySectionPresenter constructor(
                 .subscribe(onNext, onError)
     }
 
-    private val mapStoryToIdOnlyViewModel: (Story) -> ViewModel<StoryViewData> = { story -> ViewModel(mapStoryToViewData(story)) }
+    private val createBlankViewModel: (Long) -> ViewModel<StoryViewData> = { storyId -> ViewModel(StoryViewData(id = storyId.toInt())) }
 
     private val mapStoryToViewModel: (Story) -> ViewModel<StoryViewData> = { story ->
         ViewModel(
@@ -59,14 +59,14 @@ class StorySectionPresenter constructor(
     private val onError: (Throwable) -> Unit = { storiesView.showError() }
 }
 
-fun partialPresenter(idOnlyStoryProvider: IdOnlyStoryProvider,
+fun partialPresenter(storyIdProvider: StoryIdProvider,
                      storyProvider: StoryProvider,
                      navigator: Navigator,
                      subscribeScheduler: Scheduler,
                      observeScheduler: Scheduler): (AsyncListView<StoryViewData>) -> Presenter<Section> {
     return { asyncListView ->
         StorySectionPresenter(
-                idOnlyStoryProvider,
+                storyIdProvider,
                 storyProvider,
                 asyncListView,
                 navigator,

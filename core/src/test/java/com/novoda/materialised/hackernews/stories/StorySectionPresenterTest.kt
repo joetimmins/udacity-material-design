@@ -72,7 +72,7 @@ class StorySectionPresenterTest {
     private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
         val remoteDatabase = FakeStoriesDatabase(storyIds, stories)
         val presenter = StorySectionPresenter(
-                IdOnlyStoryProvider(remoteDatabase),
+                StoryIdProvider(remoteDatabase),
                 StoryProvider(remoteDatabase),
                 storiesView,
                 navigator,

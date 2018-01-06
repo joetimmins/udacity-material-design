@@ -9,9 +9,9 @@ public final class ProviderFactory {
         return new StoryProvider(remoteDatabase);
     }
 
-    public static IdOnlyStoryProvider newIdOnlyStoryProvider(Context context) {
+    public static StoryIdProvider newIdOnlyStoryProvider(Context context) {
         RemoteDatabase remoteDatabase = RemoteDatabaseSingleton.INSTANCE.obtainInstance(context);
-        return new IdOnlyStoryProvider(remoteDatabase);
+        return new StoryIdProvider(remoteDatabase);
     }
 
 }
