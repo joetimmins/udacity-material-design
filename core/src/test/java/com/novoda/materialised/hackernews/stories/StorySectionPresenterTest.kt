@@ -22,7 +22,7 @@ class StorySectionPresenterTest {
 
         val storiesView = SpyingStoriesView()
 
-        presentWith(ID_ONLY_STORIES, emptyList(), storiesView, SpyingNavigator())
+        presentWith(STORY_IDS, emptyList(), storiesView, SpyingNavigator())
 
         assertThat(storiesView.receivedData).isEqualTo(expectedViewData)
     }
@@ -42,7 +42,7 @@ class StorySectionPresenterTest {
         val moreExpectedViewData = createStoryViewDataFrom(ANOTHER_STORY)
         val storiesView = SpyingStoriesView()
 
-        presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
+        presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
 
         val actualViewData = storiesView.firstUpdatedViewModel.viewData
         val moreActualViewData = storiesView.secondUpdatedViewModel.viewData
@@ -56,7 +56,7 @@ class StorySectionPresenterTest {
         val storiesView = SpyingStoriesView()
         val navigator = SpyingNavigator()
 
-        presentWith(ID_ONLY_STORIES, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator)
+        presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator)
 
         storiesView.firstUpdatedViewModel.invokeBehaviour()
 
@@ -143,7 +143,7 @@ class StorySectionPresenterTest {
         private val TEST_TIME = 3471394
         private val FIRST_STORY_ID = 56L
         private val SECOND_STORY_ID = 78L
-        private val ID_ONLY_STORIES = listOf(
+        private val STORY_IDS = listOf(
                 FIRST_STORY_ID,
                 SECOND_STORY_ID
         )
