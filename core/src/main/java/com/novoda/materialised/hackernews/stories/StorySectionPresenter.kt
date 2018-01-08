@@ -43,11 +43,9 @@ class StorySectionPresenter constructor(
         storyViewModels.map { (viewData) -> viewData.id }
     }
 
-    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = { storyViewModels ->
-        when {
-            storyViewModels.isEmpty() -> storiesView.showError()
-            else -> storiesView.updateWith(storyViewModels)
-        }
+    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = {
+        if (it.isEmpty()) storiesView.showError()
+        else storiesView.updateWith(it)
     }
 
     private val updateViewOnNext: (ViewModel<StoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
@@ -61,12 +59,12 @@ fun partialPresenter(storyIdProvider: StoryIdProvider,
                      subscribeScheduler: Scheduler,
                      observeScheduler: Scheduler
 ): (AsyncListView<StoryViewData>) -> Presenter<Section> = { asyncListView ->
-        StorySectionPresenter(
-                storyIdProvider,
-                storyProvider,
-                asyncListView,
-                navigator,
-                subscribeScheduler,
-                observeScheduler
-        )
-    }
+    StorySectionPresenter(
+            storyIdProvider,
+            storyProvider,
+            asyncListView,
+            navigator,
+            subscribeScheduler,
+            observeScheduler
+    )
+}
