@@ -22,7 +22,7 @@ class StorySectionPresenter constructor(
 
     override fun present(section: Section) {
         storyIdProvider.storyIdsFor(section)
-                .map { stories: List<Long> -> stories.map(createBlankViewModel) }
+                .map { stories: List<Long> -> stories.map({ storyId -> ViewModel(StoryViewData(id = storyId.toInt())) }) }
                 .doAfterSuccess(updateStoriesView)
                 .map(extractStoryIds)
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
@@ -32,16 +32,12 @@ class StorySectionPresenter constructor(
                 .subscribe(updateViewOnNext, showErrorOnError)
     }
 
-    private val createBlankViewModel: (Long) -> ViewModel<StoryViewData> = { storyId -> ViewModel(StoryViewData(id = storyId.toInt())) }
-
     private val mapStoryToViewModel: (Story) -> ViewModel<StoryViewData> = { story ->
         ViewModel(
-                mapStoryToViewData(story),
+                StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
                 { storyViewData -> navigator.navigateTo(storyViewData.url) }
         )
     }
-
-    private fun mapStoryToViewData(story: Story): StoryViewData = StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
 
     private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = { storyViewModels ->
         storyViewModels.map { (viewData) -> viewData.id }
@@ -63,8 +59,8 @@ fun partialPresenter(storyIdProvider: StoryIdProvider,
                      storyProvider: StoryProvider,
                      navigator: Navigator,
                      subscribeScheduler: Scheduler,
-                     observeScheduler: Scheduler): (AsyncListView<StoryViewData>) -> Presenter<Section> {
-    return { asyncListView ->
+                     observeScheduler: Scheduler
+): (AsyncListView<StoryViewData>) -> Presenter<Section> = { asyncListView ->
         StorySectionPresenter(
                 storyIdProvider,
                 storyProvider,
@@ -74,4 +70,3 @@ fun partialPresenter(storyIdProvider: StoryIdProvider,
                 observeScheduler
         )
     }
-}
