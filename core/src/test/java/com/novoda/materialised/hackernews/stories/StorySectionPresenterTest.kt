@@ -16,9 +16,9 @@ class StorySectionPresenterTest {
 
     @Test
     fun `When presenting multiple stories, the presenter gives a list of ids to the view, wrapped in view data objects`() {
-        val firstIdOnlyViewData = StoryViewData(id = FIRST_STORY_ID.toInt())
-        val secondIdOnlyViewData = StoryViewData(id = SECOND_STORY_ID.toInt())
-        val expectedViewData = Arrays.asList(firstIdOnlyViewData, secondIdOnlyViewData)
+        val firstBlankViewData = StoryViewData(id = FIRST_STORY_ID.toInt())
+        val secondBlankViewData = StoryViewData(id = SECOND_STORY_ID.toInt())
+        val expectedViewData = Arrays.asList(firstBlankViewData, secondBlankViewData)
 
         val storiesView = SpyingStoriesView()
 

@@ -29,7 +29,7 @@ class StorySectionPresenter constructor(
                 .map(mapStoryToViewModel)
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
-                .subscribe(onNext, onError)
+                .subscribe(updateViewOnNext, showErrorOnError)
     }
 
     private val createBlankViewModel: (Long) -> ViewModel<StoryViewData> = { storyId -> ViewModel(StoryViewData(id = storyId.toInt())) }
@@ -54,9 +54,9 @@ class StorySectionPresenter constructor(
         }
     }
 
-    private val onNext: (ViewModel<StoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
+    private val updateViewOnNext: (ViewModel<StoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
 
-    private val onError: (Throwable) -> Unit = { storiesView.showError() }
+    private val showErrorOnError: (Throwable) -> Unit = { storiesView.showError() }
 }
 
 fun partialPresenter(storyIdProvider: StoryIdProvider,
