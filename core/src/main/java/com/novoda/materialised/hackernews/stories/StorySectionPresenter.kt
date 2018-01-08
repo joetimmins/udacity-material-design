@@ -43,9 +43,9 @@ class StorySectionPresenter constructor(
         storyViewModels.map { (viewData) -> viewData.id }
     }
 
-    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = {
-        if (it.isEmpty()) storiesView.showError()
-        else storiesView.updateWith(it)
+    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = { storyViewModels ->
+        if (storyViewModels.isEmpty()) storiesView.showError()
+        else storiesView.updateWith(storyViewModels)
     }
 
     private val updateViewOnNext: (ViewModel<StoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
