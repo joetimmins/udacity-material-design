@@ -19,6 +19,8 @@ import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
 import kotlin.Triple;
 import kotlin.jvm.functions.Function1;
 
@@ -31,15 +33,16 @@ class SectionPagerAdapter extends PagerAdapter {
         this.sectionPresenterFactory = sectionPresenterFactory;
     }
 
+    @NotNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(@NotNull ViewGroup container, int position) {
         Context context = container.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View sectionView = layoutInflater.inflate(R.layout.section_view, container, false);
         container.addView(sectionView);
 
         View loadingView = sectionView.findViewById(R.id.loading_view);
-        RecyclerView recyclerView = (RecyclerView) sectionView.findViewById(R.id.stories_view);
+        RecyclerView recyclerView = sectionView.findViewById(R.id.stories_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         AsyncListView<StoryViewData> asyncListView = new AsyncListViewPresenter<>(loadingView, recyclerView, StoryCardView.class);
@@ -58,7 +61,7 @@ class SectionPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NotNull ViewGroup container, int position, @NotNull Object object) {
         Triple itemToDestroy = (Triple) object;
 
         View sectionView = (View) itemToDestroy.getFirst();
@@ -71,7 +74,7 @@ class SectionPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NotNull View view, @NotNull Object object) {
         Triple triple = (Triple) object;
         return view == triple.getFirst();
     }
