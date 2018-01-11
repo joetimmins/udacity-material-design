@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import kotlin.Triple;
 import kotlin.jvm.functions.Function1;
 
 class SectionPagerAdapter extends PagerAdapter {
@@ -51,7 +50,7 @@ class SectionPagerAdapter extends PagerAdapter {
         Section viewData = viewModels.get(position).getViewData();
         sectionPresenter.present(viewData);
 
-        return new Triple<>(sectionView, asyncListView, sectionPresenter);
+        return sectionView;
     }
 
     @Override
@@ -62,9 +61,7 @@ class SectionPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NotNull ViewGroup container, int position, @NotNull Object object) {
-        Triple itemToDestroy = (Triple) object;
-
-        View sectionView = (View) itemToDestroy.getFirst();
+        View sectionView = (View) object;
         container.removeView(sectionView);
     }
 
@@ -75,7 +72,6 @@ class SectionPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NotNull View view, @NotNull Object object) {
-        Triple triple = (Triple) object;
-        return view == triple.getFirst();
+        return view == object;
     }
 }
