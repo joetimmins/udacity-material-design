@@ -38,7 +38,7 @@ final class SingleTypeAdapter<T extends ViewData<Integer>,
 
     @Override
     public long getItemId(int position) {
-        return viewModels.get(position).getViewData().getId();
+        return idFor(position);
     }
 
     void updateWith(ViewModel<T> fullyPopulatedViewModel) {
@@ -52,8 +52,12 @@ final class SingleTypeAdapter<T extends ViewData<Integer>,
     }
 
     private boolean shouldUpdate(int position, ViewModel<T> fullyPopulatedViewModel) {
-        Integer id = viewModels.get(position).getViewData().getId();
+        Integer id = idFor(position);
         Integer fullyPopulatedViewModelId = fullyPopulatedViewModel.getViewData().getId();
         return id.equals(fullyPopulatedViewModelId);
+    }
+
+    private Integer idFor(int position) {
+        return viewModels.get(position).getViewData().getId();
     }
 }
