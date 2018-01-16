@@ -3,7 +3,7 @@ package com.novoda.materialised.hackernews.stories.view
 import com.novoda.materialised.hackernews.asynclistview.ViewData
 import java.net.URI
 
-data class StoryViewData(
+data class FullStoryViewData(
         val by: String = "",
         val commentIds: List<Int> = emptyList(),
         override val id: Int = 0,

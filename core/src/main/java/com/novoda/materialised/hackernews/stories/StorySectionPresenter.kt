@@ -8,13 +8,13 @@ import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.provider.Story
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider
-import com.novoda.materialised.hackernews.stories.view.StoryViewData
+import com.novoda.materialised.hackernews.stories.view.FullStoryViewData
 import io.reactivex.Scheduler
 
 class StorySectionPresenter constructor(
         private val storyIdProvider: StoryIdProvider,
         private val storyProvider: StoryProvider,
-        private val storiesView: AsyncListView<StoryViewData>,
+        private val storiesView: AsyncListView<FullStoryViewData>,
         private val navigator: Navigator,
         private val subscribeScheduler: Scheduler,
         private val observeScheduler: Scheduler
@@ -22,7 +22,7 @@ class StorySectionPresenter constructor(
 
     override fun present(section: Section) {
         storyIdProvider.storyIdsFor(section)
-                .map { stories: List<Long> -> stories.map({ storyId -> ViewModel(StoryViewData(id = storyId.toInt())) }) }
+                .map { stories: List<Long> -> stories.map({ storyId -> ViewModel(FullStoryViewData(id = storyId.toInt())) }) }
                 .doAfterSuccess(updateStoriesView)
                 .map(extractStoryIds)
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
@@ -32,23 +32,23 @@ class StorySectionPresenter constructor(
                 .subscribe(updateViewOnNext, showErrorOnError)
     }
 
-    private val mapStoryToViewModel: (Story) -> ViewModel<StoryViewData> = { story ->
+    private val mapStoryToViewModel: (Story) -> ViewModel<FullStoryViewData> = { story ->
         ViewModel(
-                StoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
+                FullStoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
                 { storyViewData -> navigator.navigateTo(storyViewData.url) }
         )
     }
 
-    private val extractStoryIds: (List<ViewModel<StoryViewData>>) -> List<Int> = { storyViewModels ->
+    private val extractStoryIds: (List<ViewModel<FullStoryViewData>>) -> List<Int> = { storyViewModels ->
         storyViewModels.map { (viewData) -> viewData.id }
     }
 
-    private val updateStoriesView: (List<ViewModel<StoryViewData>>) -> Unit = { storyViewModels ->
+    private val updateStoriesView: (List<ViewModel<FullStoryViewData>>) -> Unit = { storyViewModels ->
         if (storyViewModels.isEmpty()) storiesView.showError()
         else storiesView.updateWith(storyViewModels)
     }
 
-    private val updateViewOnNext: (ViewModel<StoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
+    private val updateViewOnNext: (ViewModel<FullStoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
 
     private val showErrorOnError: (Throwable) -> Unit = { storiesView.showError() }
 }
@@ -58,7 +58,7 @@ fun partialPresenter(storyIdProvider: StoryIdProvider,
                      navigator: Navigator,
                      subscribeScheduler: Scheduler,
                      observeScheduler: Scheduler
-): (AsyncListView<StoryViewData>) -> Presenter<Section> = { asyncListView ->
+): (AsyncListView<FullStoryViewData>) -> Presenter<Section> = { asyncListView ->
     StorySectionPresenter(
             storyIdProvider,
             storyProvider,

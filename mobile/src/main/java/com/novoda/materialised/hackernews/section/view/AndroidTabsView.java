@@ -8,7 +8,7 @@ import com.novoda.materialised.hackernews.Presenter;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.section.Section;
-import com.novoda.materialised.hackernews.stories.view.StoryViewData;
+import com.novoda.materialised.hackernews.stories.view.FullStoryViewData;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ public final class AndroidTabsView implements TabsView<Section> {
 
     private final ViewPager sectionViewPager;
     private final TabLayout tabLayout;
-    private final Function1<AsyncListView<StoryViewData>, Presenter<Section>> sectionPresenterFactory;
+    private final Function1<AsyncListView<FullStoryViewData>, Presenter<Section>> sectionPresenterFactory;
 
-    public AndroidTabsView(ViewPager sectionViewPager, TabLayout tabLayout, Function1<AsyncListView<StoryViewData>, Presenter<Section>> factory) {
+    public AndroidTabsView(ViewPager sectionViewPager, TabLayout tabLayout, Function1<AsyncListView<FullStoryViewData>, Presenter<Section>> factory) {
         this.sectionViewPager = sectionViewPager;
         this.tabLayout = tabLayout;
         this.sectionPresenterFactory = factory;

@@ -5,7 +5,7 @@
 
     <variable
       name="viewData"
-      type="com.novoda.materialised.hackernews.stories.view.StoryViewData" />
+      type="com.novoda.materialised.hackernews.stories.view.FullStoryViewData" />
 
     <variable
       name="viewBehaviour"

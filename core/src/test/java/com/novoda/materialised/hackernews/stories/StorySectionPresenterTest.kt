@@ -5,7 +5,7 @@ import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.provider.*
-import com.novoda.materialised.hackernews.stories.view.StoryViewData
+import com.novoda.materialised.hackernews.stories.view.FullStoryViewData
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.fest.assertions.api.Assertions.assertThat
@@ -16,8 +16,8 @@ class StorySectionPresenterTest {
 
     @Test
     fun `When presenting multiple stories, the presenter gives a list of ids to the view, wrapped in view data objects`() {
-        val firstBlankViewData = StoryViewData(id = FIRST_STORY_ID.toInt())
-        val secondBlankViewData = StoryViewData(id = SECOND_STORY_ID.toInt())
+        val firstBlankViewData = FullStoryViewData(id = FIRST_STORY_ID.toInt())
+        val secondBlankViewData = FullStoryViewData(id = SECOND_STORY_ID.toInt())
         val expectedViewData = Arrays.asList(firstBlankViewData, secondBlankViewData)
 
         val storiesView = SpyingStoriesView()
@@ -63,13 +63,13 @@ class StorySectionPresenterTest {
         assertThat(navigator.uri).isEqualTo(A_STORY.url)
     }
 
-    private fun createStoryViewDataFrom(story: Story): StoryViewData {
-        return StoryViewData(
+    private fun createStoryViewDataFrom(story: Story): FullStoryViewData {
+        return FullStoryViewData(
                 story.by, story.kids, story.id, story.score, story.title, story.url
         )
     }
 
-    private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
+    private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<FullStoryViewData>, navigator: Navigator) {
         val remoteDatabase = FakeStoriesDatabase(storyIds, stories)
         val presenter = StorySectionPresenter(
                 StoryIdProvider(remoteDatabase),
@@ -108,17 +108,17 @@ class StorySectionPresenterTest {
 
     }
 
-    private class SpyingStoriesView : AsyncListView<StoryViewData> {
-        internal lateinit var receivedData: List<StoryViewData>
-        internal lateinit var firstUpdatedViewModel: ViewModel<StoryViewData>
-        internal lateinit var secondUpdatedViewModel: ViewModel<StoryViewData>
+    private class SpyingStoriesView : AsyncListView<FullStoryViewData> {
+        internal lateinit var receivedData: List<FullStoryViewData>
+        internal lateinit var firstUpdatedViewModel: ViewModel<FullStoryViewData>
+        internal lateinit var secondUpdatedViewModel: ViewModel<FullStoryViewData>
         internal var errorShown: Boolean = false
 
-        override fun updateWith(initialViewModelList: List<ViewModel<StoryViewData>>) {
+        override fun updateWith(initialViewModelList: List<ViewModel<FullStoryViewData>>) {
             receivedData = initialViewModelList.map { viewModel -> viewModel.viewData }
         }
 
-        override fun updateWith(viewModel: ViewModel<StoryViewData>) {
+        override fun updateWith(viewModel: ViewModel<FullStoryViewData>) {
             when {
                 !::firstUpdatedViewModel.isInitialized -> firstUpdatedViewModel = viewModel
                 !::secondUpdatedViewModel.isInitialized -> secondUpdatedViewModel = viewModel
