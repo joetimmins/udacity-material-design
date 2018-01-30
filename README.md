@@ -20,5 +20,5 @@ Some other attempted techniques on show here include:
 - Replacing all Firebase callbacks with RxJava 2.1 Singles and Observables using a generic binding system
 - An intention to achieve 100% test coverage of the `core` module
 - A first draft of a pattern I like to call Android-as-a-factory
-- An asynchronously-loading RecyclerView, which updates its views as their data is returned from Firebase
+- An asynchronously-loading RecyclerView, which updates its views as the data is returned from Firebase
 - A view model based ViewPager implementation which will hopefully use the new Android ViewModel architecture at some point
