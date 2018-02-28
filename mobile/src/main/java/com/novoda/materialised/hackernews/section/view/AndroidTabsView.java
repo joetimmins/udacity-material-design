@@ -32,7 +32,7 @@ public final class AndroidTabsView implements TabsView<Section> {
     }
 
     @Override
-    public void updateWith(@NotNull List<ViewModel<Section>> viewModels, @NotNull final ViewModel<Section> defaultValue) {
+    public void updateWith(@NotNull List<ViewModel<Section>> viewModels) {
         PagerAdapter sectionPagerAdapter = new SectionPagerAdapter(viewModels, sectionPresenterFactory);
         sectionViewPager.setAdapter(sectionPagerAdapter);
 
@@ -40,7 +40,7 @@ public final class AndroidTabsView implements TabsView<Section> {
     }
 
     @Override
-    public void refreshCurrentTab(@NotNull ViewModel<Section> defaultValue) {
+    public void refreshCurrentTab() {
         final int selectedTabPosition = tabLayout.getSelectedTabPosition();
 
         TabLayout.Tab currentTab = handleNullable(nullableTabAt(selectedTabPosition), tabLayout.newTab());

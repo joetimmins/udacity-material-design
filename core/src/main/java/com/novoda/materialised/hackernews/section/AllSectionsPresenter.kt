@@ -9,13 +9,10 @@ class AllSectionsPresenter(private val provider: SectionListProvider,
         val sections = provider.provideSections()
         val sectionViewModels = sections
                 .map { section -> ViewModel(section) }
-        val defaultValue = sectionViewModels.first { (viewData) -> viewData.isDefault }
-        view.updateWith(sectionViewModels, defaultValue)
+        view.updateWith(sectionViewModels)
     }
 
     fun resumePresenting() {
-        val sections = provider.provideSections()
-        val defaultValue = sections.first { section -> section.isDefault }
-        view.refreshCurrentTab(ViewModel(defaultValue))
+        view.refreshCurrentTab()
     }
 }
