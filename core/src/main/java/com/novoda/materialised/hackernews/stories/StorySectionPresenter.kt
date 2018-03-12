@@ -33,20 +33,20 @@ class StorySectionPresenter constructor(
                 .subscribe(updateViewOnNext, showErrorOnError)
     }
 
-    private val mapStoryToViewModel: (Story) -> ViewModel<FullStoryViewData> = { story ->
-        ViewModel(
-                FullStoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
-                { storyViewData -> navigator.navigateTo(storyViewData.url) }
-        )
+    private val updateStoriesView: (List<ViewModel<FullStoryViewData>>) -> Unit = { storyViewModels ->
+        if (storyViewModels.isEmpty()) storiesView.showError()
+        else storiesView.updateWith(storyViewModels)
     }
 
     private val extractStoryIds: (List<ViewModel<FullStoryViewData>>) -> List<Int> = { storyViewModels ->
         storyViewModels.map { (viewData) -> viewData.id }
     }
 
-    private val updateStoriesView: (List<ViewModel<FullStoryViewData>>) -> Unit = { storyViewModels ->
-        if (storyViewModels.isEmpty()) storiesView.showError()
-        else storiesView.updateWith(storyViewModels)
+    private val mapStoryToViewModel: (Story) -> ViewModel<FullStoryViewData> = { story ->
+        ViewModel(
+                FullStoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url),
+                { storyViewData -> navigator.navigateTo(storyViewData.url) }
+        )
     }
 
     private val updateViewOnNext: (ViewModel<FullStoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
@@ -58,8 +58,7 @@ fun partialPresenter(storyIdProvider: StoryIdProvider,
                      storyProvider: StoryProvider,
                      navigator: Navigator,
                      subscribeScheduler: Scheduler,
-                     observeScheduler: Scheduler
-): (AsyncListView<FullStoryViewData>) -> Presenter<Section> = { asyncListView ->
+                     observeScheduler: Scheduler): (AsyncListView<FullStoryViewData>) -> Presenter<Section> = { asyncListView ->
     StorySectionPresenter(
             storyIdProvider,
             storyProvider,
