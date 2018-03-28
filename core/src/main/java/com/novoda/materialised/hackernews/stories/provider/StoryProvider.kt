@@ -1,5 +1,6 @@
 package com.novoda.materialised.hackernews.stories.provider
 
+import com.novoda.materialised.hackernews.remotedb.RemoteDatabase
 import io.reactivex.Observable
 
 class StoryProvider(

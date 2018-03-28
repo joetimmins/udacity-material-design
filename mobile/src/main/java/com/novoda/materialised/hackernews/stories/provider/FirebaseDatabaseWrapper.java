@@ -1,6 +1,8 @@
 package com.novoda.materialised.hackernews.stories.provider;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.novoda.materialised.hackernews.remotedb.RemoteDatabase;
+import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNode;
 
 import org.jetbrains.annotations.NotNull;
 

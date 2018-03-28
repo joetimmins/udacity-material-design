@@ -3,6 +3,8 @@ package com.novoda.materialised.hackernews.stories
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
+import com.novoda.materialised.hackernews.remotedb.RemoteDatabase
+import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNode
 import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.provider.*
 import com.novoda.materialised.hackernews.stories.view.FullStoryViewData
