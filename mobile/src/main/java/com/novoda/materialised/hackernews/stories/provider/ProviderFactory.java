@@ -3,6 +3,7 @@ package com.novoda.materialised.hackernews.stories.provider;
 import android.content.Context;
 
 import com.novoda.materialised.hackernews.remotedb.RemoteDatabase;
+import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseSingleton;
 
 public final class ProviderFactory {
 
