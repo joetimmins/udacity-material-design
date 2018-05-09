@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public enum RemoteDatabaseSingleton {
@@ -12,10 +13,14 @@ public enum RemoteDatabaseSingleton {
 
     private FirebaseApp firebaseApp;
 
-    public RemoteDatabase obtainInstance(Context context) {
+    public RemoteDatabaseNode obtainInstance(Context context, String firstChildId, String... childIds) {
         initialiseFirebaseAppIfNecessary(context);
         FirebaseDatabase instance = FirebaseDatabase.getInstance(firebaseApp);
-        return new FirebaseDatabaseWrapper(instance);
+        DatabaseReference reference = instance.getReference(firstChildId);
+        for (String childId : childIds) {
+            reference = instance.getReference(childId);
+        }
+        return new DatabaseReferenceWrapper(reference);
     }
 
     private void initialiseFirebaseAppIfNecessary(Context context) {
