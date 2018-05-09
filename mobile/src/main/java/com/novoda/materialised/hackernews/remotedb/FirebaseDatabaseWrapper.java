@@ -13,7 +13,7 @@ final class FirebaseDatabaseWrapper implements RemoteDatabase {
     }
 
     @Override
-    public RemoteDatabaseNode child(@NotNull String name) {
-        return new DatabaseReferenceWrapper(firebaseDatabase.getReference(name));
+    public RemoteDatabaseNode child(@NotNull String childId) {
+        return new DatabaseReferenceWrapper(firebaseDatabase.getReference(childId));
     }
 }
