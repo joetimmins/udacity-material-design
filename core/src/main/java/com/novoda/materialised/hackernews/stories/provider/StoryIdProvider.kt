@@ -7,5 +7,5 @@ import io.reactivex.Single
 class StoryIdProvider(
         private val remoteDatabase: RemoteDatabase
 ) {
-    fun storyIdsFor(section: Section): Single<List<Long>> = remoteDatabase.node("v0").child(section.id).singleListOf(Long::class.java)
+    fun storyIdsFor(section: Section): Single<List<Long>> = remoteDatabase.child("v0").child(section.id).singleListOf(Long::class.java)
 }

@@ -90,7 +90,7 @@ class StorySectionPresenterTest {
 
         private val theOnlyNode: Node = Node(listReturnValue, singleReturnValues)
 
-        override fun node(name: String): RemoteDatabaseNode = theOnlyNode
+        override fun child(name: String): RemoteDatabaseNode = theOnlyNode
     }
 
     private class Node(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabaseNode {

@@ -10,7 +10,7 @@ class StoryProvider(
     fun readItems(ids: List<Int>): Observable<Story> {
         return Observable.fromIterable(ids)
                 .flatMap { id ->
-                    remoteDatabase.node("v0").child("item").child(id.toString()).singleValueOf(Story::class.java).toObservable()
+                    remoteDatabase.child("v0").child("item").child(id.toString()).singleValueOf(Story::class.java).toObservable()
                 }
 
     }
