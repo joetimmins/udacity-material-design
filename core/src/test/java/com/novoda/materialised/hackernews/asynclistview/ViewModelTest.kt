@@ -3,7 +3,7 @@ package com.novoda.materialised.hackernews.asynclistview
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
 
-private val viewId = 4
+private const val viewId = 4
 
 class ViewModelTest {
 
