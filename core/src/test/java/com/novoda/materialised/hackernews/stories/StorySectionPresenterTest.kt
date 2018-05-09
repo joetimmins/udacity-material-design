@@ -3,7 +3,6 @@ package com.novoda.materialised.hackernews.stories
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.ViewModel
 import com.novoda.materialised.hackernews.navigator.Navigator
-import com.novoda.materialised.hackernews.remotedb.RemoteDatabase
 import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNode
 import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.provider.Story
@@ -74,7 +73,7 @@ class StorySectionPresenterTest {
     }
 
     private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<FullStoryViewData>, navigator: Navigator) {
-        val remoteDatabase = FakeStoriesDatabase(storyIds, stories)
+        val remoteDatabase = Node(storyIds, stories)
         val presenter = StorySectionPresenter(
                 StoryIdProvider(remoteDatabase),
                 StoryProvider(remoteDatabase),
@@ -86,12 +85,12 @@ class StorySectionPresenterTest {
         presenter.present(Section.NEW)
     }
 
-    class FakeStoriesDatabase(listReturnValue: List<Any>, singleReturnValues: List<Any>) : RemoteDatabase {
-
-        private val theOnlyNode: Node = Node(listReturnValue, singleReturnValues)
-
-        override fun child(childId: String): RemoteDatabaseNode = theOnlyNode
-    }
+//    class FakeStoriesDatabase(listReturnValue: List<Any>, singleReturnValues: List<Any>) : RemoteDatabase {
+//
+//        private val theOnlyNode: Node = Node(listReturnValue, singleReturnValues)
+//
+//        override fun child(childId: String): RemoteDatabaseNode = theOnlyNode
+//    }
 
     private class Node(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabaseNode {
 
