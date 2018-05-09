@@ -6,7 +6,9 @@ import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.remotedb.RemoteDatabase
 import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNode
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.provider.*
+import com.novoda.materialised.hackernews.stories.provider.Story
+import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
+import com.novoda.materialised.hackernews.stories.provider.StoryProvider
 import com.novoda.materialised.hackernews.stories.view.FullStoryViewData
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
