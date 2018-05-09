@@ -1,16 +1,16 @@
 package com.novoda.materialised.hackernews.stories.provider
 
-import com.novoda.materialised.hackernews.remotedb.RemoteDatabase
+import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNode
 import io.reactivex.Observable
 
 class StoryProvider(
-        private val remoteDatabase: RemoteDatabase
+        private val itemsDatabase: RemoteDatabaseNode
 ) {
 
     fun readItems(ids: List<Int>): Observable<Story> {
         return Observable.fromIterable(ids)
                 .flatMap { id ->
-                    remoteDatabase.child("v0").child("item").child(id.toString()).singleValueOf(Story::class.java).toObservable()
+                    itemsDatabase.child(id.toString()).singleValueOf(Story::class.java).toObservable()
                 }
 
     }
