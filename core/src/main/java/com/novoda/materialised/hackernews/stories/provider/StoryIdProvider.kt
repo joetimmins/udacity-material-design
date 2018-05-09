@@ -5,7 +5,7 @@ import com.novoda.materialised.hackernews.section.Section
 import io.reactivex.Single
 
 class StoryIdProvider(
-        private val remoteDatabase: RemoteDatabase
+        private val sectionDatabase: RemoteDatabase
 ) {
-    fun storyIdsFor(section: Section): Single<List<Long>> = remoteDatabase.child("v0").child(section.id).singleListOf(Long::class.java)
+    fun storyIdsFor(section: Section): Single<List<Long>> = sectionDatabase.child("v0").child(section.id).singleListOf(Long::class.java)
 }
