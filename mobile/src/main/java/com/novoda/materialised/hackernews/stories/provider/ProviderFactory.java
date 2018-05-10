@@ -8,7 +8,7 @@ import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNodeProvider;
 public final class ProviderFactory {
 
     public static StoryProvider newStoryProvider(Context context) {
-        RemoteDatabaseNode remoteDatabase = RemoteDatabaseNodeProvider.INSTANCE.obtainNode(context, "v0", "items");
+        RemoteDatabaseNode remoteDatabase = RemoteDatabaseNodeProvider.INSTANCE.obtainNode(context, "v0", "item");
         return new StoryProvider(remoteDatabase);
     }
 

@@ -18,7 +18,7 @@ public enum RemoteDatabaseNodeProvider {
         FirebaseDatabase instance = FirebaseDatabase.getInstance(firebaseApp);
         DatabaseReference reference = instance.getReference(firstChildId);
         for (String childId : childIds) {
-            reference = instance.getReference(childId);
+            reference = reference.child(childId);
         }
         return new DatabaseReferenceWrapper(reference);
     }
