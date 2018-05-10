@@ -43,17 +43,10 @@ public final class AndroidTabsView implements TabsView<Section> {
     public void refreshCurrentTab() {
         final int selectedTabPosition = tabLayout.getSelectedTabPosition();
 
-        TabLayout.Tab currentTab = handleNullable(nullableTabAt(selectedTabPosition), tabLayout.newTab());
+        Function0<TabLayout.Tab> currentTabOrNull = () -> tabLayout.getTabAt(selectedTabPosition);
+        TabLayout.Tab currentTab = handleNullable(currentTabOrNull, tabLayout.newTab());
 
         currentTab.select();
     }
 
-    private Function0<TabLayout.Tab> nullableTabAt(final int selectedTabPosition) {
-        return new Function0<TabLayout.Tab>() {
-            @Override
-            public TabLayout.Tab invoke() {
-                return tabLayout.getTabAt(selectedTabPosition);
-            }
-        };
-    }
 }
