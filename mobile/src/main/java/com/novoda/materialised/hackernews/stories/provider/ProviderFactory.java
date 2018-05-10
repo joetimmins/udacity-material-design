@@ -12,7 +12,7 @@ public final class ProviderFactory {
         return new StoryProvider(remoteDatabase);
     }
 
-    public static StoryIdProvider newIdOnlyStoryProvider(Context context) {
+    public static StoryIdProvider newStoryIdProvider(Context context) {
         RemoteDatabaseNode remoteDatabase = RemoteDatabaseNodeProvider.INSTANCE.obtainNode(context, "v0");
         return new StoryIdProvider(remoteDatabase);
     }
