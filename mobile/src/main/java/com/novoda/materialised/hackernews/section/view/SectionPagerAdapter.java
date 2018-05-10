@@ -14,8 +14,8 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.section.Section;
-import com.novoda.materialised.hackernews.stories.view.StoryCardView;
 import com.novoda.materialised.hackernews.stories.view.FullStoryViewData;
+import com.novoda.materialised.hackernews.stories.view.StoryCardView;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import kotlin.jvm.functions.Function1;
 
-class SectionPagerAdapter extends PagerAdapter {
+final class SectionPagerAdapter extends PagerAdapter {
     private final List<ViewModel<Section>> viewModels;
     private final Function1<AsyncListView<FullStoryViewData>, Presenter<Section>> sectionPresenterFactory;
 
