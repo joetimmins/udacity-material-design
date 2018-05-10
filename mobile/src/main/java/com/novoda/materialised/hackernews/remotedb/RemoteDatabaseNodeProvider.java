@@ -7,13 +7,13 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public enum RemoteDatabaseSingleton {
+public enum RemoteDatabaseNodeProvider {
 
     INSTANCE;
 
     private FirebaseApp firebaseApp;
 
-    public RemoteDatabaseNode obtainInstance(Context context, String firstChildId, String... childIds) {
+    public RemoteDatabaseNode obtainNode(Context context, String firstChildId, String... childIds) {
         initialiseFirebaseAppIfNecessary(context);
         FirebaseDatabase instance = FirebaseDatabase.getInstance(firebaseApp);
         DatabaseReference reference = instance.getReference(firstChildId);
