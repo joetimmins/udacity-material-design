@@ -87,7 +87,7 @@ class StorySectionPresenterTest {
 
     private class Node(private val listReturnValue: List<Any>, private val singleReturnValues: List<Any>) : RemoteDatabaseNode {
 
-        override fun child(childId: String): RemoteDatabaseNode = this
+        override fun child(id: String): RemoteDatabaseNode = this
 
         private var methodCount: Int = 0
 
