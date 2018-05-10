@@ -12,6 +12,5 @@ class StoryProvider(
                 .flatMap { id ->
                     itemsDatabase.child(id.toString()).singleValueOf(Story::class.java).toObservable()
                 }
-
     }
 }
