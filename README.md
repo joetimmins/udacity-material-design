@@ -9,8 +9,8 @@ Material effects include:
 - A floating action button
 
 Coming soon:
-- Fancy view animations for nice transitions!
-- A comments page!
+- Fancy view animations for nice transitions
+- A comments page
 
 Some other attempted techniques on show here include:
 - Hexagonal architecture, with the code split between `mobile` and `core` modules
