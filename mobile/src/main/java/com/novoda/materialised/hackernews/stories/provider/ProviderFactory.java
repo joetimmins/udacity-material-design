@@ -4,16 +4,19 @@ import android.content.Context;
 
 import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNode;
 import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNodeProvider;
+import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseStructure;
 
 public final class ProviderFactory {
 
     public static StoryProvider newStoryProvider(Context context) {
-        RemoteDatabaseNode remoteDatabase = RemoteDatabaseNodeProvider.INSTANCE.obtainNode(context, "v0", "item");
+        RemoteDatabaseStructure structure = new RemoteDatabaseStructure("v0", "item");
+        RemoteDatabaseNode remoteDatabase = RemoteDatabaseNodeProvider.INSTANCE.obtainNode(context, structure);
         return new StoryProvider(remoteDatabase);
     }
 
     public static StoryIdProvider newStoryIdProvider(Context context) {
-        RemoteDatabaseNode remoteDatabase = RemoteDatabaseNodeProvider.INSTANCE.obtainNode(context, "v0");
+        RemoteDatabaseStructure structure = new RemoteDatabaseStructure("v0");
+        RemoteDatabaseNode remoteDatabase = RemoteDatabaseNodeProvider.INSTANCE.obtainNode(context, structure);
         return new StoryIdProvider(remoteDatabase);
     }
 
