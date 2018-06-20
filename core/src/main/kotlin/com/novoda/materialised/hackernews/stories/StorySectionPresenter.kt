@@ -23,7 +23,7 @@ class StorySectionPresenter constructor(
     override fun present(section: Section) {
         // TODO: find out how to do multiple subscribers
         storyIdProvider.storyIdsFor(section)
-                .map { stories: List<Long> -> stories.map({ storyId -> ViewModel(FullStoryViewData(id = storyId.toInt())) }) }
+                .map { stories: List<Long> -> stories.map { storyId -> ViewModel(FullStoryViewData(id = storyId.toInt())) } }
                 .doAfterSuccess(updateStoriesView)
                 .map(extractStoryIds)
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
