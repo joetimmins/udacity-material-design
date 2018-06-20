@@ -32,7 +32,7 @@ final class DatabaseReferenceWrapper implements RemoteDatabaseNode {
 
     @Override
     public <T> Single<List<T>> singleListOf(@NotNull final Class<T> returnClass) {
-        return dataConvertedWith(dataSnapshot -> ((List<T>) dataSnapshot.getValue()));
+        return dataConvertedWith(dataSnapshot -> (List<T>) dataSnapshot.getValue());
     }
 
     @NotNull
