@@ -39,13 +39,13 @@ final class DatabaseReferenceWrapper implements RemoteDatabaseNode {
     private <T> Single<T> dataConvertedWith(final Function1<DataSnapshot, T> converter) {
         return Single.create(emitter -> databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 T convertedDataSnapshot = converter.invoke(dataSnapshot);
                 emitter.onSuccess(convertedDataSnapshot);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NotNull DatabaseError databaseError) {
                 emitter.onError(databaseError.toException());
             }
         }));
