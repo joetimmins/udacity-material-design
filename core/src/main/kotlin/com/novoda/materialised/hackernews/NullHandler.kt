@@ -1,16 +1,8 @@
 package com.novoda.materialised.hackernews
 
-fun <T> handleNullable(mightBeNullOrThrowAnException: () -> T?, defaultValue: T): T {
+fun <T> handleNullable(mightBeNullOrThrowAnException: () -> T?, defaultValue: T): T = try {
+    mightBeNullOrThrowAnException()
+} catch (e: Throwable) {
+    null
+} ?: defaultValue
 
-    val mightBeNull = handleExceptions(mightBeNullOrThrowAnException)
-
-    return mightBeNull ?: defaultValue
-}
-
-private fun <T> handleExceptions(mightThrowAnException: () -> T?): T? {
-    return try {
-        mightThrowAnException()
-    } catch (e: Throwable) {
-        null
-    }
-}
