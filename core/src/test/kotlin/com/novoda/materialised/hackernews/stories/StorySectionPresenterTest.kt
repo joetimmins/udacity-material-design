@@ -110,10 +110,6 @@ class StorySectionPresenterTest {
         internal val receivedErrors: MutableList<Throwable> = mutableListOf()
         internal val receivedViewModels: MutableList<ViewModel<StoryViewData>> = mutableListOf()
 
-        override fun updateWith(initialViewModelList: List<ViewModel<StoryViewData>>) {
-            receivedViewModels.addAll(initialViewModelList)
-        }
-
         override fun updateWith(viewModel: ViewModel<StoryViewData>) {
             receivedViewModels.add(viewModel)
         }

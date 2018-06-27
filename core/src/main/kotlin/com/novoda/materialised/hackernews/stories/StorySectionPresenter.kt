@@ -8,7 +8,6 @@ import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.provider.Story
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider
-import com.novoda.materialised.hackernews.stories.view.FullStoryViewData
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -27,22 +26,22 @@ class StorySectionPresenter constructor(
 
         val first = storyIdsFor
                 .doOnSuccess { if (it.isEmpty()) storiesView.showError(Throwable()) }
-                .map { storyIds -> storyIds.map { ViewModel(viewData = FullStoryViewData(id = it.toInt())) } }
+                .map { storyIds -> storyIds.map { ViewModel(viewData = StoryViewData.JustAnId(id = it.toInt())) } }
                 .flatMapObservable { Observable.fromIterable(it) }
 
-        val second: Observable<ViewModel<FullStoryViewData>> = storyIdsFor
+        val second: Observable<ViewModel<StoryViewData>> = storyIdsFor
                 .flatMapObservable { storyIds -> storyProvider.readItems(storyIds.map { it.toInt() }) }
                 .map { toViewModel(it) }
 
         Observable.concat(first, second)
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
-                .subscribe({ storiesView.updateWith(it) }, { storiesView.showError(it) })
+                .subscribe({ storiesView.updateWith(it as ViewModel<StoryViewData>) }, { storiesView.showError(it) })
     }
 
-    private fun toViewModel(story: Story) = ViewModel(
+    private fun toViewModel(story: Story): ViewModel<StoryViewData> = ViewModel(
             viewBehaviour = { navigator.navigateTo(story.url) },
-            viewData = FullStoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
+            viewData = StoryViewData.FullyPopulated(story.by, story.kids, story.id, story.score, story.title, story.url) as StoryViewData
     )
 
 }
@@ -51,7 +50,7 @@ fun partialPresenter(storyIdProvider: StoryIdProvider,
                      storyProvider: StoryProvider,
                      navigator: Navigator,
                      subscribeScheduler: Scheduler,
-                     observeScheduler: Scheduler): (AsyncListView<FullStoryViewData>) -> Presenter<Section> = { asyncListView ->
+                     observeScheduler: Scheduler): (AsyncListView<StoryViewData>) -> Presenter<Section> = { asyncListView ->
     StorySectionPresenter(
             storyIdProvider,
             storyProvider,
