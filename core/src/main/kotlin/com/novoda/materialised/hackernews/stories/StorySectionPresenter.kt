@@ -25,12 +25,12 @@ class StorySectionPresenter constructor(
         storyIdProvider.storyIdsFor(section)
                 .map { storyIds: List<Long> -> storyIds.map { storyId -> ViewModel(viewData = FullStoryViewData(id = storyId.toInt())) } }
                 .doAfterSuccess { updateView(it) }
-                .map(extractStoryIds)
-                .flatMapObservable { idList -> storyProvider.readItems(idList) }
+                .map { extractStoryIds(it) }
+                .flatMapObservable { storyProvider.readItems(it) }
                 .map { toViewModel(it) }
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
-                .subscribe(updateViewOnNext, showErrorOnError)
+                .subscribe(storiesView::updateWith) { storiesView.showError() }
     }
 
     private fun updateView(viewModelList: List<ViewModel<FullStoryViewData>>) = when {
@@ -38,20 +38,13 @@ class StorySectionPresenter constructor(
         else -> storiesView.updateWith(viewModelList)
     }
 
-    private fun toViewModel(story: Story): ViewModel<FullStoryViewData> {
-        return ViewModel(
-                { navigator.navigateTo(story.url) },
-                FullStoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
-        )
-    }
+    private fun extractStoryIds(it: List<ViewModel<FullStoryViewData>>) = it.map { viewModel -> viewModel.viewData.id }
 
-    private val extractStoryIds: (List<ViewModel<FullStoryViewData>>) -> List<Int> = { storyViewModels ->
-        storyViewModels.map { it.viewData.id }
-    }
+    private fun toViewModel(story: Story) = ViewModel(
+            viewBehaviour = { navigator.navigateTo(story.url) },
+            viewData = FullStoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
+    )
 
-    private val updateViewOnNext: (ViewModel<FullStoryViewData>) -> Unit = { storyViewModel -> storiesView.updateWith(storyViewModel) }
-
-    private val showErrorOnError: (Throwable) -> Unit = { storiesView.showError() }
 }
 
 fun partialPresenter(storyIdProvider: StoryIdProvider,
