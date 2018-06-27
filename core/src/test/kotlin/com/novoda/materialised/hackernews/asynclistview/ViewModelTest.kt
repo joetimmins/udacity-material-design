@@ -16,7 +16,7 @@ class ViewModelTest {
 
         var actualViewId = 0
 
-        val intViewModel = ViewModel(intViewData, { viewData -> actualViewId = viewData.id })
+        val intViewModel = ViewModel({ viewData -> actualViewId = viewData.id }, intViewData)
 
         intViewModel.invokeBehaviour()
 
