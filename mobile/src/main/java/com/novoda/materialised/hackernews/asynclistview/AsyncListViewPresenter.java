@@ -35,8 +35,8 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
 
     @Override
     public void updateWith(@NonNull List<ViewModel<T>> initialViewModelList) {
-        init();
-        topStoriesView.swapAdapter(adapter, false);
+//        init();
+//        topStoriesView.swapAdapter(adapter, false);
     }
 
     private void init() {
@@ -44,6 +44,7 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
         textView.setText(textView.getContext().getResources().getString(R.string.loading_stories));
         loadingView.setVisibility(View.VISIBLE);
         adapter = new SingleTypeAdapter<>(viewInflater);
+        topStoriesView.setAdapter(adapter);
     }
 
     @Override

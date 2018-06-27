@@ -44,14 +44,16 @@ final class SingleTypeAdapter<T extends ViewData<Integer>,
         return idFor(position);
     }
 
-    void updateWith(ViewModel<T> fullyPopulatedViewModel) {
+    void updateWith(ViewModel<T> viewModel) {
         for (int i = 0; i < viewModels.size(); i++) {
-            if (shouldUpdate(i, fullyPopulatedViewModel)) {
-                viewModels.set(i, fullyPopulatedViewModel);
+            if (shouldUpdate(i, viewModel)) {
+                viewModels.set(i, viewModel);
                 notifyItemChanged(i);
-                break;
+                return;
             }
         }
+        viewModels.add(viewModel);
+        notifyItemChanged(viewModels.size() - 1);
     }
 
     private boolean shouldUpdate(int position, ViewModel<T> fullyPopulatedViewModel) {
