@@ -25,6 +25,7 @@ class StorySectionPresenter constructor(
         val storyIdsFor = storyIdProvider.storyIdsFor(section)
 
         val first = storyIdsFor
+                .doOnSuccess { if (it.isEmpty()) storiesView.showError(Throwable()) }
                 .map { storyIds -> storyIds.map { ViewModel(viewData = FullStoryViewData(id = it.toInt())) } }
                 .flatMapObservable { Observable.fromIterable(it) }
 

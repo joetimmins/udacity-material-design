@@ -62,7 +62,7 @@ class StorySectionPresenterTest {
 
         presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator)
 
-        storiesView.receivedViewModels[0].invokeBehaviour()
+        storiesView.receivedViewModels[2].invokeBehaviour()
 
         assertThat(navigator.uri).isEqualTo(A_STORY.url)
     }
