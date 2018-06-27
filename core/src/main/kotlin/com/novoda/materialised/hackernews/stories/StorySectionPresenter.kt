@@ -23,8 +23,8 @@ class StorySectionPresenter constructor(
     override fun present(section: Section) {
         // TODO: find out how to do multiple subscribers
         storyIdProvider.storyIdsFor(section)
-                .map { stories: List<Long> -> stories.map { storyId -> ViewModel(viewData = FullStoryViewData(id = storyId.toInt())) } }
-                .doAfterSuccess(updateStoriesView)
+                .map { storyIds: List<Long> -> storyIds.map { storyId -> ViewModel(viewData = FullStoryViewData(id = storyId.toInt())) } }
+                .doAfterSuccess { updateView(it) }
                 .map(extractStoryIds)
                 .flatMapObservable { idList -> storyProvider.readItems(idList) }
                 .map { toViewModel(it) }
@@ -33,16 +33,16 @@ class StorySectionPresenter constructor(
                 .subscribe(updateViewOnNext, showErrorOnError)
     }
 
+    private fun updateView(viewModelList: List<ViewModel<FullStoryViewData>>) = when {
+        viewModelList.isEmpty() -> storiesView.showError()
+        else -> storiesView.updateWith(viewModelList)
+    }
+
     private fun toViewModel(story: Story): ViewModel<FullStoryViewData> {
         return ViewModel(
                 { navigator.navigateTo(story.url) },
                 FullStoryViewData(story.by, story.kids, story.id, story.score, story.title, story.url)
         )
-    }
-
-    private val updateStoriesView: (List<ViewModel<FullStoryViewData>>) -> Unit = { storyViewModels ->
-        if (storyViewModels.isEmpty()) storiesView.showError()
-        else storiesView.updateWith(storyViewModels)
     }
 
     private val extractStoryIds: (List<ViewModel<FullStoryViewData>>) -> List<Int> = { storyViewModels ->
