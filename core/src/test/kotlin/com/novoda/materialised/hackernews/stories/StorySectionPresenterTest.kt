@@ -21,13 +21,14 @@ class StorySectionPresenterTest {
     fun `When presenting multiple stories, the presenter gives a list of ids to the view, wrapped in view data objects`() {
         val firstBlankViewData = FullStoryViewData(id = FIRST_STORY_ID.toInt())
         val secondBlankViewData = FullStoryViewData(id = SECOND_STORY_ID.toInt())
-        val expectedViewData = Arrays.asList(firstBlankViewData, secondBlankViewData)
+        val expectedViewData = listOf(firstBlankViewData, secondBlankViewData)
+        val expectedViewModels = expectedViewData.map { ViewModel(viewData = it) }
 
         val storiesView = SpyingStoriesView()
 
         presentWith(STORY_IDS, emptyList(), storiesView, SpyingNavigator())
 
-        assertThat(storiesView.receivedData).isEqualTo(expectedViewData)
+        assertThat(storiesView.receivedViewModels).isEqualTo(expectedViewModels)
     }
 
     @Test
@@ -47,8 +48,8 @@ class StorySectionPresenterTest {
 
         presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
 
-        val actualViewData = storiesView.firstUpdatedViewModel.viewData
-        val moreActualViewData = storiesView.secondUpdatedViewModel.viewData
+        val actualViewData = storiesView.receivedViewModels[2].viewData
+        val moreActualViewData = storiesView.receivedViewModels[3].viewData
 
         assertThat(actualViewData).isEqualTo(expectedViewData)
         assertThat(moreActualViewData).isEqualTo(moreExpectedViewData)
@@ -61,7 +62,7 @@ class StorySectionPresenterTest {
 
         presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator)
 
-        storiesView.firstUpdatedViewModel.invokeBehaviour()
+        storiesView.receivedViewModels[0].invokeBehaviour()
 
         assertThat(navigator.uri).isEqualTo(A_STORY.url)
     }
@@ -105,23 +106,20 @@ class StorySectionPresenterTest {
     }
 
     private class SpyingStoriesView : AsyncListView<FullStoryViewData> {
-        internal lateinit var receivedData: List<FullStoryViewData>
-        internal lateinit var firstUpdatedViewModel: ViewModel<FullStoryViewData>
-        internal lateinit var secondUpdatedViewModel: ViewModel<FullStoryViewData>
         internal var errorShown: Boolean = false
+        internal val receivedErrors: MutableList<Throwable> = mutableListOf()
+        internal val receivedViewModels: MutableList<ViewModel<FullStoryViewData>> = mutableListOf()
 
         override fun updateWith(initialViewModelList: List<ViewModel<FullStoryViewData>>) {
-            receivedData = initialViewModelList.map { viewModel -> viewModel.viewData }
+            receivedViewModels.addAll(initialViewModelList)
         }
 
         override fun updateWith(viewModel: ViewModel<FullStoryViewData>) {
-            when {
-                !::firstUpdatedViewModel.isInitialized -> firstUpdatedViewModel = viewModel
-                !::secondUpdatedViewModel.isInitialized -> secondUpdatedViewModel = viewModel
-            }
+            receivedViewModels.add(viewModel)
         }
 
-        override fun showError() {
+        override fun showError(throwable: Throwable) {
+            receivedErrors.add(throwable)
             errorShown = true
         }
     }
@@ -136,9 +134,9 @@ class StorySectionPresenterTest {
 
     companion object {
 
-        private val TEST_TIME = 3471394
-        private val FIRST_STORY_ID = 56L
-        private val SECOND_STORY_ID = 78L
+        private const val TEST_TIME = 3471394
+        private const val FIRST_STORY_ID = 56L
+        private const val SECOND_STORY_ID = 78L
         private val STORY_IDS = listOf(
                 FIRST_STORY_ID,
                 SECOND_STORY_ID

@@ -9,6 +9,7 @@ import com.novoda.materialised.hackernews.stories.provider.Story
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider
 import com.novoda.materialised.hackernews.stories.view.FullStoryViewData
+import io.reactivex.Observable
 import io.reactivex.Scheduler
 
 class StorySectionPresenter constructor(
@@ -22,19 +23,31 @@ class StorySectionPresenter constructor(
 
     override fun present(section: Section) {
         // TODO: find out how to do multiple subscribers
-        storyIdProvider.storyIdsFor(section)
-                .map { storyIds: List<Long> -> storyIds.map { storyId -> ViewModel(viewData = FullStoryViewData(id = storyId.toInt())) } }
-                .doAfterSuccess { updateView(it) }
-                .map { extractStoryIds(it) }
-                .flatMapObservable { storyProvider.readItems(it) }
+        val storyIdsFor = storyIdProvider.storyIdsFor(section)
+//                .map { storyIds: List<Long> -> storyIds.map { storyId -> ViewModel(viewData = FullStoryViewData(id = storyId.toInt())) } }
+//                .doAfterSuccess { updateView(it) }
+//                .map { extractStoryIds(it) }
+//                .flatMapObservable { storyProvider.readItems(it) }
+//                .map { toViewModel(it) }
+//                .subscribeOn(subscribeScheduler)
+//                .observeOn(observeScheduler)
+//                .subscribe(storiesView::updateWith) { storiesView.showError() }
+        val first = storyIdsFor
+                .map { storyIds -> storyIds.map { ViewModel(viewData = FullStoryViewData(id = it.toInt())) } }
+                .flatMapObservable { Observable.fromIterable(it) }
+
+        val second: Observable<ViewModel<FullStoryViewData>> = storyIdsFor
+                .flatMapObservable { storyIds -> storyProvider.readItems(storyIds.map { it.toInt() }) }
                 .map { toViewModel(it) }
+
+        Observable.concat(first, second)
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
-                .subscribe(storiesView::updateWith) { storiesView.showError() }
+                .subscribe({ storiesView.updateWith(it) }, { storiesView.showError(it) })
     }
 
     private fun updateView(viewModelList: List<ViewModel<FullStoryViewData>>) = when {
-        viewModelList.isEmpty() -> storiesView.showError()
+        viewModelList.isEmpty() -> storiesView.showError(Throwable())
         else -> storiesView.updateWith(viewModelList)
     }
 

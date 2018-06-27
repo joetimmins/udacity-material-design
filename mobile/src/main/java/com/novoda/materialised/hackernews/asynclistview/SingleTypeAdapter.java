@@ -4,7 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 final class SingleTypeAdapter<T extends ViewData<Integer>,
         V extends View & ModelledView<T>>
@@ -12,14 +15,14 @@ final class SingleTypeAdapter<T extends ViewData<Integer>,
     private final List<ViewModel<T>> viewModels;
     private final ModelledViewInflater<V> viewInflater;
 
-    SingleTypeAdapter(List<ViewModel<T>> partiallyPopulatedViewModels, ModelledViewInflater<V> viewInflater) {
-        this.viewModels = partiallyPopulatedViewModels;
+    SingleTypeAdapter(ModelledViewInflater<V> viewInflater) {
+        this.viewModels = new ArrayList<>();
         this.viewInflater = viewInflater;
         setHasStableIds(true);
     }
 
     @Override
-    public ModelledViewHolder<V> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ModelledViewHolder<V> onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         V view = viewInflater.inflateUsing(parent);
         return new ModelledViewHolder<>(view);
     }

@@ -2,12 +2,15 @@ package com.novoda.materialised.hackernews.asynclistview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.novoda.materialised.R;
 
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 public final class AsyncListViewPresenter<T extends ViewData<Integer>,
         V extends View & ModelledView<T>>
@@ -27,16 +30,20 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
         this.loadingView = loadingView;
         this.topStoriesView = topStoriesView;
         this.viewInflater = viewInflater;
+        init();
     }
 
     @Override
     public void updateWith(@NonNull List<ViewModel<T>> initialViewModelList) {
+        init();
+        topStoriesView.swapAdapter(adapter, false);
+    }
+
+    private void init() {
         TextView textView = (TextView) loadingView;
         textView.setText(textView.getContext().getResources().getString(R.string.loading_stories));
         loadingView.setVisibility(View.VISIBLE);
-
-        adapter = new SingleTypeAdapter<>(initialViewModelList, viewInflater);
-        topStoriesView.swapAdapter(adapter, false);
+        adapter = new SingleTypeAdapter<>(viewInflater);
     }
 
     @Override
@@ -46,7 +53,8 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
     }
 
     @Override
-    public void showError() {
+    public void showError(@NotNull Throwable throwable) {
+        Log.e("HN", "something borkded", throwable);
         TextView textView = (TextView) loadingView;
         textView.setText(R.string.bork_bork);
         loadingView.setVisibility(View.VISIBLE);
