@@ -15,7 +15,6 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView;
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter;
 import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.section.Section;
-import com.novoda.materialised.hackernews.stories.view.FullStoryViewData;
 import com.novoda.materialised.hackernews.stories.view.StoryCardView;
 import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
