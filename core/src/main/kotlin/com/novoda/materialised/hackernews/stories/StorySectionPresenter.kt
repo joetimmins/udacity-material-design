@@ -11,6 +11,7 @@ import com.novoda.materialised.hackernews.stories.provider.StoryProvider
 import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import io.reactivex.Single
 
 class StorySectionPresenter constructor(
         private val storyIdProvider: StoryIdProvider,
@@ -22,22 +23,25 @@ class StorySectionPresenter constructor(
 ) : Presenter<Section> {
 
     override fun present(section: Section) {
-        val storyIdsFor = storyIdProvider.storyIdsFor(section)
+        val storyIds: Single<List<Int>> = storyIdProvider.storyIdsFor(section)
+                .map { list -> list.map { it.toInt() } }
 
-        val first = storyIdsFor
+        val first: Observable<ViewModel<StoryViewData>> = storyIds
                 .doOnSuccess { if (it.isEmpty()) storiesView.showError(Throwable()) }
-                .map { storyIds -> storyIds.map { ViewModel(viewData = StoryViewData.JustAnId(id = it.toInt())) } }
+                .map { ids: List<Int> -> ids.map { toViewModel(it) } }
                 .flatMapObservable { Observable.fromIterable(it) }
 
-        val second: Observable<ViewModel<StoryViewData>> = storyIdsFor
-                .flatMapObservable { storyIds -> storyProvider.readItems(storyIds.map { it.toInt() }) }
+        val second: Observable<ViewModel<StoryViewData>> = storyIds
+                .flatMapObservable { ids -> storyProvider.readItems(ids.map { it }) }
                 .map { toViewModel(it) }
 
         Observable.concat(first, second)
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
-                .subscribe({ storiesView.updateWith(it as ViewModel<StoryViewData>) }, { storiesView.showError(it) })
+                .subscribe({ storiesView.updateWith(it) }, { storiesView.showError(it) })
     }
+
+    private fun toViewModel(id: Int): ViewModel<StoryViewData> = ViewModel(viewData = StoryViewData.JustAnId(id = id))
 
     private fun toViewModel(story: Story): ViewModel<StoryViewData> = ViewModel(
             viewBehaviour = { navigator.navigateTo(story.url) },
