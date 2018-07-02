@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import com.novoda.materialised.R;
 
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 
 public final class AsyncListViewPresenter<T extends ViewData<Integer>,
@@ -31,12 +29,6 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
         this.topStoriesView = topStoriesView;
         this.viewInflater = viewInflater;
         init();
-    }
-
-    @Override
-    public void updateWith(@NonNull List<ViewModel<T>> initialViewModelList) {
-//        init();
-//        topStoriesView.swapAdapter(adapter, false);
     }
 
     private void init() {
