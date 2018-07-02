@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.novoda.materialised.R;
 import com.novoda.materialised.hackernews.Presenter;
@@ -40,7 +41,7 @@ final class SectionPagerAdapter extends PagerAdapter {
         View sectionView = layoutInflater.inflate(R.layout.section_view, container, false);
         container.addView(sectionView);
 
-        View loadingView = sectionView.findViewById(R.id.loading_view);
+        TextView loadingView = sectionView.findViewById(R.id.loading_view);
         RecyclerView recyclerView = sectionView.findViewById(R.id.stories_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 

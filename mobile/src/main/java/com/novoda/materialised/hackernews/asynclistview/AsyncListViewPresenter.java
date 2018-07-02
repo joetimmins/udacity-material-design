@@ -14,17 +14,17 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
         V extends View & ModelledView<T>>
         implements AsyncListView<T> {
 
-    private final View loadingView;
+    private final TextView loadingView;
     private final RecyclerView topStoriesView;
     private final ModelledViewInflater<V> viewInflater;
 
     private SingleTypeAdapter<T, V> adapter;
 
-    public AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView, Class<V> viewClass) {
+    public AsyncListViewPresenter(TextView loadingView, RecyclerView topStoriesView, Class<V> viewClass) {
         this(loadingView, topStoriesView, new ModelledViewInflater<>(viewClass));
     }
 
-    private AsyncListViewPresenter(View loadingView, RecyclerView topStoriesView, ModelledViewInflater<V> viewInflater) {
+    private AsyncListViewPresenter(TextView loadingView, RecyclerView topStoriesView, ModelledViewInflater<V> viewInflater) {
         this.loadingView = loadingView;
         this.topStoriesView = topStoriesView;
         this.viewInflater = viewInflater;
@@ -32,7 +32,7 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
     }
 
     private void init() {
-        TextView textView = (TextView) loadingView;
+        TextView textView = loadingView;
         textView.setText(textView.getContext().getResources().getString(R.string.loading_stories));
         loadingView.setVisibility(View.VISIBLE);
         adapter = new SingleTypeAdapter<>(viewInflater);
@@ -48,8 +48,7 @@ public final class AsyncListViewPresenter<T extends ViewData<Integer>,
     @Override
     public void showError(@NotNull Throwable throwable) {
         Log.e("HN", "something borkded", throwable);
-        TextView textView = (TextView) loadingView;
-        textView.setText(R.string.bork_bork);
+        loadingView.setText(R.string.bork_bork);
         loadingView.setVisibility(View.VISIBLE);
     }
 
