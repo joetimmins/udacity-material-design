@@ -14,7 +14,7 @@ import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 
 public final class StoryCardView
         extends LinearLayout
-        implements ModelledView<FullStoryViewData> {
+        implements ModelledView<StoryViewData> {
 
     private StoryCardBinding storyCard;
 
@@ -34,9 +34,18 @@ public final class StoryCardView
     }
 
     @Override
-    public void updateWith(@NonNull ViewModel<FullStoryViewData> viewModel) {
-        storyCard.setViewData(viewModel.getViewData());
-        storyCard.setViewBehaviour(viewModel);
+    public void updateWith(@NonNull ViewModel<StoryViewData> viewModel) {
+        StoryViewData viewData = viewModel.getViewData();
+        if (viewData instanceof StoryViewData.JustAnId) {
+            StoryViewData.JustAnId justAnId = (StoryViewData.JustAnId) viewData;
+            storyCard.setId(justAnId);
+        }
+
+        if (viewData instanceof StoryViewData.FullyPopulated) {
+            StoryViewData.FullyPopulated populated = (StoryViewData.FullyPopulated) viewData;
+            storyCard.setViewData(populated);
+            storyCard.setViewModel(viewModel);
+        }
     }
 
     private void init(Context context) {

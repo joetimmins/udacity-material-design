@@ -17,6 +17,7 @@ import com.novoda.materialised.hackernews.asynclistview.ViewModel;
 import com.novoda.materialised.hackernews.section.Section;
 import com.novoda.materialised.hackernews.stories.view.FullStoryViewData;
 import com.novoda.materialised.hackernews.stories.view.StoryCardView;
+import com.novoda.materialised.hackernews.stories.view.StoryViewData;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ import kotlin.jvm.functions.Function1;
 
 final class SectionPagerAdapter extends PagerAdapter {
     private final List<ViewModel<Section>> viewModels;
-    private final Function1<AsyncListView<FullStoryViewData>, Presenter<Section>> sectionPresenterFactory;
+    private final Function1<AsyncListView<StoryViewData>, Presenter<Section>> sectionPresenterFactory;
 
-    SectionPagerAdapter(List<ViewModel<Section>> viewModels, Function1<AsyncListView<FullStoryViewData>, Presenter<Section>> sectionPresenterFactory) {
+    SectionPagerAdapter(List<ViewModel<Section>> viewModels, Function1<AsyncListView<StoryViewData>, Presenter<Section>> sectionPresenterFactory) {
         this.viewModels = viewModels;
         this.sectionPresenterFactory = sectionPresenterFactory;
     }
@@ -45,7 +46,7 @@ final class SectionPagerAdapter extends PagerAdapter {
         RecyclerView recyclerView = sectionView.findViewById(R.id.stories_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        AsyncListView<FullStoryViewData> asyncListView = new AsyncListViewPresenter<>(loadingView, recyclerView, StoryCardView.class);
+        AsyncListView<StoryViewData> asyncListView = new AsyncListViewPresenter<>(loadingView, recyclerView, StoryCardView.class);
 
         Presenter<Section> sectionPresenter = sectionPresenterFactory.invoke(asyncListView);
         Section viewData = viewModels.get(position).getViewData();
