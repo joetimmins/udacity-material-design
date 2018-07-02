@@ -28,11 +28,11 @@ class StorySectionPresenter constructor(
 
         val first: Observable<ViewModel<StoryViewData>> = storyIds
                 .doOnSuccess { if (it.isEmpty()) storiesView.showError(Throwable()) }
-                .map { ids: List<Int> -> ids.map { toViewModel(it) } }
                 .flatMapObservable { Observable.fromIterable(it) }
+                .map { toViewModel(it) }
 
         val second: Observable<ViewModel<StoryViewData>> = storyIds
-                .flatMapObservable { ids -> storyProvider.readItems(ids.map { it }) }
+                .flatMapObservable { storyProvider.readItems(it) }
                 .map { toViewModel(it) }
 
         Observable.concat(first, second)
