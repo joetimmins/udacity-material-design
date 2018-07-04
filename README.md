@@ -9,7 +9,7 @@ Material effects include:
 - A floating action button
 
 Coming soon:
-- Fancy view animations for nice transitions (maybe not!)
+- Fancy view animations for nice transitions
 - A comments page
 
 Some other attempted techniques on show here include:
