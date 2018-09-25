@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
 
-import static com.novoda.materialised.hackernews.NullHandlerKt.handleNullable;
+import static com.novoda.materialised.hackernews.NullHandlerKt.handleExceptionOrNull;
 
 public final class AndroidTabsView implements TabsView<Section> {
 
@@ -44,7 +44,7 @@ public final class AndroidTabsView implements TabsView<Section> {
         final int selectedTabPosition = tabLayout.getSelectedTabPosition();
 
         Function0<TabLayout.Tab> currentTabOrNull = () -> tabLayout.getTabAt(selectedTabPosition);
-        TabLayout.Tab currentTab = handleNullable(currentTabOrNull, tabLayout.newTab());
+        TabLayout.Tab currentTab = handleExceptionOrNull(currentTabOrNull, tabLayout.newTab());
 
         currentTab.select();
     }
