@@ -49,8 +49,10 @@ class StorySectionPresenterTest {
         presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
 
         val receivedViewData: List<StoryViewData> = storiesView.receivedViewModels
+                .asSequence()
                 .filter { it.viewData is StoryViewData.FullyPopulated }
                 .map { it.viewData }
+                .toList()
 
         assertThat(receivedViewData).containsExactly(expectedViewData, moreExpectedViewData)
     }
