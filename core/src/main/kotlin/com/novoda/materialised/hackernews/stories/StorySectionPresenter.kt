@@ -12,6 +12,7 @@ import com.novoda.materialised.hackernews.stories.view.StoryViewData
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 
 class StorySectionPresenter constructor(
         private val storyIdProvider: StoryIdProvider,
@@ -21,6 +22,8 @@ class StorySectionPresenter constructor(
         private val subscribeScheduler: Scheduler,
         private val observeScheduler: Scheduler
 ) : Presenter<Section> {
+
+    private lateinit var storiesDisposable: Disposable
 
     override fun present(section: Section) {
         val storyIds: Single<List<Int>> = storyIdProvider.storyIdsFor(section)
@@ -35,7 +38,7 @@ class StorySectionPresenter constructor(
                 .flatMapObservable { storyProvider.readItems(it) }
                 .map { toViewModel(it) }
 
-        Observable.concat(first, second)
+        storiesDisposable = Observable.concat(first, second)
                 .subscribeOn(subscribeScheduler)
                 .observeOn(observeScheduler)
                 .subscribe({ storiesView.updateWith(it) }, { storiesView.showError(it) })
