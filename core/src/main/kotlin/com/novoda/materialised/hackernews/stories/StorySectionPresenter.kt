@@ -51,6 +51,9 @@ class StorySectionPresenter constructor(
             viewData = StoryViewData.FullyPopulated(story.by, story.kids, story.id, story.score, story.title, story.url) as StoryViewData
     )
 
+    override fun stop() {
+        if (!storiesDisposable.isDisposed) storiesDisposable.dispose()
+    }
 }
 
 fun partialPresenter(storyIdProvider: StoryIdProvider,
