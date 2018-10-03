@@ -13,14 +13,14 @@ public enum RemoteDatabaseProvider {
 
     private FirebaseApp firebaseApp;
 
-    public DatabaseReferenceWrapper obtainNode(Context context, RemoteDatabaseStructure remoteDatabaseStructure) {
+    public RemoteDatabase obtainNode(Context context, RemoteDatabaseStructure remoteDatabaseStructure) {
         initialiseFirebaseAppIfNecessary(context);
         FirebaseDatabase instance = FirebaseDatabase.getInstance(firebaseApp);
         DatabaseReference reference = instance.getReference(remoteDatabaseStructure.getFirstChildId());
         for (String childId : remoteDatabaseStructure.getChildIds()) {
             reference = reference.child(childId);
         }
-        return new DatabaseReferenceWrapper(reference);
+        return new RemoteDatabase(reference);
     }
 
     private void initialiseFirebaseAppIfNecessary(Context context) {
