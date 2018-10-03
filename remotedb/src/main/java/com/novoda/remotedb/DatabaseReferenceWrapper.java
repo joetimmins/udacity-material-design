@@ -4,7 +4,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.novoda.materialised.hackernews.stories.provider.RemoteDatabaseNode;
 
 import java.util.List;
 
@@ -13,25 +12,22 @@ import org.jetbrains.annotations.NotNull;
 import io.reactivex.Single;
 import kotlin.jvm.functions.Function1;
 
-final class DatabaseReferenceWrapper implements RemoteDatabaseNode {
+public final class DatabaseReferenceWrapper {
     private final DatabaseReference databaseReference;
 
     DatabaseReferenceWrapper(DatabaseReference databaseReference) {
         this.databaseReference = databaseReference;
     }
 
-    @Override
-    public RemoteDatabaseNode child(@NotNull String nodeId) {
+    public DatabaseReferenceWrapper child(@NotNull String nodeId) {
         DatabaseReference child = databaseReference.child(nodeId);
         return new DatabaseReferenceWrapper(child);
     }
 
-    @Override
     public <T> Single<T> singleValueOf(@NotNull final Class<T> returnClass) {
         return dataConvertedWith(dataSnapshot -> dataSnapshot.getValue(returnClass));
     }
 
-    @Override
     public <T> Single<List<T>> singleListOf(@NotNull final Class<T> returnClass) {
         return dataConvertedWith(dataSnapshot -> (List<T>) dataSnapshot.getValue());
     }

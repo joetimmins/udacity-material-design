@@ -6,15 +6,14 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.novoda.materialised.hackernews.stories.provider.RemoteDatabaseNode;
 
-public enum RemoteDatabaseNodeProvider {
+public enum RemoteDatabaseProvider {
 
     INSTANCE;
 
     private FirebaseApp firebaseApp;
 
-    public RemoteDatabaseNode obtainNode(Context context, RemoteDatabaseStructure remoteDatabaseStructure) {
+    public DatabaseReferenceWrapper obtainNode(Context context, RemoteDatabaseStructure remoteDatabaseStructure) {
         initialiseFirebaseAppIfNecessary(context);
         FirebaseDatabase instance = FirebaseDatabase.getInstance(firebaseApp);
         DatabaseReference reference = instance.getReference(remoteDatabaseStructure.getFirstChildId());
