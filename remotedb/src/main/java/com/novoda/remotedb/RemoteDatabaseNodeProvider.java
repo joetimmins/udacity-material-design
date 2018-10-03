@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews.remotedb;
+package com.novoda.remotedb;
 
 import android.content.Context;
 
@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.novoda.materialised.hackernews.stories.provider.RemoteDatabaseNode;
 
 public enum RemoteDatabaseNodeProvider {
 

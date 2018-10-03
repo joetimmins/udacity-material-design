@@ -2,9 +2,8 @@ package com.novoda.materialised.hackernews.stories.provider;
 
 import android.content.Context;
 
-import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNode;
-import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseNodeProvider;
-import com.novoda.materialised.hackernews.remotedb.RemoteDatabaseStructure;
+import com.novoda.remotedb.RemoteDatabaseNodeProvider;
+import com.novoda.remotedb.RemoteDatabaseStructure;
 
 public final class ProviderFactory {
 

@@ -1,9 +1,10 @@
-package com.novoda.materialised.hackernews.remotedb;
+package com.novoda.remotedb;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.novoda.materialised.hackernews.stories.provider.RemoteDatabaseNode;
 
 import java.util.List;
 

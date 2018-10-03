@@ -1,4 +1,4 @@
-package com.novoda.materialised.hackernews.remotedb
+package com.novoda.materialised.hackernews.stories.provider
 
 import io.reactivex.Single
 
