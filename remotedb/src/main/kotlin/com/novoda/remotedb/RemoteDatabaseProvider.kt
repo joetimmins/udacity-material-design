@@ -25,15 +25,20 @@ class RemoteDatabaseProvider private constructor(private val firebaseApp: Fireba
                 when {
                     lastUsedMetadata != null && metadata == lastUsedMetadata -> lastReturnedProvider
                     else -> {
+                        val firebaseApp = FirebaseApp.initializeApp(
+                                context.applicationContext,
+                                FirebaseOptions.Builder().containing(metadata),
+                                metadata.applicationName
+                        )
                         lastUsedMetadata = metadata
-                        val firebaseOptions = FirebaseOptions.Builder()
-                                .setApplicationId(metadata.applicationId) // build() throws an exception if this isn't set
-                                .setDatabaseUrl(metadata.databaseUrl)
-                                .build()
-                        val initializeApp = FirebaseApp.initializeApp(context.applicationContext, firebaseOptions, metadata.applicationName)
-                        lastReturnedProvider = RemoteDatabaseProvider(initializeApp)
+                        lastReturnedProvider = RemoteDatabaseProvider(firebaseApp)
                         lastReturnedProvider
                     }
                 }
     }
 }
+
+private fun FirebaseOptions.Builder.containing(metadata: Metadata): FirebaseOptions = apply {
+    setApplicationId(metadata.applicationId)
+    setDatabaseUrl(metadata.databaseUrl)
+}.build()
