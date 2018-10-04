@@ -14,7 +14,7 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 
-class StorySectionPresenter constructor(
+class StorySectionPresenter(
         private val storyIdProvider: StoryIdProvider,
         private val storyProvider: StoryProvider,
         private val storiesView: AsyncListView<StoryViewData>,
@@ -60,13 +60,14 @@ fun partialPresenter(storyIdProvider: StoryIdProvider,
                      storyProvider: StoryProvider,
                      navigator: Navigator,
                      subscribeScheduler: Scheduler,
-                     observeScheduler: Scheduler): (AsyncListView<StoryViewData>) -> Presenter<Section> = { asyncListView ->
-    StorySectionPresenter(
-            storyIdProvider,
-            storyProvider,
-            asyncListView,
-            navigator,
-            subscribeScheduler,
-            observeScheduler
-    )
-}
+                     observeScheduler: Scheduler): (AsyncListView<StoryViewData>) -> Presenter<Section> =
+        { asyncListView ->
+            StorySectionPresenter(
+                    storyIdProvider,
+                    storyProvider,
+                    asyncListView,
+                    navigator,
+                    subscribeScheduler,
+                    observeScheduler
+            )
+        }
