@@ -35,10 +35,12 @@ class RemoteDatabaseProvider private constructor(private val firebaseApp: Fireba
                         lastReturnedProvider
                     }
                 }
+
+        private fun FirebaseOptions.Builder.containing(metadata: Metadata): FirebaseOptions = apply {
+            setApplicationId(metadata.applicationId)
+            setDatabaseUrl(metadata.databaseUrl)
+        }.build()
     }
 }
 
-private fun FirebaseOptions.Builder.containing(metadata: Metadata): FirebaseOptions = apply {
-    setApplicationId(metadata.applicationId)
-    setDatabaseUrl(metadata.databaseUrl)
-}.build()
+
