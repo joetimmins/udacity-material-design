@@ -5,12 +5,12 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.database.FirebaseDatabase
 
-class RemoteDatabaseProvider private constructor(private val firebaseApp: FirebaseApp) {
+class NodeProvider private constructor(private val firebaseApp: FirebaseApp) {
 
-    fun node(structure: Structure): RemoteDatabase {
+    fun node(structure: Structure): Node {
         var reference = firebaseApp.referenceFor(structure)
         structure.childIds.forEach { reference = reference.child(it) }
-        return RemoteDatabase(reference)
+        return Node(reference)
     }
 
     private fun FirebaseApp.referenceFor(structure: Structure) = FirebaseDatabase.getInstance(this).getReference(structure.firstChildId)
@@ -18,22 +18,22 @@ class RemoteDatabaseProvider private constructor(private val firebaseApp: Fireba
     companion object {
 
         private var lastUsedMetadata: Metadata? = null // wanted to use lateinit here too, but isInitialized doesn't work for some reason
-        private lateinit var lastReturnedProvider: RemoteDatabaseProvider
+        private lateinit var lastReturnedProvider: NodeProvider
 
-        fun obtain(context: Context, metadata: Metadata): RemoteDatabaseProvider =
+        fun obtain(context: Context, metadata: Metadata): NodeProvider =
                 when {
                     lastUsedMetadata != null && metadata == lastUsedMetadata -> lastReturnedProvider
                     else -> createNewProvider(context, metadata)
                 }
 
-        private fun createNewProvider(context: Context, metadata: Metadata): RemoteDatabaseProvider {
+        private fun createNewProvider(context: Context, metadata: Metadata): NodeProvider {
             val firebaseApp = FirebaseApp.initializeApp(
                     context.applicationContext,
                     FirebaseOptions.Builder().containing(metadata),
                     metadata.applicationName
             )
             lastUsedMetadata = metadata
-            lastReturnedProvider = RemoteDatabaseProvider(firebaseApp)
+            lastReturnedProvider = NodeProvider(firebaseApp)
             return lastReturnedProvider
         }
 

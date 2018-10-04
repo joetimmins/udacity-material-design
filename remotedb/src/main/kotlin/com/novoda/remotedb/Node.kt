@@ -7,11 +7,11 @@ import com.google.firebase.database.ValueEventListener
 
 import io.reactivex.Single
 
-class RemoteDatabase internal constructor(private val databaseReference: DatabaseReference) {
+class Node internal constructor(private val databaseReference: DatabaseReference) {
 
-    fun child(nodeId: String): RemoteDatabase {
+    fun child(nodeId: String): Node {
         val child = databaseReference.child(nodeId)
-        return RemoteDatabase(child)
+        return Node(child)
     }
 
     fun <T> singleValueOf(returnClass: Class<T>): Single<T> = databaseReference.toSingle { it.getValue(returnClass) }
