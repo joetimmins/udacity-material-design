@@ -42,5 +42,3 @@ class RemoteDatabaseProvider private constructor(private val firebaseApp: Fireba
         }.build()
     }
 }
-
-
