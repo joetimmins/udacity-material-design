@@ -8,13 +8,12 @@ import com.google.firebase.database.FirebaseDatabase
 class RemoteDatabaseProvider private constructor(private val firebaseApp: FirebaseApp) {
 
     fun node(structure: Structure): RemoteDatabase {
-        val instance = FirebaseDatabase.getInstance(firebaseApp)
-        var reference = instance.getReference(structure.firstChildId)
-        for (childId in structure.childIds) {
-            reference = reference.child(childId)
-        }
+        var reference = firebaseApp.referenceFor(structure)
+        structure.childIds.forEach { reference = reference.child(it) }
         return RemoteDatabase(reference)
     }
+
+    private fun FirebaseApp.referenceFor(structure: Structure) = FirebaseDatabase.getInstance(firebaseApp).getReference(structure.firstChildId)
 
     companion object {
 
