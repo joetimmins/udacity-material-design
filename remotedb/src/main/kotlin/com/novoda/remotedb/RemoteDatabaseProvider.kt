@@ -13,7 +13,7 @@ class RemoteDatabaseProvider private constructor(private val firebaseApp: Fireba
         return RemoteDatabase(reference)
     }
 
-    private fun FirebaseApp.referenceFor(structure: Structure) = FirebaseDatabase.getInstance(firebaseApp).getReference(structure.firstChildId)
+    private fun FirebaseApp.referenceFor(structure: Structure) = FirebaseDatabase.getInstance(this).getReference(structure.firstChildId)
 
     companion object {
 
