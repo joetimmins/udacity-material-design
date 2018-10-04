@@ -24,17 +24,19 @@ class RemoteDatabaseProvider private constructor(private val firebaseApp: Fireba
         fun obtain(context: Context, metadata: Metadata): RemoteDatabaseProvider =
                 when {
                     lastUsedMetadata != null && metadata == lastUsedMetadata -> lastReturnedProvider
-                    else -> {
-                        val firebaseApp = FirebaseApp.initializeApp(
-                                context.applicationContext,
-                                FirebaseOptions.Builder().containing(metadata),
-                                metadata.applicationName
-                        )
-                        lastUsedMetadata = metadata
-                        lastReturnedProvider = RemoteDatabaseProvider(firebaseApp)
-                        lastReturnedProvider
-                    }
+                    else -> createNewProvider(context, metadata)
                 }
+
+        private fun createNewProvider(context: Context, metadata: Metadata): RemoteDatabaseProvider {
+            val firebaseApp = FirebaseApp.initializeApp(
+                    context.applicationContext,
+                    FirebaseOptions.Builder().containing(metadata),
+                    metadata.applicationName
+            )
+            lastUsedMetadata = metadata
+            lastReturnedProvider = RemoteDatabaseProvider(firebaseApp)
+            return lastReturnedProvider
+        }
 
         private fun FirebaseOptions.Builder.containing(metadata: Metadata): FirebaseOptions = apply {
             setApplicationId(metadata.applicationId)
