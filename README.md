@@ -6,7 +6,7 @@ In order to showcase some of the cool techniques detailed in Udacity's Material 
 Material effects include:
 - Collapsing app bar with tabs, to switch between the top, new and best stories
 - Seam-to-step transition when scrolling through the article list
-- A floating action button
+- A (useless) floating action button!
 
 Coming soon:
 - Fancy view animations for nice transitions
