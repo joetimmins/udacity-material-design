@@ -21,16 +21,16 @@ class NodeProvider private constructor(private val firebaseApp: FirebaseApp) {
         private lateinit var lastReturnedProvider: NodeProvider
 
         fun obtain(context: Context, metadata: Metadata): NodeProvider =
-                when {
-                    lastUsedMetadata != null && metadata == lastUsedMetadata -> lastReturnedProvider
-                    else -> createNewProvider(context, metadata)
-                }
+            when {
+                lastUsedMetadata != null && metadata == lastUsedMetadata -> lastReturnedProvider
+                else -> createNewProvider(context, metadata)
+            }
 
         private fun createNewProvider(context: Context, metadata: Metadata): NodeProvider {
             val firebaseApp = FirebaseApp.initializeApp(
-                    context.applicationContext,
-                    FirebaseOptions.Builder().containing(metadata),
-                    metadata.applicationName
+                context.applicationContext,
+                FirebaseOptions.Builder().containing(metadata),
+                metadata.applicationName
             )
             lastUsedMetadata = metadata
             lastReturnedProvider = NodeProvider(firebaseApp)
