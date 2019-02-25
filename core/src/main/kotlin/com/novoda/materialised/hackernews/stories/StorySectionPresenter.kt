@@ -32,11 +32,11 @@ class StorySectionPresenter(
         val first: Observable<ViewModel<StoryViewData>> = storyIds
             .doOnSuccess { if (it.isEmpty()) storiesView.showError(Throwable()) }
             .flatMapObservable { Observable.fromIterable(it) }
-            .map { toViewModel(it) }
+            .map { it.toViewModel() }
 
         val second: Observable<ViewModel<StoryViewData>> = storyIds
             .flatMapObservable { storyProvider.readItems(it) }
-            .map { toViewModel(it) }
+            .map { it.toViewModel() }
 
         storiesDisposable = Observable.concat(first, second)
             .subscribeOn(subscribeScheduler)
@@ -44,11 +44,11 @@ class StorySectionPresenter(
             .subscribe({ storiesView.updateWith(it) }, { storiesView.showError(it) })
     }
 
-    private fun toViewModel(id: Int): ViewModel<StoryViewData> = ViewModel(viewData = StoryViewData.JustAnId(id = id))
+    private fun Int.toViewModel(): ViewModel<StoryViewData> = ViewModel(viewData = StoryViewData.JustAnId(id = this))
 
-    private fun toViewModel(story: Story): ViewModel<StoryViewData> = ViewModel(
-        viewBehaviour = { navigator.navigateTo(story.url) },
-        viewData = StoryViewData.FullyPopulated(story.by, story.kids, story.id, story.score, story.title, story.url) as StoryViewData
+    private fun Story.toViewModel(): ViewModel<StoryViewData> = ViewModel(
+        viewBehaviour = { navigator.navigateTo(url) },
+        viewData = StoryViewData.FullyPopulated(by, kids, id, score, title, url) as StoryViewData
     )
 
     override fun stop() {
