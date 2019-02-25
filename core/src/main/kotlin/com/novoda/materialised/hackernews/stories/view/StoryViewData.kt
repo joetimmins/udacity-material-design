@@ -3,7 +3,6 @@ package com.novoda.materialised.hackernews.stories.view
 import com.novoda.materialised.hackernews.asynclistview.ViewData
 import java.net.URI
 
-
 sealed class StoryViewData : ViewData<Int> {
     data class JustAnId(override val id: Int) : StoryViewData()
     data class FullyPopulated(val by: String = "",

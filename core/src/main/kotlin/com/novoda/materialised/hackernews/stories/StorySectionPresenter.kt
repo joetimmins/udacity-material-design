@@ -15,40 +15,40 @@ import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 
 class StorySectionPresenter(
-        private val storyIdProvider: StoryIdProvider,
-        private val storyProvider: StoryProvider,
-        private val storiesView: AsyncListView<StoryViewData>,
-        private val navigator: Navigator,
-        private val subscribeScheduler: Scheduler,
-        private val observeScheduler: Scheduler
+    private val storyIdProvider: StoryIdProvider,
+    private val storyProvider: StoryProvider,
+    private val storiesView: AsyncListView<StoryViewData>,
+    private val navigator: Navigator,
+    private val subscribeScheduler: Scheduler,
+    private val observeScheduler: Scheduler
 ) : Presenter<Section> {
 
     private lateinit var storiesDisposable: Disposable
 
     override fun present(section: Section) {
         val storyIds: Single<List<Int>> = storyIdProvider.storyIdsFor(section)
-                .map { list -> list.map { it.toInt() } }
+            .map { list -> list.map { it.toInt() } }
 
         val first: Observable<ViewModel<StoryViewData>> = storyIds
-                .doOnSuccess { if (it.isEmpty()) storiesView.showError(Throwable()) }
-                .flatMapObservable { Observable.fromIterable(it) }
-                .map { toViewModel(it) }
+            .doOnSuccess { if (it.isEmpty()) storiesView.showError(Throwable()) }
+            .flatMapObservable { Observable.fromIterable(it) }
+            .map { toViewModel(it) }
 
         val second: Observable<ViewModel<StoryViewData>> = storyIds
-                .flatMapObservable { storyProvider.readItems(it) }
-                .map { toViewModel(it) }
+            .flatMapObservable { storyProvider.readItems(it) }
+            .map { toViewModel(it) }
 
         storiesDisposable = Observable.concat(first, second)
-                .subscribeOn(subscribeScheduler)
-                .observeOn(observeScheduler)
-                .subscribe({ storiesView.updateWith(it) }, { storiesView.showError(it) })
+            .subscribeOn(subscribeScheduler)
+            .observeOn(observeScheduler)
+            .subscribe({ storiesView.updateWith(it) }, { storiesView.showError(it) })
     }
 
     private fun toViewModel(id: Int): ViewModel<StoryViewData> = ViewModel(viewData = StoryViewData.JustAnId(id = id))
 
     private fun toViewModel(story: Story): ViewModel<StoryViewData> = ViewModel(
-            viewBehaviour = { navigator.navigateTo(story.url) },
-            viewData = StoryViewData.FullyPopulated(story.by, story.kids, story.id, story.score, story.title, story.url) as StoryViewData
+        viewBehaviour = { navigator.navigateTo(story.url) },
+        viewData = StoryViewData.FullyPopulated(story.by, story.kids, story.id, story.score, story.title, story.url) as StoryViewData
     )
 
     override fun stop() {
@@ -61,13 +61,13 @@ fun partialPresenter(storyIdProvider: StoryIdProvider,
                      navigator: Navigator,
                      subscribeScheduler: Scheduler,
                      observeScheduler: Scheduler): (AsyncListView<StoryViewData>) -> Presenter<Section> =
-        { asyncListView ->
-            StorySectionPresenter(
-                    storyIdProvider,
-                    storyProvider,
-                    asyncListView,
-                    navigator,
-                    subscribeScheduler,
-                    observeScheduler
-            )
-        }
+    { asyncListView ->
+        StorySectionPresenter(
+            storyIdProvider,
+            storyProvider,
+            asyncListView,
+            navigator,
+            subscribeScheduler,
+            observeScheduler
+        )
+    }

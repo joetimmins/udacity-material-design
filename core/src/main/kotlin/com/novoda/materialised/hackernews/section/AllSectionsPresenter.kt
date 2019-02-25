@@ -8,7 +8,7 @@ class AllSectionsPresenter(private val provider: SectionListProvider,
     fun startPresenting() {
         val sections = provider.provideSections()
         val sectionViewModels = sections
-                .map { section -> ViewModel(viewData = section) }
+            .map { section -> ViewModel(viewData = section) }
         view.updateWith(sectionViewModels)
     }
 
