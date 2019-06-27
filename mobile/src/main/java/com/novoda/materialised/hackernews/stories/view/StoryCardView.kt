@@ -41,7 +41,7 @@ class StoryCardView : LinearLayout, ModelledView<StoryViewData> {
 
     private fun init(context: Context) {
         storyCard = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.story_card, this, true)
-        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         setLayoutParams(layoutParams)
     }
 }
