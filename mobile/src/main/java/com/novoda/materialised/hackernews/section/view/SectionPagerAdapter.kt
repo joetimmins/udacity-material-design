@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
 import com.novoda.materialised.R
 import com.novoda.materialised.hackernews.Presenter
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
@@ -18,7 +19,7 @@ import com.novoda.materialised.hackernews.stories.view.StoryUiData
 internal class SectionPagerAdapter(
     private val uiStates: List<UiState<Section>>,
     private val sectionPresenterFactory: Function1<AsyncListView<StoryUiData>, Presenter<Section>>
-) : androidx.viewpager.widget.PagerAdapter() {
+) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val context = container.context
