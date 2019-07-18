@@ -1,9 +1,8 @@
 package com.novoda.materialised.hackernews.asynclistview
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
 internal class SingleTypeAdapter<T, V>(private val viewInflater: ModelledViewInflater<V>) :

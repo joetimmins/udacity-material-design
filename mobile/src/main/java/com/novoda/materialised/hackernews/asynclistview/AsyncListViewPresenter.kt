@@ -1,10 +1,9 @@
 package com.novoda.materialised.hackernews.asynclistview
 
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-
+import androidx.recyclerview.widget.RecyclerView
 import com.novoda.materialised.R
 
 class AsyncListViewPresenter<T, V> private constructor(

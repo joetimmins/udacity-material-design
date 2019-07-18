@@ -1,11 +1,10 @@
 package com.novoda.materialised.hackernews.stories.view
 
 import android.content.Context
-import android.databinding.DataBindingUtil
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-
+import androidx.databinding.DataBindingUtil
 import com.novoda.materialised.R
 import com.novoda.materialised.databinding.StoryCardBinding
 import com.novoda.materialised.hackernews.asynclistview.ModelledView

@@ -1,12 +1,12 @@
 package com.novoda.materialised.hackernews.stories
 
-import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.novoda.materialised.R
 import com.novoda.materialised.databinding.MainActivityBinding
 import com.novoda.materialised.hackernews.section.AllSectionsPresenter
