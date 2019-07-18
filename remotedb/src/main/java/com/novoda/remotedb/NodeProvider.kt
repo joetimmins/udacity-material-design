@@ -17,12 +17,12 @@ class NodeProvider private constructor(private val firebaseApp: FirebaseApp) {
 
     companion object {
 
-        private var lastUsedMetadata: Metadata? = null // wanted to use lateinit here too, but isInitialized doesn't work for some reason
-        private lateinit var lastReturnedProvider: NodeProvider
+        private var lastUsedMetadata: Metadata? = null
+        private var lastReturnedProvider: NodeProvider? = null
 
         fun obtain(context: Context, metadata: Metadata): NodeProvider =
             when {
-                lastUsedMetadata != null && metadata == lastUsedMetadata -> lastReturnedProvider
+                lastReturnedProvider != null && metadata == lastUsedMetadata -> lastReturnedProvider!!
                 else -> createNewProvider(context, metadata)
             }
 
@@ -34,7 +34,7 @@ class NodeProvider private constructor(private val firebaseApp: FirebaseApp) {
             )
             lastUsedMetadata = metadata
             lastReturnedProvider = NodeProvider(firebaseApp)
-            return lastReturnedProvider
+            return lastReturnedProvider!!
         }
 
         private fun FirebaseOptions.Builder.containing(metadata: Metadata): FirebaseOptions = apply {

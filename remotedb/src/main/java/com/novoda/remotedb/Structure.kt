@@ -4,7 +4,6 @@ package com.novoda.remotedb
 class Structure(
     val firstChildId: String,
     vararg val childIds: String
-
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
