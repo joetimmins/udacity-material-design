@@ -8,9 +8,9 @@ import androidx.databinding.DataBindingUtil
 import com.novoda.materialised.R
 import com.novoda.materialised.databinding.StoryCardBinding
 import com.novoda.materialised.hackernews.asynclistview.ModelledView
-import com.novoda.materialised.hackernews.asynclistview.ViewModel
+import com.novoda.materialised.hackernews.asynclistview.UiState
 
-class StoryCardView : LinearLayout, ModelledView<StoryViewData> {
+class StoryCardView : LinearLayout, ModelledView<StoryUiData> {
 
     private var storyCard: StoryCardBinding? = null
 
@@ -26,15 +26,15 @@ class StoryCardView : LinearLayout, ModelledView<StoryViewData> {
         init(context)
     }
 
-    override fun updateWith(viewModel: ViewModel<StoryViewData>) {
-        val viewData = viewModel.viewData
-        if (viewData is StoryViewData.JustAnId) {
+    override fun updateWith(uiState: UiState<StoryUiData>) {
+        val viewData = uiState.viewData
+        if (viewData is StoryUiData.JustAnId) {
             storyCard!!.id = viewData
         }
 
-        if (viewData is StoryViewData.FullyPopulated) {
+        if (viewData is StoryUiData.FullyPopulated) {
             storyCard!!.viewData = viewData
-            storyCard!!.viewModel = viewModel
+            storyCard!!.viewModel = uiState
         }
     }
 

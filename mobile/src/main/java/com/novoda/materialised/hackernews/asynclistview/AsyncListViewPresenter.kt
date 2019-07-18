@@ -10,7 +10,7 @@ class AsyncListViewPresenter<T, V> private constructor(
     private val loadingView: TextView,
     private val topStoriesView: RecyclerView,
     private val viewInflater: ModelledViewInflater<V>
-) : AsyncListView<T> where T : ViewData<Int>, V : View, V : ModelledView<T> {
+) : AsyncListView<T> where T : UiData<Int>, V : View, V : ModelledView<T> {
 
     private var adapter: SingleTypeAdapter<T, V>? = null
 
@@ -32,9 +32,9 @@ class AsyncListViewPresenter<T, V> private constructor(
         topStoriesView.adapter = adapter
     }
 
-    override fun updateWith(viewModel: ViewModel<T>) {
+    override fun updateWith(uiState: UiState<T>) {
         loadingView.visibility = View.GONE
-        adapter!!.updateWith(viewModel)
+        adapter!!.updateWith(uiState)
     }
 
     override fun showError(throwable: Throwable) {

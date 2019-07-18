@@ -1,6 +1,6 @@
 package com.novoda.materialised.hackernews.asynclistview
 
-data class ViewModel<T : ViewData<Any>>(
+data class UiState<T : UiData<Any>>(
     private val viewBehaviour: (T) -> Unit = {},
     val viewData: T
 ) {

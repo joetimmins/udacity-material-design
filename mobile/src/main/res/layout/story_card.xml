@@ -5,15 +5,15 @@
 
     <variable
       name="id"
-      type="com.novoda.materialised.hackernews.stories.view.StoryViewData.JustAnId" />
+      type="com.novoda.materialised.hackernews.stories.view.StoryUiData.JustAnId" />
 
     <variable
       name="viewData"
-      type="com.novoda.materialised.hackernews.stories.view.StoryViewData.FullyPopulated" />
+      type="com.novoda.materialised.hackernews.stories.view.StoryUiData.FullyPopulated" />
 
     <variable
       name="viewModel"
-      type="com.novoda.materialised.hackernews.asynclistview.ViewModel" />
+      type="com.novoda.materialised.hackernews.asynclistview.UiState" />
 
   </data>
 

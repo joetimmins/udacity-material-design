@@ -5,18 +5,18 @@ import org.junit.Test
 
 private const val viewId = 4
 
-class ViewModelTest {
+class UiStateTest {
 
     @Test
     fun viewModelInvokesGivenBehaviour() {
-        val intViewData = object : ViewData<Int> {
+        val intViewData = object : UiData<Int> {
             override val id: Int
                 get() = viewId
         }
 
         var actualViewId = 0
 
-        val intViewModel = ViewModel({ viewData -> actualViewId = viewData.id }, intViewData)
+        val intViewModel = UiState({ viewData -> actualViewId = viewData.id }, intViewData)
 
         intViewModel.invokeBehaviour()
 

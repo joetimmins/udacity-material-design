@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
 internal class SingleTypeAdapter<T, V>(private val viewInflater: ModelledViewInflater<V>) :
-    RecyclerView.Adapter<ModelledViewHolder<V>>() where T : ViewData<Int>, V : View, V : ModelledView<T> {
-    private val viewModels: MutableList<ViewModel<T>>
+    RecyclerView.Adapter<ModelledViewHolder<V>>() where T : UiData<Int>, V : View, V : ModelledView<T> {
+    private val uiStates: MutableList<UiState<T>>
 
     init {
-        this.viewModels = ArrayList()
+        this.uiStates = ArrayList()
         setHasStableIds(true)
     }
 
@@ -21,37 +21,37 @@ internal class SingleTypeAdapter<T, V>(private val viewInflater: ModelledViewInf
 
     override fun onBindViewHolder(holder: ModelledViewHolder<V>, position: Int) {
         val view = holder.obtainHeldView()
-        val viewModel = viewModels[position]
+        val viewModel = uiStates[position]
         view.updateWith(viewModel)
     }
 
     override fun getItemCount(): Int {
-        return viewModels.size
+        return uiStates.size
     }
 
     override fun getItemId(position: Int): Long {
         return idFor(position)!!.toLong()
     }
 
-    fun updateWith(viewModel: ViewModel<T>) {
-        for (i in viewModels.indices) {
-            if (shouldUpdate(i, viewModel)) {
-                viewModels[i] = viewModel
+    fun updateWith(uiState: UiState<T>) {
+        for (i in uiStates.indices) {
+            if (shouldUpdate(i, uiState)) {
+                uiStates[i] = uiState
                 notifyItemChanged(i)
                 return
             }
         }
-        viewModels.add(viewModel)
-        notifyItemChanged(viewModels.size - 1)
+        uiStates.add(uiState)
+        notifyItemChanged(uiStates.size - 1)
     }
 
-    private fun shouldUpdate(position: Int, fullyPopulatedViewModel: ViewModel<T>): Boolean {
+    private fun shouldUpdate(position: Int, fullyPopulatedUiState: UiState<T>): Boolean {
         val id = idFor(position)
-        val fullyPopulatedViewModelId = fullyPopulatedViewModel.viewData.id
+        val fullyPopulatedViewModelId = fullyPopulatedUiState.viewData.id
         return id == fullyPopulatedViewModelId
     }
 
     private fun idFor(position: Int): Int? {
-        return viewModels[position].viewData.id
+        return uiStates[position].viewData.id
     }
 }

@@ -1,14 +1,14 @@
 package com.novoda.materialised.hackernews.stories
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
-import com.novoda.materialised.hackernews.asynclistview.ViewModel
+import com.novoda.materialised.hackernews.asynclistview.UiState
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.provider.RemoteDatabaseNode
 import com.novoda.materialised.hackernews.stories.provider.Story
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider
-import com.novoda.materialised.hackernews.stories.view.StoryViewData
+import com.novoda.materialised.hackernews.stories.view.StoryUiData
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.fest.assertions.api.Assertions.assertThat
@@ -19,16 +19,16 @@ class StorySectionPresenterTest {
 
     @Test
     fun `When presenting multiple stories, the presenter gives a list of ids to the view, wrapped in view data objects`() {
-        val firstBlankViewData = StoryViewData.JustAnId(id = FIRST_STORY_ID.toInt())
-        val secondBlankViewData = StoryViewData.JustAnId(id = SECOND_STORY_ID.toInt())
-        val expectedViewData: List<StoryViewData> = listOf(firstBlankViewData, secondBlankViewData)
-        val expectedViewModels = expectedViewData.map { ViewModel(viewData = it) }
+        val firstBlankViewData = StoryUiData.JustAnId(id = FIRST_STORY_ID.toInt())
+        val secondBlankViewData = StoryUiData.JustAnId(id = SECOND_STORY_ID.toInt())
+        val expectedViewData: List<StoryUiData> = listOf(firstBlankViewData, secondBlankViewData)
+        val expectedViewModels = expectedViewData.map { UiState(viewData = it) }
 
         val storiesView = SpyingStoriesView()
 
         presentWith(STORY_IDS, emptyList(), storiesView, SpyingNavigator())
 
-        assertThat(storiesView.receivedViewModels).isEqualTo(expectedViewModels)
+        assertThat(storiesView.receivedUiStates).isEqualTo(expectedViewModels)
     }
 
     @Test
@@ -48,9 +48,9 @@ class StorySectionPresenterTest {
 
         presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
 
-        val receivedViewData: List<StoryViewData> = storiesView.receivedViewModels
+        val receivedViewData: List<StoryUiData> = storiesView.receivedUiStates
                 .asSequence()
-                .filter { it.viewData is StoryViewData.FullyPopulated }
+                .filter { it.viewData is StoryUiData.FullyPopulated }
                 .map { it.viewData }
                 .toList()
 
@@ -64,18 +64,18 @@ class StorySectionPresenterTest {
 
         presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator)
 
-        storiesView.receivedViewModels[2].invokeBehaviour()
+        storiesView.receivedUiStates[2].invokeBehaviour()
 
         assertThat(navigator.uri).isEqualTo(A_STORY.url)
     }
 
-    private fun createStoryViewDataFrom(story: Story): StoryViewData.FullyPopulated {
-        return StoryViewData.FullyPopulated(
+    private fun createStoryViewDataFrom(story: Story): StoryUiData.FullyPopulated {
+        return StoryUiData.FullyPopulated(
                 story.by, story.kids, story.id, story.score, story.title, story.url
         )
     }
 
-    private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryViewData>, navigator: Navigator) {
+    private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryUiData>, navigator: Navigator) {
         val remoteDatabase = Node(storyIds, stories)
         val presenter = StorySectionPresenter(
                 StoryIdProvider(remoteDatabase),
@@ -107,13 +107,13 @@ class StorySectionPresenterTest {
 
     }
 
-    private class SpyingStoriesView : AsyncListView<StoryViewData> {
+    private class SpyingStoriesView : AsyncListView<StoryUiData> {
         internal var errorShown: Boolean = false
         internal val receivedErrors: MutableList<Throwable> = mutableListOf()
-        internal val receivedViewModels: MutableList<ViewModel<StoryViewData>> = mutableListOf()
+        internal val receivedUiStates: MutableList<UiState<StoryUiData>> = mutableListOf()
 
-        override fun updateWith(viewModel: ViewModel<StoryViewData>) {
-            receivedViewModels.add(viewModel)
+        override fun updateWith(uiState: UiState<StoryUiData>) {
+            receivedUiStates.add(uiState)
         }
 
         override fun showError(throwable: Throwable) {

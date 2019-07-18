@@ -10,14 +10,14 @@ import com.novoda.materialised.R
 import com.novoda.materialised.hackernews.Presenter
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter
-import com.novoda.materialised.hackernews.asynclistview.ViewModel
+import com.novoda.materialised.hackernews.asynclistview.UiState
 import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.view.StoryCardView
-import com.novoda.materialised.hackernews.stories.view.StoryViewData
+import com.novoda.materialised.hackernews.stories.view.StoryUiData
 
 internal class SectionPagerAdapter(
-    private val viewModels: List<ViewModel<Section>>,
-    private val sectionPresenterFactory: Function1<AsyncListView<StoryViewData>, Presenter<Section>>
+    private val uiStates: List<UiState<Section>>,
+    private val sectionPresenterFactory: Function1<AsyncListView<StoryUiData>, Presenter<Section>>
 ) : androidx.viewpager.widget.PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -33,14 +33,14 @@ internal class SectionPagerAdapter(
         val asyncListView = AsyncListViewPresenter(loadingView, recyclerView, StoryCardView::class.java)
 
         val sectionPresenter = sectionPresenterFactory.invoke(asyncListView)
-        val viewData = viewModels[position].viewData
+        val viewData = uiStates[position].viewData
         sectionPresenter.present(viewData)
 
         return sectionView
     }
 
     override fun getPageTitle(position: Int): CharSequence {
-        val section = viewModels[position].viewData
+        val section = uiStates[position].viewData
         return section.userFacingName
     }
 
@@ -50,7 +50,7 @@ internal class SectionPagerAdapter(
     }
 
     override fun getCount(): Int {
-        return viewModels.size
+        return uiStates.size
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {

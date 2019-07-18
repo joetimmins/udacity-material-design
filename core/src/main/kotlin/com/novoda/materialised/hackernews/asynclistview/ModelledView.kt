@@ -1,5 +1,5 @@
 package com.novoda.materialised.hackernews.asynclistview
 
-interface ModelledView<T : ViewData<Any>> {
-    fun updateWith(viewModel: ViewModel<T>)
+interface ModelledView<T : UiData<Any>> {
+    fun updateWith(uiState: UiState<T>)
 }
