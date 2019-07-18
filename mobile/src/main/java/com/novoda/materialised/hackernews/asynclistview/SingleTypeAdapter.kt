@@ -14,15 +14,13 @@ internal class SingleTypeAdapter<T, V>(private val viewInflater: ModelledViewInf
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModelledViewHolder<V> {
-        val view = viewInflater.inflateUsing(parent)
-        return ModelledViewHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModelledViewHolder<V> =
+        ModelledViewHolder(viewInflater.inflateUsing(parent))
 
     override fun onBindViewHolder(holder: ModelledViewHolder<V>, position: Int) {
         val view = holder.obtainHeldView()
-        val viewModel = uiStates[position]
-        view.updateWith(viewModel)
+        val uiState = uiStates[position]
+        view.updateWith(uiState)
     }
 
     override fun getItemCount(): Int {

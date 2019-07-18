@@ -6,35 +6,24 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.novoda.materialised.R
 
-class AsyncListViewPresenter<T, V> private constructor(
+internal class AsyncListViewPresenter<T, V>(
     private val loadingView: TextView,
-    private val topStoriesView: RecyclerView,
-    private val viewInflater: ModelledViewInflater<V>
+    topStoriesView: RecyclerView,
+    viewClass: Class<V>,
+    viewInflater: ModelledViewInflater<V> = ModelledViewInflater(viewClass)
 ) : AsyncListView<T> where T : UiData<Int>, V : View, V : ModelledView<T> {
 
-    private var adapter: SingleTypeAdapter<T, V>? = null
-
-    constructor(
-        loadingView: TextView,
-        topStoriesView: RecyclerView,
-        viewClass: Class<V>
-    ) : this(loadingView, topStoriesView, ModelledViewInflater<V>(viewClass))
+    private val adapter: SingleTypeAdapter<T, V> = SingleTypeAdapter(viewInflater)
 
     init {
-        init()
-    }
-
-    private fun init() {
-        val textView = loadingView
-        textView.text = textView.context.resources.getString(R.string.loading_stories)
+        loadingView.text = loadingView.context.resources.getString(R.string.loading_stories)
         loadingView.visibility = View.VISIBLE
-        adapter = SingleTypeAdapter(viewInflater)
         topStoriesView.adapter = adapter
     }
 
     override fun updateWith(uiState: UiState<T>) {
         loadingView.visibility = View.GONE
-        adapter!!.updateWith(uiState)
+        adapter.updateWith(uiState)
     }
 
     override fun showError(throwable: Throwable) {
