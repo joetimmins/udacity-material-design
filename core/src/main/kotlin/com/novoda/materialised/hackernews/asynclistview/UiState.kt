@@ -7,4 +7,8 @@ data class UiState<T : UiData<Any>>(
     fun invokeBehaviour() {
         behaviour(data)
     }
+
+    override fun equals(other: Any?): Boolean = (other as? UiState<T>)?.data == data
+
+    override fun hashCode(): Int = data.hashCode()
 }

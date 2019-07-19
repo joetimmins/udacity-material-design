@@ -3,14 +3,12 @@ package com.novoda.materialised.hackernews.asynclistview
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import java.util.ArrayList
 
 internal class SingleTypeAdapter<T, V>(private val viewInflater: ModelledViewInflater<V>) :
     RecyclerView.Adapter<ModelledViewHolder<V>>() where T : UiData<Int>, V : View, V : ModelledView<T> {
-    private val uiStates: MutableList<UiState<T>>
+    private val uiStates: MutableList<UiState<T>> = mutableListOf()
 
     init {
-        this.uiStates = ArrayList()
         setHasStableIds(true)
     }
 
@@ -23,33 +21,19 @@ internal class SingleTypeAdapter<T, V>(private val viewInflater: ModelledViewInf
         view.updateWith(uiState)
     }
 
-    override fun getItemCount(): Int {
-        return uiStates.size
-    }
+    override fun getItemCount(): Int = uiStates.size
 
-    override fun getItemId(position: Int): Long {
-        return idFor(position)!!.toLong()
-    }
+    override fun getItemId(position: Int): Long = uiStates[position].data.id.toLong()
 
-    fun updateWith(uiState: UiState<T>) {
-        for (i in uiStates.indices) {
-            if (shouldUpdate(i, uiState)) {
-                uiStates[i] = uiState
-                notifyItemChanged(i)
-                return
+    fun updateWith(newUiState: UiState<T>) =
+        when (val originalUiStatePosition = uiStates.indexOfFirst { it.data.id == newUiState.data.id }) {
+            -1 -> {
+                uiStates.add(newUiState)
+                notifyItemChanged(uiStates.size - 1)
+            }
+            else -> {
+                uiStates[originalUiStatePosition] = newUiState
+                notifyItemChanged(originalUiStatePosition)
             }
         }
-        uiStates.add(uiState)
-        notifyItemChanged(uiStates.size - 1)
-    }
-
-    private fun shouldUpdate(position: Int, fullyPopulatedUiState: UiState<T>): Boolean {
-        val id = idFor(position)
-        val fullyPopulatedViewModelId = fullyPopulatedUiState.data.id
-        return id == fullyPopulatedViewModelId
-    }
-
-    private fun idFor(position: Int): Int? {
-        return uiStates[position].data.id
-    }
 }
