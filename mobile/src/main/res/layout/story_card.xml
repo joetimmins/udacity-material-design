@@ -4,12 +4,8 @@
   <data>
 
     <variable
-      name="viewData"
-      type="com.novoda.materialised.hackernews.stories.view.StoryUiData" />
-
-    <variable
-      name="viewModel"
-      type="com.novoda.materialised.hackernews.asynclistview.UiState" />
+      name="uiState"
+      type="com.novoda.materialised.hackernews.asynclistview.UiState&lt;com.novoda.materialised.hackernews.stories.view.StoryUiData&gt;" />
 
   </data>
 
@@ -30,12 +26,12 @@
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> viewModel.invokeBehaviour()}"
+        android:onClick="@{() -> uiState.invokeBehaviour()}"
         android:paddingLeft="@dimen/story_card_horizontal_padding"
         android:paddingTop="@dimen/story_card_vertical_padding"
         android:paddingRight="@dimen/story_card_horizontal_padding"
         android:paddingBottom="@dimen/story_card_vertical_padding"
-        android:text="@{viewData.getTitle}"
+        android:text="@{uiState.getData().getTitle()}"
         android:textColor="@android:color/black" />
 
       <View
@@ -61,14 +57,14 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{viewData.getScore + " points"}'
+            android:text='@{uiState.getData().getScore() + " points"}'
             android:textColor="@android:color/darker_gray"
             android:textSize="12sp" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{"by " + viewData.getBy}'
+            android:text='@{"by " + uiState.getData().getBy()}'
             android:textColor="@android:color/darker_gray"
             android:textSize="12sp" />
 
@@ -79,7 +75,7 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:gravity="start"
-          android:text='@{viewData.commentCount + " comments"}'
+          android:text='@{uiState.getData().commentCount() + " comments"}'
           android:textColor="@android:color/darker_gray"
           android:textSize="12sp" />
 
@@ -90,7 +86,7 @@
           android:ellipsize="end"
           android:gravity="end"
           android:maxLines="1"
-          android:text="@{viewData.submittedFrom}"
+          android:text="@{uiState.getData().submittedFrom()}"
           android:textColor="@android:color/darker_gray"
           android:textSize="12sp" />
 

@@ -22,7 +22,6 @@ class StoryCardView @JvmOverloads constructor(
     }
 
     override fun updateWith(uiState: UiState<StoryUiData>) {
-        storyCard.viewData = uiState.data
-        storyCard.viewModel = uiState
+        storyCard.uiState = uiState
     }
 }
