@@ -10,30 +10,19 @@ import com.novoda.materialised.databinding.StoryCardBinding
 import com.novoda.materialised.hackernews.asynclistview.ModelledView
 import com.novoda.materialised.hackernews.asynclistview.UiState
 
-class StoryCardView : LinearLayout, ModelledView<StoryUiData> {
+class StoryCardView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr), ModelledView<StoryUiData> {
 
-    private var storyCard: StoryCardBinding? = null
+    private var storyCard: StoryCardBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.story_card, this, true)
 
-    constructor(context: Context) : super(context) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context)
+    init {
+        val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        setLayoutParams(layoutParams)
     }
 
     override fun updateWith(uiState: UiState<StoryUiData>) {
-        storyCard!!.viewData = uiState.data
-        storyCard!!.viewModel = uiState
-    }
-
-    private fun init(context: Context) {
-        storyCard = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.story_card, this, true)
-        val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        setLayoutParams(layoutParams)
+        storyCard.viewData = uiState.data
+        storyCard.viewModel = uiState
     }
 }
