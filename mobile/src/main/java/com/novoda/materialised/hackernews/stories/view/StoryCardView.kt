@@ -14,7 +14,7 @@ class StoryCardView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), ModelledView<StoryUiData> {
 
-    private var storyCard: StoryCardBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.story_card, this, true)
+    private val storyCard: StoryCardBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.story_card, this, true)
 
     init {
         val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)

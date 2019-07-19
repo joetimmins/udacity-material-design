@@ -13,26 +13,23 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
-import java.util.*
 
 class StorySectionPresenterTest {
 
     @Test
-    fun `When presenting multiple stories, the presenter gives a list of ids to the view, wrapped in view data objects`() {
-        val firstBlankViewData = StoryUiData.JustAnId(id = FIRST_STORY_ID.toInt())
-        val secondBlankViewData = StoryUiData.JustAnId(id = SECOND_STORY_ID.toInt())
-        val expectedViewData: List<StoryUiData> = listOf(firstBlankViewData, secondBlankViewData)
-        val expectedViewModels = expectedViewData.map { UiState(data = it) }
+    fun `When presenting multiple stories, the presenter gives a list of ids to the view, as ui state objects`() {
+        val expectedUiState = listOf(FIRST_STORY_ID.asUiData(), SECOND_STORY_ID.asUiData())
+            .map { UiState(data = it) }
 
         val storiesView = SpyingStoriesView()
 
-        presentWith(STORY_IDS, emptyList(), storiesView, SpyingNavigator())
+        presentWith(listOf(FIRST_STORY_ID, SECOND_STORY_ID), emptyList(), storiesView, SpyingNavigator())
 
-        assertThat(storiesView.receivedUiStates).isEqualTo(expectedViewModels)
+        assertThat(storiesView.receivedUiStates).isEqualTo(expectedUiState)
     }
 
     @Test
-    fun `When no id-only view data are retrieved, the presenter tells the view to show the error screen`() {
+    fun `When no id-only data are retrieved, the presenter tells the view to show the error screen`() {
         val storiesView = SpyingStoriesView()
 
         presentWith(emptyList(), emptyList(), storiesView, SpyingNavigator())
@@ -41,49 +38,46 @@ class StorySectionPresenterTest {
     }
 
     @Test
-    fun `When presenting multiple stories, the presenter gives view models containing full view data to the view, one at a time`() {
-        val expectedViewData = createStoryViewDataFrom(A_STORY)
-        val moreExpectedViewData = createStoryViewDataFrom(ANOTHER_STORY)
+    fun `When story IDs resolve to fully populated stories, the presenter gives IDs and then full data to the view, one at a time`() {
         val storiesView = SpyingStoriesView()
 
-        presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
+        presentWith(listOf(FIRST_STORY_ID, SECOND_STORY_ID), listOf(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
 
         val receivedViewData: List<StoryUiData> = storiesView.receivedUiStates
-                .asSequence()
-                .filter { it.data is StoryUiData.FullyPopulated }
-                .map { it.data }
-                .toList()
+            .map { it.data }
 
-        assertThat(receivedViewData).containsExactly(expectedViewData, moreExpectedViewData)
+        assertThat(receivedViewData).containsExactly(
+            FIRST_STORY_ID.asUiData(), SECOND_STORY_ID.asUiData(), A_STORY.asUiData(), ANOTHER_STORY.asUiData()
+        )
     }
 
     @Test
-    fun `When a view model's behaviour is invoked, the navigator is given the url from that view model to navigate to`() {
+    fun `When a ui state's behaviour is invoked, the navigator is given the url from that ui state to navigate to`() {
         val storiesView = SpyingStoriesView()
         val navigator = SpyingNavigator()
 
-        presentWith(STORY_IDS, Arrays.asList(A_STORY, ANOTHER_STORY), storiesView, navigator)
+        presentWith(listOf(FIRST_STORY_ID, SECOND_STORY_ID), listOf(A_STORY, ANOTHER_STORY), storiesView, navigator)
 
         storiesView.receivedUiStates[2].invokeBehaviour()
 
         assertThat(navigator.uri).isEqualTo(A_STORY.url)
     }
 
-    private fun createStoryViewDataFrom(story: Story): StoryUiData.FullyPopulated {
-        return StoryUiData.FullyPopulated(
-                story.by, story.kids, story.id, story.score, story.title, story.url
-        )
-    }
+    private fun Long.asUiData() = StoryUiData(id = this.toInt())
+
+    private fun Story.asUiData() = StoryUiData(
+        by, kids, id, score, title, url
+    )
 
     private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryUiData>, navigator: Navigator) {
         val remoteDatabase = Node(storyIds, stories)
         val presenter = StorySectionPresenter(
-                StoryIdProvider(remoteDatabase),
-                StoryProvider(remoteDatabase),
-                storiesView,
-                navigator,
-                Schedulers.trampoline(),
-                Schedulers.trampoline()
+            StoryIdProvider(remoteDatabase),
+            StoryProvider(remoteDatabase),
+            storiesView,
+            navigator,
+            Schedulers.trampoline(),
+            Schedulers.trampoline()
         )
         presenter.present(Section.NEW)
     }
@@ -104,7 +98,6 @@ class StorySectionPresenterTest {
             val castReturnValue = listReturnValue as List<T>
             return Single.just(castReturnValue)
         }
-
     }
 
     private class SpyingStoriesView : AsyncListView<StoryUiData> {
@@ -135,12 +128,8 @@ class StorySectionPresenterTest {
         private const val TEST_TIME = 3471394
         private const val FIRST_STORY_ID = 56L
         private const val SECOND_STORY_ID = 78L
-        private val STORY_IDS = listOf(
-                FIRST_STORY_ID,
-                SECOND_STORY_ID
-        )
 
-        private val A_STORY = Story("test author", 123, FIRST_STORY_ID.toInt(), Arrays.asList(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url")
-        private val ANOTHER_STORY = Story("another author", 456, SECOND_STORY_ID.toInt(), Arrays.asList(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url")
+        private val A_STORY = Story("test author", 123, FIRST_STORY_ID.toInt(), listOf(1, 2), 123, TEST_TIME, "test title", "test type", "http://test.url")
+        private val ANOTHER_STORY = Story("another author", 456, SECOND_STORY_ID.toInt(), listOf(3, 4), 456, TEST_TIME, "another title", "another type", "http://another.url")
     }
 }
