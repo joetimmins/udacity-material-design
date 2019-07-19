@@ -42,7 +42,7 @@ private class SpyingTabsView : TabsView<Section> {
 
     override fun updateWith(uiStates: List<UiState<Section>>) {
         receivedUiStates = uiStates
-        receivedViewData = uiStates.map { it.viewData }
+        receivedViewData = uiStates.map { it.data }
     }
 
     override fun refreshCurrentTab() {

@@ -1,10 +1,10 @@
 package com.novoda.materialised.hackernews.asynclistview
 
 data class UiState<T : UiData<Any>>(
-    private val viewBehaviour: (T) -> Unit = {},
-    val viewData: T
+    private val behaviour: (T) -> Unit = {},
+    val data: T
 ) {
     fun invokeBehaviour() {
-        viewBehaviour(viewData)
+        behaviour(data)
     }
 }

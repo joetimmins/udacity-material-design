@@ -34,14 +34,14 @@ internal class SectionPagerAdapter(
         val asyncListView = AsyncListViewPresenter(loadingView, recyclerView, StoryCardView::class.java)
 
         val sectionPresenter = sectionPresenterFactory.invoke(asyncListView)
-        val viewData = uiStates[position].viewData
+        val viewData = uiStates[position].data
         sectionPresenter.present(viewData)
 
         return sectionView
     }
 
     override fun getPageTitle(position: Int): CharSequence {
-        val section = uiStates[position].viewData
+        val section = uiStates[position].data
         return section.userFacingName
     }
 

@@ -4,12 +4,8 @@
   <data>
 
     <variable
-      name="id"
-      type="com.novoda.materialised.hackernews.stories.view.StoryUiData.JustAnId" />
-
-    <variable
       name="viewData"
-      type="com.novoda.materialised.hackernews.stories.view.StoryUiData.FullyPopulated" />
+      type="com.novoda.materialised.hackernews.stories.view.StoryUiData" />
 
     <variable
       name="viewModel"

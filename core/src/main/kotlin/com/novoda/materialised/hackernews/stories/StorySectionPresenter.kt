@@ -32,11 +32,11 @@ class StorySectionPresenter(
         val first: Observable<UiState<StoryUiData>> = storyIds
             .doOnSuccess { if (it.isEmpty()) storiesView.showError(Throwable()) }
             .flatMapObservable { Observable.fromIterable(it) }
-            .map { it.toViewModel() }
+            .map { it.toUiState() }
 
         val second: Observable<UiState<StoryUiData>> = storyIds
             .flatMapObservable { storyProvider.readItems(it) }
-            .map { it.toViewModel() }
+            .map { it.toUiState() }
 
         storiesDisposable = Observable.concat(first, second)
             .subscribeOn(subscribeScheduler)
@@ -44,11 +44,11 @@ class StorySectionPresenter(
             .subscribe({ storiesView.updateWith(it) }, { storiesView.showError(it) })
     }
 
-    private fun Int.toViewModel(): UiState<StoryUiData> = UiState(viewData = StoryUiData.JustAnId(id = this))
+    private fun Int.toUiState(): UiState<StoryUiData> = UiState(data = StoryUiData(id = this))
 
-    private fun Story.toViewModel(): UiState<StoryUiData> = UiState(
-        viewBehaviour = { navigator.navigateTo(url) },
-        viewData = StoryUiData.FullyPopulated(by, kids, id, score, title, url) as StoryUiData
+    private fun Story.toUiState(): UiState<StoryUiData> = UiState(
+        behaviour = { navigator.navigateTo(url) },
+        data = StoryUiData(by, kids, id, score, title, url)
     )
 
     override fun stop() {

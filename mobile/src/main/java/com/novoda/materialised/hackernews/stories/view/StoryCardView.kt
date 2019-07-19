@@ -27,15 +27,8 @@ class StoryCardView : LinearLayout, ModelledView<StoryUiData> {
     }
 
     override fun updateWith(uiState: UiState<StoryUiData>) {
-        val viewData = uiState.viewData
-        if (viewData is StoryUiData.JustAnId) {
-            storyCard!!.id = viewData
-        }
-
-        if (viewData is StoryUiData.FullyPopulated) {
-            storyCard!!.viewData = viewData
-            storyCard!!.viewModel = uiState
-        }
+        storyCard!!.viewData = uiState.data
+        storyCard!!.viewModel = uiState
     }
 
     private fun init(context: Context) {

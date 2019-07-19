@@ -22,7 +22,7 @@ class StorySectionPresenterTest {
         val firstBlankViewData = StoryUiData.JustAnId(id = FIRST_STORY_ID.toInt())
         val secondBlankViewData = StoryUiData.JustAnId(id = SECOND_STORY_ID.toInt())
         val expectedViewData: List<StoryUiData> = listOf(firstBlankViewData, secondBlankViewData)
-        val expectedViewModels = expectedViewData.map { UiState(viewData = it) }
+        val expectedViewModels = expectedViewData.map { UiState(data = it) }
 
         val storiesView = SpyingStoriesView()
 
@@ -50,8 +50,8 @@ class StorySectionPresenterTest {
 
         val receivedViewData: List<StoryUiData> = storiesView.receivedUiStates
                 .asSequence()
-                .filter { it.viewData is StoryUiData.FullyPopulated }
-                .map { it.viewData }
+                .filter { it.data is StoryUiData.FullyPopulated }
+                .map { it.data }
                 .toList()
 
         assertThat(receivedViewData).containsExactly(expectedViewData, moreExpectedViewData)

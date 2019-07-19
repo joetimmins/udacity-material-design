@@ -45,11 +45,11 @@ internal class SingleTypeAdapter<T, V>(private val viewInflater: ModelledViewInf
 
     private fun shouldUpdate(position: Int, fullyPopulatedUiState: UiState<T>): Boolean {
         val id = idFor(position)
-        val fullyPopulatedViewModelId = fullyPopulatedUiState.viewData.id
+        val fullyPopulatedViewModelId = fullyPopulatedUiState.data.id
         return id == fullyPopulatedViewModelId
     }
 
     private fun idFor(position: Int): Int? {
-        return uiStates[position].viewData.id
+        return uiStates[position].data.id
     }
 }
