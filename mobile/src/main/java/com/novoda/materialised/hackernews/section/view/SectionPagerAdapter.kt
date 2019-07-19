@@ -13,12 +13,11 @@ import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter
 import com.novoda.materialised.hackernews.asynclistview.UiState
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.view.StoryCardView
 import com.novoda.materialised.hackernews.stories.view.StoryUiData
 
 internal class SectionPagerAdapter(
     private val uiStates: List<UiState<Section>>,
-    private val sectionPresenterFactory: Function1<AsyncListView<StoryUiData>, Presenter<Section>>
+    private val sectionPresenterFactory: (AsyncListView<StoryUiData>) -> Presenter<Section>
 ) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -31,11 +30,11 @@ internal class SectionPagerAdapter(
         val recyclerView = sectionView.findViewById<RecyclerView>(R.id.stories_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val asyncListView = AsyncListViewPresenter(loadingView, recyclerView, StoryCardView::class.java)
+        val asyncListView = AsyncListViewPresenter<StoryUiData>(loadingView, recyclerView)
 
         val sectionPresenter = sectionPresenterFactory.invoke(asyncListView)
-        val viewData = uiStates[position].data
-        sectionPresenter.present(viewData)
+        val section = uiStates[position].data
+        sectionPresenter.present(section)
 
         return sectionView
     }
