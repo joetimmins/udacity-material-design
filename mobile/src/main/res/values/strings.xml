@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">Material Hacker News</string>
+  <string name="app_name">Hacker News</string>
   <string name="action_settings">Settings</string>
   <string name="loading_stories">Loading stories…</string>
 
