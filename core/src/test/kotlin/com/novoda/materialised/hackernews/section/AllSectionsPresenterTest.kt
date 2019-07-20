@@ -1,6 +1,6 @@
 package com.novoda.materialised.hackernews.section
 
-import com.novoda.materialised.hackernews.asynclistview.UiState
+import com.novoda.materialised.hackernews.asynclistview.UiModel
 import com.novoda.materialised.hackernews.section.view.TabsView
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
@@ -36,13 +36,13 @@ private class DummySectionListProvider : SectionListProvider {
 }
 
 private class SpyingTabsView : TabsView {
-    var receivedUiStates: List<UiState<Section>> = emptyList()
+    var receivedUiModels: List<UiModel<Section>> = emptyList()
     var receivedViewData: List<Section> = emptyList()
     var currentTabRefreshed: Boolean = false
 
-    override fun updateWith(uiStates: List<UiState<Section>>) {
-        receivedUiStates = uiStates
-        receivedViewData = uiStates.map { it.data }
+    override fun updateWith(uiModels: List<UiModel<Section>>) {
+        receivedUiModels = uiModels
+        receivedViewData = uiModels.map { it.data }
     }
 
     override fun refreshCurrentTab() {

@@ -1,6 +1,6 @@
 package com.novoda.materialised.hackernews.section
 
-import com.novoda.materialised.hackernews.asynclistview.UiState
+import com.novoda.materialised.hackernews.asynclistview.UiModel
 import com.novoda.materialised.hackernews.section.view.TabsView
 
 class AllSectionsPresenter(private val provider: SectionListProvider,
@@ -8,7 +8,7 @@ class AllSectionsPresenter(private val provider: SectionListProvider,
     fun startPresenting() {
         val sections = provider.provideSections()
         val sectionViewModels = sections
-            .map { section -> UiState(data = section) }
+            .map { section -> UiModel(data = section) }
         view.updateWith(sectionViewModels)
     }
 

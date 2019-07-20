@@ -11,13 +11,13 @@ import com.novoda.materialised.R
 import com.novoda.materialised.hackernews.Presenter
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
 import com.novoda.materialised.hackernews.asynclistview.AsyncListViewPresenter
-import com.novoda.materialised.hackernews.asynclistview.UiState
+import com.novoda.materialised.hackernews.asynclistview.UiModel
 import com.novoda.materialised.hackernews.section.Section
-import com.novoda.materialised.hackernews.stories.view.StoryUiData
+import com.novoda.materialised.hackernews.stories.view.UiStory
 
 internal class SectionPagerAdapter(
-    private val uiStates: List<UiState<Section>>,
-    private val sectionPresenterFactory: (AsyncListView<StoryUiData>) -> Presenter<Section>
+    private val uiModels: List<UiModel<Section>>,
+    private val sectionPresenterFactory: (AsyncListView<UiStory>) -> Presenter<Section>
 ) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -33,14 +33,14 @@ internal class SectionPagerAdapter(
         val asyncListView = AsyncListViewPresenter(loadingView, recyclerView)
 
         val sectionPresenter = sectionPresenterFactory.invoke(asyncListView)
-        val section = uiStates[position].data
+        val section = uiModels[position].data
         sectionPresenter.present(section)
 
         return sectionView
     }
 
     override fun getPageTitle(position: Int): CharSequence {
-        val section = uiStates[position].data
+        val section = uiModels[position].data
         return section.userFacingName
     }
 
@@ -50,7 +50,7 @@ internal class SectionPagerAdapter(
     }
 
     override fun getCount(): Int {
-        return uiStates.size
+        return uiModels.size
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {

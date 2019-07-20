@@ -1,14 +1,14 @@
 package com.novoda.materialised.hackernews.stories
 
 import com.novoda.materialised.hackernews.asynclistview.AsyncListView
-import com.novoda.materialised.hackernews.asynclistview.UiState
+import com.novoda.materialised.hackernews.asynclistview.UiModel
 import com.novoda.materialised.hackernews.navigator.Navigator
 import com.novoda.materialised.hackernews.section.Section
 import com.novoda.materialised.hackernews.stories.provider.RemoteDatabaseNode
 import com.novoda.materialised.hackernews.stories.provider.Story
 import com.novoda.materialised.hackernews.stories.provider.StoryIdProvider
 import com.novoda.materialised.hackernews.stories.provider.StoryProvider
-import com.novoda.materialised.hackernews.stories.view.StoryUiData
+import com.novoda.materialised.hackernews.stories.view.UiStory
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.fest.assertions.api.Assertions.assertThat
@@ -19,13 +19,13 @@ class StorySectionPresenterTest {
     @Test
     fun `When presenting multiple stories, the presenter gives a list of ids to the view, as ui state objects`() {
         val expectedUiState = listOf(FIRST_STORY_ID.asUiData(), SECOND_STORY_ID.asUiData())
-            .map { UiState(data = it) }
+            .map { UiModel(data = it) }
 
         val storiesView = SpyingStoriesView()
 
         presentWith(listOf(FIRST_STORY_ID, SECOND_STORY_ID), emptyList(), storiesView, SpyingNavigator())
 
-        assertThat(storiesView.receivedUiStates).isEqualTo(expectedUiState)
+        assertThat(storiesView.receivedUiModels).isEqualTo(expectedUiState)
     }
 
     @Test
@@ -43,7 +43,7 @@ class StorySectionPresenterTest {
 
         presentWith(listOf(FIRST_STORY_ID, SECOND_STORY_ID), listOf(A_STORY, ANOTHER_STORY), storiesView, SpyingNavigator())
 
-        val receivedViewData: List<StoryUiData> = storiesView.receivedUiStates
+        val receivedViewData: List<UiStory> = storiesView.receivedUiModels
             .map { it.data }
 
         assertThat(receivedViewData).containsExactly(
@@ -58,18 +58,18 @@ class StorySectionPresenterTest {
 
         presentWith(listOf(FIRST_STORY_ID, SECOND_STORY_ID), listOf(A_STORY, ANOTHER_STORY), storiesView, navigator)
 
-        storiesView.receivedUiStates[2].invokeBehaviour()
+        storiesView.receivedUiModels[2].invokeBehaviour()
 
         assertThat(navigator.uri).isEqualTo(A_STORY.url)
     }
 
-    private fun Long.asUiData() = StoryUiData(id = this.toInt())
+    private fun Long.asUiData() = UiStory(id = this.toInt())
 
-    private fun Story.asUiData() = StoryUiData(
+    private fun Story.asUiData() = UiStory(
         by, kids, id, score, title, url
     )
 
-    private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<StoryUiData>, navigator: Navigator) {
+    private fun presentWith(storyIds: List<Long>, stories: List<Story>, storiesView: AsyncListView<UiStory>, navigator: Navigator) {
         val remoteDatabase = Node(storyIds, stories)
         val presenter = StorySectionPresenter(
             StoryIdProvider(remoteDatabase),
@@ -100,13 +100,13 @@ class StorySectionPresenterTest {
         }
     }
 
-    private class SpyingStoriesView : AsyncListView<StoryUiData> {
+    private class SpyingStoriesView : AsyncListView<UiStory> {
         internal var errorShown: Boolean = false
         internal val receivedErrors: MutableList<Throwable> = mutableListOf()
-        internal val receivedUiStates: MutableList<UiState<StoryUiData>> = mutableListOf()
+        internal val receivedUiModels: MutableList<UiModel<UiStory>> = mutableListOf()
 
-        override fun updateWith(uiState: UiState<StoryUiData>) {
-            receivedUiStates.add(uiState)
+        override fun updateWith(uiModel: UiModel<UiStory>) {
+            receivedUiModels.add(uiModel)
         }
 
         override fun showError(throwable: Throwable) {

@@ -5,7 +5,7 @@ import org.junit.Test
 
 private const val SOME_ID = 4
 
-class UiStateTest {
+class UiModelTest {
 
     @Test
     fun viewModelInvokesGivenBehaviour() {
@@ -13,7 +13,7 @@ class UiStateTest {
 
         var actualViewId = 0
 
-        val dummyUiState = UiState({ viewData -> actualViewId = viewData.id }, dummyData)
+        val dummyUiState = UiModel({ viewData -> actualViewId = viewData.id }, dummyData)
 
         dummyUiState.invokeBehaviour()
 

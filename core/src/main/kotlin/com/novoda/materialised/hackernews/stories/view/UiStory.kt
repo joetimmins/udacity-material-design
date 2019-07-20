@@ -2,7 +2,7 @@ package com.novoda.materialised.hackernews.stories.view
 
 import java.net.URI
 
-data class StoryUiData(
+data class UiStory(
     val by: String = "",
     val commentIds: List<Int> = emptyList(),
     val id: Int = 0,

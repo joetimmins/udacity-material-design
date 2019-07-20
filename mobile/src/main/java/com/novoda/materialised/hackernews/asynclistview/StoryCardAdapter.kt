@@ -7,10 +7,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.novoda.materialised.R
 import com.novoda.materialised.databinding.StoryCardBinding
-import com.novoda.materialised.hackernews.stories.view.StoryUiData
+import com.novoda.materialised.hackernews.stories.view.UiStory
 
-internal class StoryCardAdapter : RecyclerView.Adapter<DataBindingHolder<StoryCardBinding>>(), ModelledView<StoryUiData> {
-    private val uiStates: MutableList<UiState<StoryUiData>> = mutableListOf()
+internal class StoryCardAdapter : RecyclerView.Adapter<DataBindingHolder<StoryCardBinding>>(), ModelledView<UiStory> {
+    private val uiModels: MutableList<UiModel<UiStory>> = mutableListOf()
 
     init {
         setHasStableIds(true)
@@ -27,21 +27,21 @@ internal class StoryCardAdapter : RecyclerView.Adapter<DataBindingHolder<StoryCa
     }
 
     override fun onBindViewHolder(holder: DataBindingHolder<StoryCardBinding>, position: Int) {
-        holder.binding.uiState = uiStates[position]
+        holder.binding.uiState = uiModels[position]
     }
 
-    override fun getItemCount(): Int = uiStates.size
+    override fun getItemCount(): Int = uiModels.size
 
-    override fun getItemId(position: Int): Long = uiStates[position].data.id.toLong()
+    override fun getItemId(position: Int): Long = uiModels[position].data.id.toLong()
 
-    override fun updateWith(uiState: UiState<StoryUiData>) =
-        when (val originalUiStatePosition = uiStates.indexOfFirst { it.data.id == uiState.data.id }) {
+    override fun updateWith(uiModel: UiModel<UiStory>) =
+        when (val originalUiStatePosition = uiModels.indexOfFirst { it.data.id == uiModel.data.id }) {
             -1 -> {
-                uiStates.add(uiState)
-                notifyItemChanged(uiStates.size - 1)
+                uiModels.add(uiModel)
+                notifyItemChanged(uiModels.size - 1)
             }
             else -> {
-                uiStates[originalUiStatePosition] = uiState
+                uiModels[originalUiStatePosition] = uiModel
                 notifyItemChanged(originalUiStatePosition)
             }
         }
