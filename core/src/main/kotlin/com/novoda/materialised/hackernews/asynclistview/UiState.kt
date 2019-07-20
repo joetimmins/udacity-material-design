@@ -8,7 +8,7 @@ data class UiState<T : UiData<Any>>(
         behaviour(data)
     }
 
-    override fun equals(other: Any?): Boolean = (other as? UiState<T>)?.data == data
+    override fun equals(other: Any?): Boolean = other is UiState<*> && other.data == data
 
     override fun hashCode(): Int = data.hashCode()
 }
