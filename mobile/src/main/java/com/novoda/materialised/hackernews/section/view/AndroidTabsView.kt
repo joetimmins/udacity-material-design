@@ -13,7 +13,7 @@ class AndroidTabsView(
     private val sectionViewPager: ViewPager,
     private val tabLayout: TabLayout,
     private val sectionPresenterFactory: Function1<AsyncListView<StoryUiData>, Presenter<Section>>
-) : TabsView<Section> {
+) : TabsView {
 
     override fun updateWith(uiStates: List<UiState<Section>>) {
         val sectionPagerAdapter = SectionPagerAdapter(uiStates, sectionPresenterFactory)

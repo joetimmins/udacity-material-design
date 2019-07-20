@@ -35,7 +35,7 @@ private class DummySectionListProvider : SectionListProvider {
     override fun provideSections(): List<Section> = listOf(Section.BEST, Section.TOP_STORIES)
 }
 
-private class SpyingTabsView : TabsView<Section> {
+private class SpyingTabsView : TabsView {
     var receivedUiStates: List<UiState<Section>> = emptyList()
     var receivedViewData: List<Section> = emptyList()
     var currentTabRefreshed: Boolean = false

@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers
 
 class HackerNewsStoriesActivity : AppCompatActivity() {
 
-    private var presenter: AllSectionsPresenter? = null
+    private lateinit var presenter: AllSectionsPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +49,12 @@ class HackerNewsStoriesActivity : AppCompatActivity() {
             DefaultSectionListProvider(),
             AndroidTabsView(sectionViewPager, mainActivityLayout.sectionTabLayout, sectionPresenterFactory)
         )
-        presenter!!.startPresenting()
+        presenter.startPresenting()
     }
 
     override fun onResume() {
         super.onResume()
-        presenter!!.resumePresenting()
+        presenter.resumePresenting()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -3,23 +3,22 @@ package com.novoda.materialised.hackernews.asynclistview
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
 
-private const val viewId = 4
+private const val SOME_ID = 4
 
 class UiStateTest {
 
     @Test
     fun viewModelInvokesGivenBehaviour() {
-        val intViewData = object : UiData<Int> {
-            override val id: Int
-                get() = viewId
-        }
+        val dummyData = DummyData(SOME_ID)
 
         var actualViewId = 0
 
-        val intViewModel = UiState({ viewData -> actualViewId = viewData.id }, intViewData)
+        val dummyUiState = UiState({ viewData -> actualViewId = viewData.id }, dummyData)
 
-        intViewModel.invokeBehaviour()
+        dummyUiState.invokeBehaviour()
 
-        assertThat(actualViewId).isEqualTo(viewId)
+        assertThat(actualViewId).isEqualTo(SOME_ID)
     }
 }
+
+private data class DummyData(val id: Int)

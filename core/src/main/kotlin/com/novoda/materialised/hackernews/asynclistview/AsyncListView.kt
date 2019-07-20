@@ -1,5 +1,5 @@
 package com.novoda.materialised.hackernews.asynclistview
 
-interface AsyncListView<T : UiData<Any>> : ModelledView<T> {
+interface AsyncListView<T : Any> : ModelledView<T> {
     fun showError(throwable: Throwable)
 }

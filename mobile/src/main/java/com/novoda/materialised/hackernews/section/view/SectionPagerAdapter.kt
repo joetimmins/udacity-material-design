@@ -30,7 +30,7 @@ internal class SectionPagerAdapter(
         val recyclerView = sectionView.findViewById<RecyclerView>(R.id.stories_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val asyncListView = AsyncListViewPresenter<StoryUiData>(loadingView, recyclerView)
+        val asyncListView = AsyncListViewPresenter(loadingView, recyclerView)
 
         val sectionPresenter = sectionPresenterFactory.invoke(asyncListView)
         val section = uiStates[position].data

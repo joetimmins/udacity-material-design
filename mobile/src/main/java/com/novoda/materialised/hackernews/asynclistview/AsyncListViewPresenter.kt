@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.novoda.materialised.R
 import com.novoda.materialised.hackernews.stories.view.StoryUiData
 
-internal class AsyncListViewPresenter<T>(
+internal class AsyncListViewPresenter(
     private val loadingView: TextView,
     topStoriesView: RecyclerView
-) : AsyncListView<T> where T : UiData<Int> {
+) : AsyncListView<StoryUiData> {
 
     private val adapter: StoryCardAdapter = StoryCardAdapter()
 
@@ -20,9 +20,9 @@ internal class AsyncListViewPresenter<T>(
         topStoriesView.adapter = adapter
     }
 
-    override fun updateWith(uiState: UiState<T>) {
+    override fun updateWith(uiState: UiState<StoryUiData>) {
         loadingView.visibility = View.GONE
-        adapter.updateWith(uiState as UiState<StoryUiData>)
+        adapter.updateWith(uiState)
     }
 
     override fun showError(throwable: Throwable) {
